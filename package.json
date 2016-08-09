@@ -1,0 +1,55 @@
+{
+  "name": "xtralife-http",
+  "version": "3.2.0",
+  "description": "RESTful express server for xtralife",
+  "main": "src/http.coffee",
+  "scripts": {
+    "test": "mocha ./test/*.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xtralifecloud/xtralife-http.git"
+  },
+  "keywords": [
+    "http layer",
+    "REST api",
+    "gaming backend",
+    "gaming",
+    "backend"
+  ],
+  "author": "devteam <devteam@xtralife.cloud>",
+  "license": "(C) Xtralife.cloud, 2015",
+  "engines": {
+    "node": ">=6.2.2"
+  },
+  "dependencies": {
+    "basic-auth": "*",
+    "bluebird": "*",
+    "body": "*",
+    "body-parser": "*",
+    "check-types": "*",
+    "cors": "*",
+    "xtralife-api": "<3.3",
+    "express": "*",
+    "jayschema": "*",
+    "lru-cache": "*",
+    "minimist": "*",
+    "node-uuid": "*",
+    "randomstring": "*",
+    "redlock": "<2",
+    "underscore": "*"
+  },
+  "devDependencies": {
+    "async": "*",
+    "coffee-script": "*",
+    "coffee-script-mapped": "*",
+    "xtralife-env": "<3.3",
+    "elasticsearch": "*",
+    "mocha": "3",
+    "mongodb": "2.1",
+    "redis": "*",
+    "should": "*",
+    "supertest": "<1.1",
+    "winston": "*"
+  }
+}
