@@ -153,7 +153,7 @@ route.route '/:match_id/move'
 		globalState:
 			type: 'object'
 	required: ['move'],
-	additionalProperties: false
+	additionalProperties: true
 ), _requires_lastEventId, (req, res, next)->
 	xtralife.api.match.postMove req.context, req.match_id, req.gamer._id, req.body.osn, req.lastEventId, req.body
 	.then (updatedMatch)->
