@@ -43,6 +43,9 @@ _login = (game, id, token, options)->
 	email: (cb)->
 		xtralife.api.connect.login game, id, xtralife.api.user.sha_passwd(token), options, cb
 
+	external: (cb)->
+		xtralife.api.connect.loginExternal game, options.external, id, token, options, cb
+
 	restore: (cb)->
 		shortcode = token
 		newpass = null
@@ -123,7 +126,7 @@ module.exports = (app)->
 		network = req.body['network']
 		id = req.body['id']
 		secret = req.body['secret']
-		options = req.body['options']
+		options = req.body['options'] or {}
 		thenBatch = req.body.thenBatch or req.body.options?.thenBatch
 
 		if thenBatch?
@@ -131,6 +134,10 @@ module.exports = (app)->
 			return next new errors.MissingParameter("thenBatch.domain") unless thenBatch.domain?
 			return next new errors.MissingParameter("thenBatch.params") unless thenBatch.params?
 		
+		if network?.startsWith("external:")
+			options.external = network.slice 9
+			network = "external"
+
 		login = _login(req.game, id, secret, options)[network]
 		unless login? then return next new errors.InvalidLoginNetwork
 		unless id? then return next new errors.LoginError req

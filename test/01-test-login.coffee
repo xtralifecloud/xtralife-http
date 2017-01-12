@@ -11,7 +11,7 @@ print = (obj)->
 	return
 	#console.log require("util").inspect(obj, { showHidden: false, depth: 8, colors: true })
 
-describe 'App Authentication', ->
+describe.only 'App Authentication', ->
 
 	before 'should wait for initialisation', ->
 		shuttlePromise.then (_shuttle)->
@@ -382,6 +382,46 @@ describe 'App Authentication', ->
 					.expect 200
 					.end (err, res)->
 						done err
+
+	# Testing Custom Network Login
+	describe 'Custom Network login', ->
+
+		it 'should connect with good creds', (done)->
+			request(shuttle)
+			.post '/v1/login'
+			.set dataset.validAppCredentials
+			.send {network: 'external:customNetwork', id:'good', secret: 'good'}
+			.expect 'content-type', /json/
+			.end (err, res)->
+				if err? then return done(err)
+				res.body.gamer_id.should.not.be.undefined
+				res.body.gamer_secret.should.not.be.undefined
+				res.body.network.should.be.eql("customNetwork")
+				res.body.networkid.should.not.be.undefined
+				done(err)
+
+		it 'should not connect with bad creds', (done)->
+			request(shuttle)
+			.post '/v1/login'
+			.set dataset.validAppCredentials
+			.send {network: 'external:customNetwork', id:'good', secret: 'bad'}
+			.expect 'content-type', /json/
+			.expect 400
+			.end (err, res)->
+				res.body.name.should.eql('BadUserCredentials')
+				done(err)
+
+		it 'should not connect with bad custom Name', (done)->
+			request(shuttle)
+			.post '/v1/login'
+			.set dataset.validAppCredentials
+			.send {network: 'external:Unknown', id:'good', secret: 'good'}
+			.expect 'content-type', /json/
+			.expect 400
+			.end (err, res)->
+				res.body.name.should.eql('HookError')
+				done(err)
+
 
 	# Testing Gamer authentication
 	describe 'Gamer authentication', ->

@@ -171,7 +171,11 @@ module.exports = {
 		},
 		'__centeredScoreInBatch': function (params, customData, mod) {
 			return this.leaderboard.highscore(this.game.getPrivateDomain(), params.user_id, 'easyboard', 10);
-		}
+		},
+		'__auth_customNetwork_comclanofthecloudcloudbuilder': function (params, customData, mod) {
+			var {user_id, user_token} = params;
+			return {verified : user_token == user_id}
+		},
 	}
 };
 
