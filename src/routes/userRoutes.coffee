@@ -165,13 +165,15 @@ module.exports = (app)->
 		title = req.body['title']
 		body = req.body['body']
 		from = req.body['from']
+		html = req.body['html']
 
 		return next new errors.MissingEmailTitle unless title?
 		return next new errors.MissingEmailBody unless body?
 		return next new errors.BadEmailTemplate if body.indexOf("[[SHORTCODE]]")==-1
 		return next new errors.MissingSenderEmail unless from?
+		return next new errors.BadEmailTemplate if html?.indexOf("[[SHORTCODE]]")==-1
 
-		xtralife.api.connect.sendPassword req.game, email, from, title, body, (err, done)->
+		xtralife.api.connect.sendPassword req.game, email, from, title, body, html, (err, done)->
 			return next err if err?
 			res
 			.status(200)

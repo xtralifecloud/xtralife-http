@@ -83,7 +83,7 @@ describe 'Short Login code', ->
 			res.body.should.have.property 'done'
 			done(err)
 
-	it.skip 'should send an email', (done)->
+	it 'should send an email', (done)->
 		this.timeout(15000);
 
 		request(shuttle)
@@ -95,6 +95,20 @@ describe 'Short Login code', ->
 		.end (err, res)->
 			#console.log res.body
 			if err? then return done(err)
+			res.body.should.have.property "done"
+			done(err)
+
+	it 'should send an email with html', (done)->
+		this.timeout(15000);
+		request(shuttle)
+		.get "/v1/login/devteam@clanofthecloud.com"
+		.set dataset.validAppCredentials
+		.send { from: "noreply@clanofthecloud.com", title : "Here are your credentials", body : "You temporary code is [[SHORTCODE]] \nEnjoy.", html: "<h1>Hi!</h1> <p>You temporary code is <b>[[SHORTCODE]]<b> </p> <br /><p>Enjoy.</p>" }
+		.expect 'content-type', /json/
+		.expect 200
+		.end (err, res)->
+			console.log res.body
+			should(err).be.null
 			res.body.should.have.property "done"
 			done(err)
 
