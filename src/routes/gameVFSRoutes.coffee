@@ -23,7 +23,7 @@ router.route '/:domain/:key'
 
 		res
 		.status 200
-		.json value[req.params.key]
+		.json result
 		.end()
 
 .put forbiddenRoute
