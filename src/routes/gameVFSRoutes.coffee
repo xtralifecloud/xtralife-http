@@ -19,6 +19,7 @@ router.route '/:domain/:key'
 		if err? then return next err
 
 		unless value[req.params.key]? then return next new errors.KeyNotFound req
+		result = if req.version == "v1" then value[req.params.key] else { result : value }
 
 		res
 		.status 200
@@ -37,10 +38,11 @@ router.route "/:domain"
 .get (req, res, next)->
 	xtralife.api.gamevfs.read req.params.domain, null, (err, value)->
 		if err? then return next err
-
+		
+		result = if req.version == 'v1' then value else { result : value } 
 		res
 		.status 200
-		.json value
+		.json result
 		.end()
 
 .put forbiddenRoute
