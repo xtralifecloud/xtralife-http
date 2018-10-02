@@ -30,7 +30,7 @@ router.route '/:domain/:key'
 			.end()
 
 	(if req.query.binary?
-		xtralife.api.virtualfs.createSignedURL req.params.domain, req.gamer._id, req.params.key
+		xtralife.api.virtualfs.createSignedURL req.params.domain, req.gamer._id, req.params.key, req.query.contentType
 		.spread (signedURL, getURL)->
 			_write getURL,
 				putURL: signedURL
