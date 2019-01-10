@@ -74,7 +74,7 @@ describe.skip 'GooglePlus', ->
 
 	it "should delete google user", (done)->
 		this.timeout(4000)
-		xtralife.api.onDeleteUser ObjectID(gplus_gamer_id), done
+		xtralife.api.onDeleteUser ObjectID(gplus_gamer_id), done, 'com.clanofthecloud.cloudbuilder'
 
 
 	it "should convert anonymous to googleplus", (done)->
@@ -141,5 +141,5 @@ describe.skip 'GooglePlus', ->
 
 	it "should delete anonymous user", (done)->
 		this.timeout(4000)
-		xtralife.api.onDeleteUser ObjectID(gamer_id), done
+		xtralife.api.onDeleteUser ObjectID(gamer_id), done, 'com.clanofthecloud.cloudbuilder'
 

@@ -460,4 +460,4 @@ describe 'Achievements', ->
 
 	it "should delete the temporary user", (done)->
 		xtralife = require 'xtralife-api'
-		xtralife.api.onDeleteUser ObjectID(gamer_id), done
+		xtralife.api.onDeleteUser ObjectID(gamer_id), done, 'com.clanofthecloud.cloudbuilder'

@@ -422,4 +422,4 @@ describe 'Store', ->
 			done()
 
 	it "should delete the user", (done)->
-		xtralife.api.onDeleteUser ObjectID(gamer_id), done
+		xtralife.api.onDeleteUser ObjectID(gamer_id), done, 'com.clanofthecloud.cloudbuilder'
