@@ -26,30 +26,31 @@
     "basic-auth": "*",
     "bluebird": "*",
     "body": "*",
-    "body-parser": "*",
+    "body-parser": "^1.19.0",
     "check-types": "*",
     "cors": "*",
-    "xtralife-api": "<3.3",
-    "express": "*",
+    "express": "^4.17.1",
     "jayschema": "*",
     "lru-cache": "*",
     "minimist": "*",
     "node-uuid": "*",
     "randomstring": "*",
     "redlock": "<2",
-    "underscore": "*"
+    "underscore": "*",
+    "xtralife-api": "^3.2.20",
+    "xtralife-msg": "^3.2.4"
   },
   "devDependencies": {
     "async": "*",
-    "coffee-script": "*",
+    "coffeescript": "*",
     "coffee-script-mapped": "*",
-    "xtralife-env": "<3.3",
     "elasticsearch": "*",
     "mocha": "3",
-    "mongodb": "2.1",
+    "mongodb": "^2.2.36",
     "redis": "*",
     "should": "*",
     "supertest": "<1.1",
-    "winston": "*"
+    "winston": "*",
+    "xtralife-env": "^3.0.1"
   }
 }

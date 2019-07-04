@@ -25,8 +25,8 @@ router
 	{domain, indexName} = req.params
 
 	promise =
-		if q? then xtralife.api.index.search domain.toLowerCase(), indexName, q, sort, from, max
-		else xtralife.api.index.query domain.toLowerCase(), indexName, req.body, from, max
+		if q? then xtralife.api.index.search req.context, domain.toLowerCase(), indexName, q, sort, from, max
+		else xtralife.api.index.query req.context, domain.toLowerCase(), indexName, req.body, from, max
 
 	promise.then (result)->
 		res.status 200
@@ -40,7 +40,7 @@ router
 .get (req, res, next)->
 	{id, domain, indexName} = req.params
 	console.log "#{domain} / #{indexName} / #{id}"
-	xtralife.api.index.get domain.toLowerCase(), indexName, id
+	xtralife.api.index.get req.context, domain.toLowerCase(), indexName, id
 	.then (result)->
 		console.log result
 		if result.found
@@ -57,7 +57,7 @@ router
 
 	{domain, indexName, id} = req.params
 
-	xtralife.api.index.delete domain.toLowerCase(), indexName, id
+	xtralife.api.index.delete req.context, domain.toLowerCase(), indexName, id
 	.then (result)->
 		res.status 200
 		.json result
@@ -71,7 +71,7 @@ router
 	{id, properties, payload} = req.body
 	{domain, indexName} = req.params
 
-	xtralife.api.index.index domain.toLowerCase(), indexName, id, properties, payload
+	xtralife.api.index.index req.context, domain.toLowerCase(), indexName, id, properties, payload
 	.then (result)->
 		res.status 200
 		.json result

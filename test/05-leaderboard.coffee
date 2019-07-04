@@ -575,7 +575,7 @@ describe 'Leaderboards', ->
 			this.timeout(4000)
 			async.forEachSeries gamers_id,
 			(userid, cb)->
-				xtralife.api.onDeleteUser ObjectID(userid), cb
+				xtralife.api.onDeleteUser ObjectID(userid), cb, 'com.clanofthecloud.cloudbuilder'
 			, (err)=>
 				done(err)
 

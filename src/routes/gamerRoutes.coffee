@@ -176,6 +176,14 @@ module.exports = (app)->
 		.catch next
 		.done()
 
+	app.post '/v1/gamer/nuke/me', (req, res, next)=>
+		xtralife.api.onDeleteUser req.gamer._id, (err)=>
+			unless err?
+				res.status(200).json {nuked: true, dead: 'probably'}
+			else
+				next err
+		, req.game.appid
+
 	# Only in dev mode (for CLI tests), we allow to reset the status of achievements
 	if env is 'dev'
 		app.post '/v1/gamer/achievements/:domain/reset', _domainHandler, (req, res, next)->

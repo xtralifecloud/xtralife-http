@@ -11,7 +11,7 @@ print = (obj)->
 	return
 	#console.log require("util").inspect(obj, { showHidden: false, depth: 8, colors: true })
 
-describe.only 'App Authentication', ->
+describe 'App Authentication', ->
 
 	before 'should wait for initialisation', ->
 		shuttlePromise.then (_shuttle)->
@@ -384,7 +384,7 @@ describe.only 'App Authentication', ->
 						done err
 
 	# Testing Custom Network Login
-	describe 'Custom Network login', ->
+	describe.skip 'Custom Network login', ->
 
 		it 'should connect with good creds', (done)->
 			request(shuttle)

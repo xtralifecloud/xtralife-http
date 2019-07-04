@@ -134,7 +134,7 @@ describe.skip 'UnitTest', ->
 			xtralife = require 'xtralife-api'
 			async = require 'async'
 			this.timeout(4000)
-			xtralife.api.onDeleteUser ObjectID(anonym_id), done
+			xtralife.api.onDeleteUser ObjectID(anonym_id), done, 'com.clanofthecloud.cloudbuilder'
 
 
 

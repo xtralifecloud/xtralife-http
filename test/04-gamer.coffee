@@ -159,3 +159,44 @@ describe 'Gamers', ->
 				res.body.should.have.property "count"
 				done()
 
+	describe 'GDPR user nuking', ->
+
+		it 'should create a guinee pig and nuke it', (done)=>
+			request(shuttle)
+			.post '/v1/login/anonymous'
+			.set dataset.validAppCredentials
+			.type 'json'
+			.send {}
+			.expect 'content-type', /json/
+			.expect 200
+			.end (err, res)->
+				should(err).be.null
+				gamer_id = res.body.gamer_id
+				gamer_token = res.body.gamer_secret
+
+				request(shuttle)
+				.post '/v1/gamer/nuke/me'
+				.set dataset.validAppCredentials
+				.auth(gamer_id, gamer_token)
+				.type 'json'
+				.send {}
+				.expect 'content-type', /json/
+				.expect 200
+				.end (err, res)->
+					res.body.nuked.should.eql(true)
+
+					# same call, should fail for bad auth, missing user
+					request(shuttle)
+					.post '/v1/gamer/nuke/me'
+					.set dataset.validAppCredentials
+					.auth(gamer_id, gamer_token)
+					.type 'json'
+					.send {}
+					.expect 'content-type', /json/
+					.expect 200
+					.end (err, res)->
+						res.status.should.eql(401)
+						res.body.name.should.eql('InvalidLoginTokenError')
+						done()
+
+

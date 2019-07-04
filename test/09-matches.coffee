@@ -978,10 +978,11 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 		xtralife = require 'xtralife-api'
 		async = require 'async'
 		async.parallel [(cb)->
-			xtralife.api.onDeleteUser ObjectID(gamer_id_p1), cb
+			xtralife.api.onDeleteUser ObjectID(gamer_id_p1), cb, 'com.clanofthecloud.cloudbuilder'
 		(cb)->
-			xtralife.api.onDeleteUser ObjectID(gamer_id_p2), cb
+			xtralife.api.onDeleteUser ObjectID(gamer_id_p2), cb, 'com.clanofthecloud.cloudbuilder'
 		], (err)=>
 			done(err)
+		return null
 
 
