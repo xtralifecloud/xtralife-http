@@ -20,7 +20,7 @@
   "author": "devteam <devteam@xtralife.cloud>",
   "license": "(C) Xtralife.cloud, 2015",
   "engines": {
-    "node": ">=6.2.2"
+    "node": ">=8.14"
   },
   "dependencies": {
     "basic-auth": "*",
@@ -37,8 +37,8 @@
     "randomstring": "*",
     "redlock": "<2",
     "underscore": "*",
-    "xtralife-api": "^3.2.20",
-    "xtralife-msg": "^3.2.4"
+    "xtralife-api": "*",
+    "xtralife-msg": "*"
   },
   "devDependencies": {
     "async": "*",
@@ -46,11 +46,11 @@
     "coffee-script-mapped": "*",
     "elasticsearch": "*",
     "mocha": "3",
-    "mongodb": "^2.2.36",
+    "mongodb": "*",
     "redis": "*",
     "should": "*",
     "supertest": "<1.1",
     "winston": "*",
-    "xtralife-env": "^3.0.1"
+    "xtralife-env": "*"
   }
 }
