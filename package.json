@@ -1,6 +1,6 @@
 {
   "name": "xtralife-http",
-  "version": "3.2.7",
+  "version": "3.3.0",
   "description": "RESTful express server for xtralife",
   "main": "src/http.coffee",
   "scripts": {
