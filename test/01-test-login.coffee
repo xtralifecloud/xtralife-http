@@ -383,6 +383,68 @@ describe 'App Authentication', ->
 					.end (err, res)->
 						done err
 
+	describe "Game Center login", ()=>
+		it 'should connect with good creds', (done)=>
+			auth = {
+				bundleId: "cloud.xtralife.gamecenterauth"
+				playerId: "G:1965586982"
+				publicKeyUrl: "https://static.gc.apple.com/public-key/gc-prod-4.cer"
+				salt: "NRRF0g=="
+				signature: "cf6d+TOnCFABj1+CT5dS4H7zU+xgCgos9gI3TsqcHyl7Q73UZHkdeAEM+Lq4zXtMOz14ieK5AhxorjkrxCnotH7JLMQhdGwyM11PIsA4Yugu+Vm9RqvY6HuAsNKpdIn1XvyIKwff7vXpCWwfbk6r8Idy8kHnAAOgCUxwE9vLXYGVov6KTDjrjM1LggvYjCY7cvPB8AjhPsA28GkIMZD04JSZEpZAAwTJCiDCwPoyZxBUciIe5NUOSboWZP8CjmNUB5WFl4Fwean4Vi0a8+tr1/UZdfUsB4eTqXoQOv6zgmvFjIU+XQ7gGGEUDbtJrc+LInXouN4nLNAY0cD4ItgA3g=="
+				timestamp: 1565253768519
+			}
+
+			request(shuttle)
+			.post '/v1/login'
+			.set dataset.validAppCredentials
+			.send {network: 'gamecenter', id: auth.playerId, secret: JSON.stringify(auth)}
+			.expect 'content-type', /json/
+			.end (err, res)->
+				if err? then return done(err)
+				res.body.gamer_id.should.not.be.undefined
+				res.body.gamer_secret.should.not.be.undefined
+				res.body.network.should.be.eql("gamecenter")
+				res.body.networkid.should.be.eql(auth.playerId)
+				done(err)
+
+		it 'should fail for bad bundleId', (done)=>
+			auth = {
+				bundleId: "cloud.xtralife.badBundleId"
+				playerId: "G:1965586982"
+				publicKeyUrl: "https://static.gc.apple.com/public-key/gc-prod-4.cer"
+				salt: "NRRF0g=="
+				signature: "cf6d+TOnCFABj1+CT5dS4H7zU+xgCgos9gI3TsqcHyl7Q73UZHkdeAEM+Lq4zXtMOz14ieK5AhxorjkrxCnotH7JLMQhdGwyM11PIsA4Yugu+Vm9RqvY6HuAsNKpdIn1XvyIKwff7vXpCWwfbk6r8Idy8kHnAAOgCUxwE9vLXYGVov6KTDjrjM1LggvYjCY7cvPB8AjhPsA28GkIMZD04JSZEpZAAwTJCiDCwPoyZxBUciIe5NUOSboWZP8CjmNUB5WFl4Fwean4Vi0a8+tr1/UZdfUsB4eTqXoQOv6zgmvFjIU+XQ7gGGEUDbtJrc+LInXouN4nLNAY0cD4ItgA3g=="
+				timestamp: 1565253768519
+			}
+
+			request(shuttle)
+			.post '/v1/login'
+			.set dataset.validAppCredentials
+			.send {network: 'gamecenter', id: auth.playerId, secret: JSON.stringify(auth)}
+			.expect 'content-type', /json/
+			.end (err, res)->
+				res.body.message.should.eql("Invalid bundleId")
+				done()
+
+		it 'should fail for bad signature', (done)=>
+			auth = {
+				bundleId: "cloud.xtralife.gamecenterauth"
+				playerId: "G:1965586982 modified"
+				publicKeyUrl: "https://static.gc.apple.com/public-key/gc-prod-4.cer"
+				salt: "NRRF0g=="
+				signature: "cf6d+TOnCFABj1+CT5dS4H7zU+xgCgos9gI3TsqcHyl7Q73UZHkdeAEM+Lq4zXtMOz14ieK5AhxorjkrxCnotH7JLMQhdGwyM11PIsA4Yugu+Vm9RqvY6HuAsNKpdIn1XvyIKwff7vXpCWwfbk6r8Idy8kHnAAOgCUxwE9vLXYGVov6KTDjrjM1LggvYjCY7cvPB8AjhPsA28GkIMZD04JSZEpZAAwTJCiDCwPoyZxBUciIe5NUOSboWZP8CjmNUB5WFl4Fwean4Vi0a8+tr1/UZdfUsB4eTqXoQOv6zgmvFjIU+XQ7gGGEUDbtJrc+LInXouN4nLNAY0cD4ItgA3g=="
+				timestamp: 1565253768519
+			}
+
+			request(shuttle)
+			.post '/v1/login'
+			.set dataset.validAppCredentials
+			.send {network: 'gamecenter', id: auth.playerId, secret: JSON.stringify(auth)}
+			.expect 'content-type', /json/
+			.end (err, res)->
+				res.body.message.should.eql("Invalid Signature")
+				done()
+
 	# Testing Custom Network Login
 	describe.skip 'Custom Network login', ->
 

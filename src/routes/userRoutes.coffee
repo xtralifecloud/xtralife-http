@@ -38,7 +38,7 @@ _login = (game, id, token, options)->
 			cb err, gamer, created
 
 	gamecenter: (cb)->
-		xtralife.api.connect.logingc game, id, options, cb
+		xtralife.api.connect.logingc game, id, JSON.parse(token), options, cb
 
 	email: (cb)->
 		xtralife.api.connect.login game, id, xtralife.api.user.sha_passwd(token), options, cb

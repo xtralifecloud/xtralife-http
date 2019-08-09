@@ -126,6 +126,7 @@ xlenv.override null,
 							key: ''
 					socialSettings:
 						facebookAppToken : ''
+						gameCenterBundleIdRE: /^cloud.xtralife.gamecenterauth$/
 
 	AWS: # to run the xtralife-http tests, you MUST configure access to an S3 bucket
 		S3:
