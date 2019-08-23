@@ -39,10 +39,10 @@ router
 .all _domainHandler
 .get (req, res, next)->
 	{id, domain, indexName} = req.params
-	console.log "#{domain} / #{indexName} / #{id}"
+	#console.log "#{domain} / #{indexName} / #{id}"
 	xtralife.api.index.get req.context, domain.toLowerCase(), indexName, id
 	.then (result)->
-		console.log result
+		#console.log result
 		if result.found
 			res.status 200
 			.json result

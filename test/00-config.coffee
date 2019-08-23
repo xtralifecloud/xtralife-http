@@ -3,17 +3,16 @@ Q.promisifyAll(require('redis'))
 os = require 'os'
 global.xlenv = require "xtralife-env"
 
-global.logger = require 'winston'
-global.logger.level = "error"
+winston = require 'winston'
+global.logger = winston.createLogger 
+	transports: [new winston.transports.Console()]
+	level: 'error'
+	format: winston.format.simple()
 
 xlenv.override null,
 	nbworkers: 1
 
 	privateKey: "CONFIGURE : This is a private key and you should customize it"
-
-	logs:
-		slack:
-			enable: false
 
 	redis:
 		host: "localhost"
@@ -38,17 +37,13 @@ xlenv.override null,
 	mongodb:
 		dbname: 'xtralife'
 
-		url: "mongodb://localhost:27018"
+		url: "mongodb://localhost:27018/xtralife"
 		options: # see http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html
-			db:
-				w: 1
-				readPreference: "primaryPreferred"
-
-			server:
-				auto_reconnect: true
-
-			mongos: {}
+			w: 1
+			readPreference: "primaryPreferred"
+			auto_reconnect: true
 			promiseLibrary: require 'bluebird'
+			useNewUrlParser: true
 
 	mongoCx: (cb)->
 		require("mongodb").MongoClient.connect xlenv.mongodb.url, xlenv.mongodb.options, (err, mongodb)->
