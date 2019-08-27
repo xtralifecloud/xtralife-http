@@ -93,6 +93,13 @@ _finalize = (req, res, next, gamer, created )->
 		.catch next
 		.done()
 	else
+		if xlenv.options.cleanLogin
+			result.domains = []
+			res.status(if created then 201 else 200)
+			.json result
+			.end()
+			return 
+
 		xtralife.api.outline.get req.game, gamer.gamer_id, req.game.config.domains, (err, outline)=>
 			return next err if err?
 

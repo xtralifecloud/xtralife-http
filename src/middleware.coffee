@@ -54,6 +54,10 @@ module.exports =
 				info.headers = req.headers
 
 			if req.originalUrl != "/v1/ping"
+
+				if req.originalUrl.startsWith('/v1/login/') and req.originalUrl.indexOf('@') isnt -1
+					req.originalUrl = '/v1/login/obfuscated@domain.com'
+
 				logger.info req.originalUrl, info
 
 			res.end = res_end

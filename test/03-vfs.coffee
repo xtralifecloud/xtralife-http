@@ -226,6 +226,20 @@ describe 'gamerVFS', ->
 			if err? then return done(err)
 			done(err)
 
+	it 'should return the domains on login', (done) =>
+		request(shuttle)
+		.post '/v1/login'
+		.set dataset.validAppCredentials
+		.type 'json'
+		.send {network: 'anonymous', id: dataset.gamer_id, secret:dataset.gamer_token}
+		.expect 'content-type', /json/
+		.expect 200
+		.end (err, res)->
+			if err? then return done err
+			res.body.domains.length.should.eql(2) # breaks with options.cleanLogin of course
+			done()
+
+
 	it 'should delete all domain keys', (done)->
 		request(shuttle)
 		.delete '/v1/gamer/vfs/com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3'

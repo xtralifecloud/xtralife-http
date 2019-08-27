@@ -67,6 +67,8 @@ xlenv.override null,
 			listen: true
 
 		hostnameBlacklist: ['localhost', '127.0.0.1']
+		#profileFields: ['displayName'] # show nothing but displayName in profile
+		#cleanLogin: true
 
 	mailer: null # not used for xtralife-http tests
 
