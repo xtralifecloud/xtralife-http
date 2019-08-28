@@ -69,6 +69,8 @@ xlenv.override null,
 		hostnameBlacklist: ['localhost', '127.0.0.1']
 		#profileFields: ['displayName'] # show nothing but displayName in profile
 		#cleanLogin: true
+		#GameCenterTokenMaxage: 86400
+		tag: 'custom test tag'
 
 	mailer: null # not used for xtralife-http tests
 

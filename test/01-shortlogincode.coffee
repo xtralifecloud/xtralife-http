@@ -107,7 +107,7 @@ describe 'Short Login code', ->
 		.expect 'content-type', /json/
 		.expect 200
 		.end (err, res)->
-			console.log res.body
+			#console.log res.body
 			should(err).be.null
 			res.body.should.have.property "done"
 			done(err)

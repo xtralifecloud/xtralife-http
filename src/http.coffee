@@ -32,10 +32,13 @@ if env is 'dev'
 app.options '/*', cors(xlenv.http.cors)
 
 app.get "/v1/ping" , cors(xlenv.http.cors), (req, res)->
+	response = { version : xlenv.version, utc : new Date() }
+	if xlenv.options.tag?
+		response.tag = xlenv.options.tag
 	res
 	.set 'content-type', 'application/json'
 	.status 200
-	.send { version : xlenv.version, utc : new Date() }
+	.json response
 	.end()
 
 # All routes require App authentication with x-apikey and x-apisecret

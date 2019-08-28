@@ -202,7 +202,7 @@ describe 'Transactions', ->
 		.expect 'content-type', /json/
 		.expect 400
 		.end (err, res)->
-			res.body.should.eql { name: 'BadArgument', message: 'A passed argument is invalid' }
+			res.body.should.eql { name: 'PreconditionError', message: 'Incorrect parameters (transaction must be a valid transaction)' }
 			done(err)
 
 

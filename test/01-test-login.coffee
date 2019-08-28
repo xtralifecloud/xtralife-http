@@ -423,6 +423,7 @@ describe 'App Authentication', ->
 			.send {network: 'gamecenter', id: auth.playerId, secret: JSON.stringify(auth)}
 			.expect 'content-type', /json/
 			.end (err, res)->
+				res.body.name.should.eql("GameCenterLoginError")
 				res.body.message.should.eql("Invalid bundleId")
 				done()
 
@@ -442,6 +443,7 @@ describe 'App Authentication', ->
 			.send {network: 'gamecenter', id: auth.playerId, secret: JSON.stringify(auth)}
 			.expect 'content-type', /json/
 			.end (err, res)->
+				res.body.name.should.eql("GameCenterLoginError")
 				res.body.message.should.eql("Invalid Signature")
 				done()
 

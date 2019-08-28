@@ -20,13 +20,14 @@ anonym_token = null
 
 # Testing Gamer routes
 
-describe.skip 'UnitTest', ->
+describe 'UnitTest', ->
 
 	before 'should wait for initialisation', (done)->
 		shuttlePromise.then (_shuttle)->
 			shuttle = _shuttle
 			done()
 		.catch done
+		.done()
 
 
 	describe 'ping', ->
@@ -38,6 +39,8 @@ describe.skip 'UnitTest', ->
 			.end (err, res)->
 				#console.log res.body
 				res.body.should.have.property 'utc'
+				res.body.should.have.property 'tag'
+				res.body.tag.should.eql('custom test tag')
 				done err
 
 	describe.skip 'create-delete users', ->
