@@ -28,7 +28,7 @@ describe 'Transactions', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
-
+		null
 
 	it 'should return the balance', (done)->
 		request(shuttle)
@@ -42,6 +42,7 @@ describe 'Transactions', ->
 			if err? then return done err
 			balance = res.body
 			done()
+		null
 
 	it 'should list transactions before anything', (done)->
 		request(shuttle)
@@ -55,6 +56,7 @@ describe 'Transactions', ->
 			if err? then return done err
 			txHistory = res.body.history
 			done()
+		null
 
 
 	it 'should then send a transaction', (done)->
@@ -75,6 +77,7 @@ describe 'Transactions', ->
 			balance = res.body
 			balance.Gold.should.eql(unless oldBalance.Gold? then 100 else oldBalance.Gold+100)
 			done()
+		null
 
 	it 'should have updated the balance', (done)->
 		request(shuttle)
@@ -88,6 +91,7 @@ describe 'Transactions', ->
 			if err? then return done err
 			res.body.Gold.should.eql(balance.Gold)
 			done(err)
+		null
 
 
 	it 'should zero the balance on Gold', (done)->
@@ -108,6 +112,7 @@ describe 'Transactions', ->
 			balance = res.body
 			balance.Gold.should.eql(0)
 			done()
+		null
 
 	it 'should list transactions after everything', (done)->
 		request(shuttle)
@@ -121,6 +126,7 @@ describe 'Transactions', ->
 			newtxHistory = res.body.history
 			newtxHistory.length.should.eql(txHistory.length + 2)
 			done()
+		null
 
 	it 'should page through lists of transactions', (done)->
 		request(shuttle)
@@ -134,6 +140,7 @@ describe 'Transactions', ->
 			res.body.count.should.eql txHistory.length + 2
 			#res.body.history.length.should.eql(10) # doesn't work with empty db
 			done()
+		null
 
 	it 'should forbid illegal transactions', (done)->
 		request(shuttle)
@@ -150,6 +157,7 @@ describe 'Transactions', ->
 			if err? then return done err
 			res.body.name.should.eql 'BalanceInsufficient'
 			done()
+		null
 
 	it 'should forbid string transactions', (done)->
 		request(shuttle)
@@ -163,6 +171,7 @@ describe 'Transactions', ->
 		.expect 400
 		.end (err, res)->
 			done()
+		null
 
 	it 'should forbid invalid transactions format', (done)->
 		request(shuttle)
@@ -177,6 +186,7 @@ describe 'Transactions', ->
 		.expect 400
 		.end (err, res)->
 			done()
+		null
 
 
 	it 'should list 2 transactions for a single currency', (done)->
@@ -191,6 +201,7 @@ describe 'Transactions', ->
 			silvertxHistory = res.body.history
 			silvertxHistory.length.should.be.lessThan(3)
 			done()
+		null
 
 	it 'should not allow transaction without transaction', (done)->
 		request(shuttle)
@@ -204,6 +215,7 @@ describe 'Transactions', ->
 		.end (err, res)->
 			res.body.should.eql { name: 'PreconditionError', message: 'Incorrect parameters (transaction must be a valid transaction)' }
 			done(err)
+		null
 
 
 	it 'should allow -auto transactions', (done)->
@@ -221,3 +233,4 @@ describe 'Transactions', ->
 			if err? then return done err
 			res.body.Gold.should.eql 0
 			done(err)
+		null

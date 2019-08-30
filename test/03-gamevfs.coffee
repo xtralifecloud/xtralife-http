@@ -33,7 +33,8 @@ describe 'GameVFS', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
-
+		null
+		
 	it.skip 'should delete all game-private keys to begin fresh', (done)->
 		request(shuttle)
 		.delete '/v1/vfs/private'
@@ -44,6 +45,7 @@ describe 'GameVFS', ->
 			if err? then return done(err)
 			res.status.should.eql 200
 			done(err)
+		null
 
 	it "should write two game-private 'test' and 'test2' keys", ->
 
@@ -57,7 +59,7 @@ describe 'GameVFS', ->
 			result.test2.should.eql {hello: "world"}
 			done()
 		.catch done
-		return null
+		null
 
 
 	it 'should read the test key', (done)->
@@ -70,6 +72,7 @@ describe 'GameVFS', ->
 			if err? then return done(err)
 			res.body.should.eql {hi: "all"}
 			done(err)
+		null
 
 	it "should write a counter named 'counter'", (done)->
 
@@ -89,8 +92,7 @@ describe 'GameVFS', ->
 				if err? then return done err
 				done()
 		.catch done
-		return null
-
+		null
 
 	it 'should read all private keys', (done)->
 		request(shuttle)
@@ -104,6 +106,7 @@ describe 'GameVFS', ->
 			res.body.should.eql {test: {hi: "all"}, test2: {hello: 'world'}}
 			if err? then return done(err)
 			done(err)
+		null
 
 	it.skip 'should delete the test key', (done)->
 		request(shuttle)
@@ -122,6 +125,7 @@ describe 'GameVFS', ->
 			.end (err, res)->
 				res.body.should.eql {test2: {hello: "world"}}
 				done(err)
+		null
 
 	it 'should handle a missing key with a 404', (done)->
 		request(shuttle)
@@ -132,6 +136,7 @@ describe 'GameVFS', ->
 		.end (err, res)->
 			res.status.should.eql(404)
 			done(err)
+		null
 
 	it.skip 'should allow setting all keys at once', (done)->
 		request(shuttle)
@@ -156,6 +161,7 @@ describe 'GameVFS', ->
 				res.body.should.eql {hi: "all"}
 				if err? then return done(err)
 				done(err)
+		null
 
 
 	it.skip 'should delete all game-private keys', (done)->
@@ -176,6 +182,7 @@ describe 'GameVFS', ->
 			.end (err, res)->
 				res.body.should.eql {}
 				done(err)
+		null
 
 	it.skip "should write in specific domain com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3", (done)->
 		request(shuttle)
@@ -190,6 +197,7 @@ describe 'GameVFS', ->
 			res.status.should.eql 200
 			if err? then return done(err)
 			done(err)
+		null
 
 	it.skip 'should read all domain keys', (done)->
 		request(shuttle)
@@ -202,6 +210,7 @@ describe 'GameVFS', ->
 			res.body.test.should.eql {hi: "all"}
 			if err? then return done(err)
 			done(err)
+		null
 
 	it.skip 'should delete all domain keys', (done)->
 		request(shuttle)
@@ -221,6 +230,7 @@ describe 'GameVFS', ->
 			.end (err, res)->
 				res.body.should.eql {}
 				done(err)
+		null
 
 	it "should not access in an unknown domain", (done)->
 		request(shuttle)
@@ -233,6 +243,7 @@ describe 'GameVFS', ->
 		.end (err, res)->
 			res.status.should.eql(404)
 			done(err)
+		null
 
 describe.skip "Binary GameVFS", ->
 
@@ -253,6 +264,7 @@ describe.skip "Binary GameVFS", ->
 		.end (err, res)->
 			res.body.error.should.eql 'This route is no longer available'
 			done(err)
+		null
 
 	it "should delete S3 data", (done)->
 		request(shuttle)
@@ -264,6 +276,7 @@ describe.skip "Binary GameVFS", ->
 		.end (err, res)->
 			res.body.error.should.eql 'This route is no longer available'
 			done(err)
+		null
 
 
 

@@ -32,6 +32,7 @@ describe 'Index', ->
 			gamer_id = res.body.gamer_id
 			gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it "should index a document", (done)->
 
@@ -51,6 +52,7 @@ describe 'Index', ->
 			if err? then return done(err)
 			res.body.created.should.eql true
 			done(err)
+		null
 
 	it 'should get the indexed document', (done)->
 		request(shuttle)
@@ -66,6 +68,7 @@ describe 'Index', ->
 			res.body._source.b.should.eql 2
 			#console.log res.body
 			done(err)
+		null
 
 	it 'should report missing document', (done)->
 		request(shuttle)
@@ -75,6 +78,7 @@ describe 'Index', ->
 		.expect 404
 		.end (err, res)->
 			done(err)
+		null
 
 	it 'should allow searching all entries and get max limit entries', (done)->
 
@@ -88,6 +92,7 @@ describe 'Index', ->
 
 			should(res.body.hits.length > 0 and res.body.hits.length <= 5)
 			done(err)
+		null
 
 	it 'should allow searching entries by value', (done)->
 
@@ -102,6 +107,7 @@ describe 'Index', ->
 			res.body.hits[0]._id.should.eql gamer_id
 			res.body.hits[0]._source.payload.should.eql {string: 'this is from our unit tests' }
 			done(err)
+		null
 
 	it 'should allow querying by body', (done)->
 
@@ -120,6 +126,7 @@ describe 'Index', ->
 			res.body.hits[0]._id.should.eql gamer_id
 			res.body.hits[0]._source.payload.should.eql {string: 'this is from our unit tests' }
 			done(err)
+		null
 
 	it 'should allow querying inexistant document', (done)->
 
@@ -136,6 +143,7 @@ describe 'Index', ->
 			if err? then return done(err)
 			res.body.hits.length.should.eql 0
 			done(err)
+		null
 
 
 	it "should overwrite a document", (done)->
@@ -167,6 +175,7 @@ describe 'Index', ->
 				res.body.hits[0]._id.should.eql gamer_id
 				res.body.hits[0]._source.payload.should.eql {string: 'this is still from our unit tests' }
 				done(err)
+		null
 
 
 	# skip it, to let the db grow...
@@ -183,3 +192,4 @@ describe 'Index', ->
 			res.body.found.should.eql true
 			#console.log res.body
 			done()
+		null

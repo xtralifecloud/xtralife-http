@@ -27,6 +27,7 @@ describe 'Properties', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	before "should create a friend", (done)->
 		request(shuttle)
@@ -41,6 +42,7 @@ describe 'Properties', ->
 			dataset.friend_id = res.body.gamer_id
 			dataset.friend_token = res.body.gamer_secret
 			done()
+		null
 
 	describe 'Failure', ->
 
@@ -56,6 +58,7 @@ describe 'Properties', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadPropertyType')
 				done(err)
+			null
 
 		it 'set array of objets property should fail', (done)->
 
@@ -69,6 +72,7 @@ describe 'Properties', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadPropertyType')
 				done(err)
+			null
 
 		it 'missing value should fail', (done)->
 
@@ -82,6 +86,7 @@ describe 'Properties', ->
 			.end (err, res)->
 				res.body.name.should.eql('MissingPropertyValue')
 				done(err)
+			null
 
 		it 'change all properties with objetcs should fail', (done)->
 
@@ -95,6 +100,7 @@ describe 'Properties', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadPropertyType')
 				done()
+			null
 
 
 	describe 'Success', ->
@@ -112,6 +118,7 @@ describe 'Properties', ->
 				if err? then return done(err)
 				res.body.should.have.property "done"
 				done()
+			null
 
 		it 'get property should sucess', (done)->
 
@@ -126,6 +133,7 @@ describe 'Properties', ->
 				res.body.properties.should.have.property "board"
 				res.body.properties.board.should.be.eql "cube"
 				done()
+			null
 
 		it 'set number property should sucess', (done)->
 
@@ -140,6 +148,7 @@ describe 'Properties', ->
 				if err? then return done(err)
 				res.body.should.have.property "done"
 				done()
+			null
 
 		it 'set boolean property should sucess', (done)->
 
@@ -154,6 +163,7 @@ describe 'Properties', ->
 				if err? then return done(err)
 				res.body.should.have.property "done"
 				done()
+			null
 
 		it 'set array property should sucess', (done)->
 
@@ -168,6 +178,7 @@ describe 'Properties', ->
 				if err? then return done(err)
 				res.body.should.have.property "done"
 				done()
+			null
 
 		it 'get all property should sucess', (done)->
 
@@ -183,6 +194,7 @@ describe 'Properties', ->
 				res.body.properties.should.containEql { board : "cube"}
 				res.body.properties.should.containEql { level : 10 }
 				done()
+			null
 
 		it 'change all properties should sucess', (done)->
 
@@ -197,6 +209,7 @@ describe 'Properties', ->
 				if err? then return done(err)
 				res.body.should.have.property "done"
 				done()
+			null
 
 		it 'find user who match properties', (done)->
 
@@ -209,6 +222,7 @@ describe 'Properties', ->
 			.expect 410
 			.end (err, res)->
 				done()
+			null
 
 		it 'find should fail on bad query', (done)->
 
@@ -221,6 +235,7 @@ describe 'Properties', ->
 			.expect 410
 			.end (err, res)->
 				done()
+			null
 
 
 		it 'vefify all properties should sucess', (done)->
@@ -237,6 +252,7 @@ describe 'Properties', ->
 				res.body.properties.should.containEql { board : "square"}
 				res.body.properties.should.containEql { level : 20}
 				done()
+			null
 
 		it 'del property should sucess', (done)->
 
@@ -251,6 +267,7 @@ describe 'Properties', ->
 				res.body.should.have.property "done"
 				res.body.done.should.eql 1
 				done()
+			null
 
 		it 'del properties should sucess', (done)->
 
@@ -265,4 +282,5 @@ describe 'Properties', ->
 				res.body.should.have.property "done"
 				res.body.done.should.eql 1
 				done()
+			null
 

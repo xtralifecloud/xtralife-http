@@ -44,7 +44,8 @@ xlenv.override null,
 			auto_reconnect: true
 			promiseLibrary: require 'bluebird'
 			useNewUrlParser: true
-
+			useUnifiedTopology: true
+			
 	mongoCx: (cb)->
 		require("mongodb").MongoClient.connect xlenv.mongodb.url, xlenv.mongodb.options, (err, mongodb)->
 			return cb(err, mongodb)

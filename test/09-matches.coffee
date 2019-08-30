@@ -65,6 +65,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				gamer_id_p2 = res.body.gamer_id
 				gamer_token_p2 = res.body.gamer_secret
 				done()
+		null
 
 	it "should create a match", (done)->
 
@@ -112,6 +113,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				if err? then return done err
 				sample_match_id_2 = res.body.match._id
 				done()
+		null
 
 	it "should not be able to create a match with insufficient information", (done)->
 
@@ -125,6 +127,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 		.expect 400
 		.end (err, res)->
 			done err
+		null
 
 	it "should not be able to create a match with complex objects in the properties", (done)->
 
@@ -141,6 +144,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 		.expect 400
 		.end (err, res)->
 			done err
+		null
 
 	it "should contain the profile of the creator in the match list, but no players", (done)->
 
@@ -156,6 +160,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			match.creator.gamer_id.should.eql(gamer_id_p1)
 			should.not.exist(match.players)
 			done()
+		null
 
 	it "should list filtered matches", (done)->
 
@@ -169,6 +174,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			if err? then return done err
 			_selectMatch(res, sample_match_id).description.should.eql('Sample match for testing')
 			done()
+		null
 
 	it "should not list filtered matches that do not fit", (done)->
 
@@ -182,6 +188,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			if err? then return done err
 			res.body.matches.should.eql([])
 			done()
+		null
 
 	first_match_id = null
 	it "should use pagination parameters", (done)->
@@ -212,6 +219,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				res.body.matches.length.should.eql(1)
 				res.body.matches[0]._id.should.not.eql(first_match_id)
 				done()
+		null
 
 	it "should fetch value about a single match", (done)->
 
@@ -227,6 +235,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			res.body.match.creator.gamer_id.should.eql(gamer_id_p1)
 			res.body.match.players[0].gamer_id.should.eql(gamer_id_p1)
 			done()
+		null
 
 	it "should not be able to fetch an invalid match ID", (done)->
 
@@ -237,6 +246,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 		.expect 404
 		.end (err, res)->
 			done err
+		null
 
 	it "should not be able to fetch a non-existing match ID", (done)->
 
@@ -247,10 +257,12 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 		.expect 400
 		.end (err, res)->
 			done err
+		null
 
 	it "should eat all pending messages from broker", (done)->
 		_eatPendingEvents gamer_id_p1, gamer_token_p1, ->
 			done()
+		null
 
 	it "should join a match", (done)->
 
@@ -268,6 +280,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			should.not.exist(res.body.match.shoe)
 			lastEventId_p2 = res.body.match.lastEventId
 			done()
+		null
 
 	it "should receive a notification when another player joins", (done)->
 		# P1 should receive a notification
@@ -284,6 +297,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			res.body.event.playersJoined[0].gamer_id.should.eql(gamer_id_p2)
 			lastEventId_p1 = res.body.event._id
 			done()
+		null
 
 	it "should not be able to join a match twice", (done)->
 
@@ -298,6 +312,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('AlreadyJoinedMatch')
 			done()
+		null
 
 	it "should be limited to the maximum number of players", (done)->
 		# The second game already has one player (the one who created it)
@@ -313,6 +328,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('MaximumNumberOfPlayersReached')
 			done()
+		null
 
 	it "should refuse invalid move", (done)->
 
@@ -330,6 +346,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('InvalidJSONBody')
 			done()
+		null
 
 	it "should not be able to make a move without a lastEventId", (done)->
 
@@ -345,6 +362,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 		.expect 400
 		.end (err, res)->
 			done err
+		null
 
 	it "should not be able to make a move with an invalid lastEventId", (done)->
 
@@ -362,6 +380,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('InvalidLastEventId')
 			done()
+		null
 
 	it "should not receive an own move from broker", (done)->
 
@@ -402,6 +421,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 					res.body.type.should.eql('match.move')
 					lastEventId_p1 = res.body.event._id
 					done()
+		null
 
 	it "should receive a move from broker if another player posts a move", (done)->
 
@@ -437,6 +457,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				should.exist(res.body.event._id)
 				lastEventId_p2 = res.body.event.move.move_id
 				done()
+		null
 
 	it "should post a move in the match", (done)->
 
@@ -457,6 +478,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			should.exist(res.body.match.lastEventId)
 			lastEventId_p1 = res.body.match.lastEventId
 			done()
+		null
 
 	it "should post a second move in the match", (done)->
 
@@ -474,6 +496,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			if err? then return done err
 			lastEventId_p1 = res.body.match.lastEventId
 			done()
+		null
 
 	it "should clear the move list when posting a global state", (done)->
 
@@ -493,6 +516,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			if err? then return done err
 			lastEventId_p1 = res.body.match.lastEventId
 			done()
+		null
 
 	it "should draw an element from the shoe", (done)->
 
@@ -523,6 +547,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 					res.body.event.count.should.eql(2)
 					lastEventId_p2 = res.body.event._id
 					done()
+		null
 
 	it "should draw more elements than available from the shoe", (done)->
 
@@ -540,6 +565,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				lastEventId_p1 = res.body.match.lastEventId
 				res.body.drawnItems.length.should.eql(5)
 				done()
+		null
 
 	it "should complete a match", (done)->
 		# Eat pending messages to start up clean
@@ -571,6 +597,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 					res.body.event.finished.should.eql(1)
 					lastEventId_p2 = res.body.event._id
 					done()
+		null
 
 	it "should reveal the shoe after the match has ended", (done)->
 		# Eat pending messages to start up clean
@@ -589,6 +616,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				# Was 4 initially, but drew 5 so increased to the double
 				res.body.match.shoe.length.should.eql(8)
 				done()
+		null
 
 	it "should complete a match only once", (done)->
 
@@ -604,6 +632,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('MatchAlreadyFinished')
 			done()
+		null
 
 	it "shouldn't be able to complete a match to which one doesn't belong", (done)->
 
@@ -619,6 +648,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('BadMatchID')
 			done()
+		null
 
 	it "should not list finished matches", (done)->
 
@@ -633,6 +663,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			should.not.exist(_selectMatch(res, sample_match_id))
 			should.exist(_selectMatch(res, sample_match_id_2))
 			done()
+		null
 
 	it "should list finished matches", (done)->
 
@@ -647,6 +678,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			should.exist(_selectMatch(res, sample_match_id))
 			should.exist(_selectMatch(res, sample_match_id_2))
 			done()
+		null
 
 	it "should not list full matches by default", (done)->
 
@@ -661,6 +693,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			should.not.exist(_selectMatch(res, sample_match_id))
 			should.not.exist(_selectMatch(res, sample_match_id_2))
 			done()
+		null
 
 	it "should leave a match", (done)->
 
@@ -677,6 +710,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			# Only summarized information should be returned
 			should.not.exist(res.body.match.globalState)
 			done()
+		null
 
 	it "should receive a notification when another player leaves", (done)->
 		# P1 should receive a notification
@@ -692,6 +726,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			should.exist(res.body.event.match_id)
 			res.body.event.playersLeft[0].gamer_id.should.eql(gamer_id_p2)
 			done()
+		null
 
 	it "should not leave a match twice", (done)->
 
@@ -705,6 +740,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 		.expect 400
 		.end (err, res)->
 			done err
+		null
 
 	it "should not allow to delete a match unless being owner", (done)->
 
@@ -720,6 +756,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('BadMatchID')
 			done()
+		null
 
 	it "should not allow to delete a match unless it is finished", (done)->
 
@@ -735,6 +772,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('MatchNotFinished')
 			done()
+		null
 
 	it "should delete a finished match", (done)->
 
@@ -750,6 +788,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.done.should.eql(1)
 			done()
+		null
 
 	it "should complete a match that just started", (done)->
 		request(shuttle)
@@ -775,6 +814,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			.expect 200
 			.end (err, res)->
 				done err
+		null
 
 	it "should not be able to invite himself", (done)->
 
@@ -806,6 +846,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				return done err if err?
 				res.body.name.should.eql('AlreadyJoinedMatch')
 				done err
+		null
 
 	it "should invite somebody else", (done)->
 
@@ -832,6 +873,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				res.body.event.match_id.should.eql(sample_match_id)
 				res.body.event.inviter.gamer_id.should.eql(gamer_id_p1)
 				done()
+		null
 
 	it "should not invite somebody twice", (done)->
 
@@ -847,6 +889,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('AlreadyInvitedToMatch')
 			done err
+		null
 
 	it "should list matches to which one is invited", (done)->
 
@@ -860,6 +903,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			if err? then return done err
 			_selectMatch(res, sample_match_id).description.should.eql('Match for testing')
 			done()
+		null
 
 	it "should not be invited anymore once match is joined", (done)->
 
@@ -883,6 +927,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 				if err? then return done err
 				should.not.exist(_selectMatch(res, sample_match_id))
 				done()
+		null
 
 	it "should not invite non-existing gamer", (done)->
 
@@ -898,6 +943,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			return done err if err?
 			res.body.name.should.eql('BadGamerID')
 			done err
+		null
 
 	it "should be able to dismiss an invitation", (done)->
 
@@ -960,6 +1006,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 							if err? then return done err
 							should.not.exist(_selectMatch(res, sample_match_id))
 							done err
+		null
 
 	it "should not be able to dismiss an invitation from a match he hasn't been invited to", (done)->
 		# Then he'll dismiss the invitation
@@ -973,6 +1020,7 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			if err? then return done err
 			res.body.name.should.be.eql('BadMatchID')
 			done err
+		null
 
 	it "should delete the user", (done)->
 		xtralife = require 'xtralife-api'
@@ -983,6 +1031,6 @@ describe 'Matches', -> # there's an interraction somewhere in our tests, can run
 			xtralife.api.onDeleteUser ObjectID(gamer_id_p2), cb, 'com.clanofthecloud.cloudbuilder'
 		], (err)=>
 			done(err)
-		return null
+		null
 
 

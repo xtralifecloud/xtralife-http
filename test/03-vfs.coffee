@@ -34,6 +34,7 @@ describe 'gamerVFS', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it 'should delete all game-private keys to begin fresh', (done)->
 		request(shuttle)
@@ -46,6 +47,7 @@ describe 'gamerVFS', ->
 			if err? then return done err
 			res.status.should.eql 200
 			done()
+		null
 
 	it "should write two keys at once, 'test' and 'test2', through xtralife", ->
 
@@ -91,7 +93,7 @@ describe 'gamerVFS', ->
 				res.status.should.eql 200
 				if err? then return done(err)
 				done(err)
-
+		null
 
 	it 'should read the test key', (done)->
 		request(shuttle)
@@ -103,6 +105,7 @@ describe 'gamerVFS', ->
 		.end (err, res)->
 			res.body.should.eql {hi: "all"}
 			done(err)
+		null
 
 	it 'should read all private keys', (done)->
 		request(shuttle)
@@ -116,6 +119,7 @@ describe 'gamerVFS', ->
 			res.body.should.eql {test: {hi: "all"}, test2: {hello: 'world'}}
 			if err? then return done(err)
 			done(err)
+		null
 
 	it 'should delete the test key', (done)->
 		request(shuttle)
@@ -136,6 +140,7 @@ describe 'gamerVFS', ->
 			.end (err, res)->
 				res.body.should.eql {test2: {hello: "world"}}
 				done(err)
+		null
 
 	it 'should handle a missing key with a 404', (done)->
 		request(shuttle)
@@ -147,6 +152,7 @@ describe 'gamerVFS', ->
 		.end (err, res)->
 			res.status.should.eql(404)
 			done(err)
+		null
 
 	it 'should allow setting all keys at once', (done)->
 		request(shuttle)
@@ -173,7 +179,7 @@ describe 'gamerVFS', ->
 				res.body.should.eql {hi: "all"}
 				if err? then return done(err)
 				done(err)
-
+		null
 
 	it 'should delete all game-private keys', (done)->
 		request(shuttle)
@@ -195,6 +201,7 @@ describe 'gamerVFS', ->
 			.end (err, res)->
 				res.body.should.eql {}
 				done(err)
+		null
 
 	it "should write in specific domain com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3", (done)->
 		request(shuttle)
@@ -210,6 +217,7 @@ describe 'gamerVFS', ->
 			res.status.should.eql 200
 			if err? then return done(err)
 			done(err)
+		null
 
 	it 'should read all domain keys', (done)->
 		request(shuttle)
@@ -225,6 +233,7 @@ describe 'gamerVFS', ->
 				hi: "all"
 			if err? then return done(err)
 			done(err)
+		null
 
 	it 'should return the domains on login', (done) =>
 		request(shuttle)
@@ -238,6 +247,7 @@ describe 'gamerVFS', ->
 			if err? then return done err
 			res.body.domains.length.should.eql(2) # breaks with options.cleanLogin of course
 			done()
+		null
 
 
 	it 'should delete all domain keys', (done)->
@@ -260,6 +270,7 @@ describe 'gamerVFS', ->
 			.end (err, res)->
 				res.body.should.eql {}
 				done(err)
+		null
 
 	it "should not access in an unknown domain", (done)->
 		request(shuttle)
@@ -273,6 +284,7 @@ describe 'gamerVFS', ->
 		.end (err, res)->
 			res.status.should.eql(404)
 			done(err)
+		null
 
 	getURL = null
 
@@ -294,6 +306,7 @@ describe.skip "binary gamer vfs", ->
 
 			getURL = res.body.getURL
 			done(err)
+		null
 
 	it "should have stored the url for S3 access", (done)->
 		request(shuttle)
@@ -305,6 +318,7 @@ describe.skip "binary gamer vfs", ->
 		.end (err, res)->
 			res.body.should.eql getURL
 			done(err)
+		null
 
 	after "should delete the S3 data", (done)->
 		request(shuttle)
@@ -317,3 +331,4 @@ describe.skip "binary gamer vfs", ->
 			res.body.should.have.property('done')
 			res.body.done.should.eql(1)
 			done(err)
+		null

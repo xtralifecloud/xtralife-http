@@ -34,6 +34,7 @@ describe 'Godfather', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it "should create an anonymous user just for godchilden", (done)->
 
@@ -49,6 +50,7 @@ describe 'Godfather', ->
 			gamer_id = res.body.gamer_id
 			gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it 'create godfather code should sucess', (done)->
 
@@ -64,8 +66,7 @@ describe 'Godfather', ->
 			godfatherCode = res.body.godfathercode
 
 			done(err)
-
-
+		null
 
 	it 'set godfather code should sucess', (done)->
 
@@ -91,6 +92,7 @@ describe 'Godfather', ->
 			.end (err, res)->
 				res.body.godfather.gamer_id.should.eql dataset.gamer_id
 				done(err)
+		null
 
 
 	it "should create another anonymous user just for godchilden", (done)->
@@ -107,6 +109,7 @@ describe 'Godfather', ->
 			gamer_id = res.body.gamer_id
 			gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it 'set godfather code with reward should success', (done)->
 
@@ -121,6 +124,7 @@ describe 'Godfather', ->
 			#console.log res.body
 			res.body.should.have.property 'done'
 			done(err)
+		null
 
 	it 'get godchildren should sucess', (done)->
 
@@ -135,4 +139,5 @@ describe 'Godfather', ->
 			#console.log res.body
 			res.body.should.have.property 'godchildren'
 			done(err)
+		null
 

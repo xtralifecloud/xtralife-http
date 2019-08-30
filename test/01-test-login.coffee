@@ -30,7 +30,8 @@ describe 'App Authentication', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
-
+		null
+		
 	# Test App credentials
 
 	it 'should reject missing app creds', (done)->
@@ -43,6 +44,7 @@ describe 'App Authentication', ->
 			#console.log res.body
 			res.body.name.should.eql('InvalidAppAuthenticationError')
 			done(err)
+		null
 
 	it 'should reject invalid app creds', (done)->
 
@@ -56,6 +58,7 @@ describe 'App Authentication', ->
 		.end (err, res)->
 			res.body.name.should.eql('InvalidAppAuthenticationError')
 			done(err)
+		null
 
 	# Test Anonymous login
 	describe "Anonymous login", ->
@@ -72,6 +75,7 @@ describe 'App Authentication', ->
 				res.body.name.should.eql('LoginError')
 				res.body.message.should.eql('Invalid Gamer Credentials (unknown network)')
 				done(err)
+			null
 
 		it 'should reject missing id', (done)->
 
@@ -85,6 +89,7 @@ describe 'App Authentication', ->
 				res.body.name.should.eql('LoginError')
 				res.body.message.should.eql('Invalid user credentials')
 				done(err)
+			null
 
 		it 'should reject missing secret', (done)->
 
@@ -98,6 +103,7 @@ describe 'App Authentication', ->
 				res.body.name.should.eql('LoginError')
 				res.body.message.should.eql('Invalid user credentials')
 				done(err)
+			null
 
 		it 'should register anonymous gamer', (done)->
 
@@ -112,6 +118,7 @@ describe 'App Authentication', ->
 				res.body.should.have.property 'gamer_id'
 				res.body.should.have.property 'gamer_secret'
 				done(err)
+			null
 
 		it 'should accept anonymous gamer creds', (done)->
 
@@ -128,6 +135,7 @@ describe 'App Authentication', ->
 				res.body.gamer_id.should.eql(dataset.gamer_id)
 				res.body.gamer_secret.should.eql(dataset.gamer_token)
 				done(err)
+			null
 
 		it 'should accept anonymous gamer creds then batch', (done)->
 
@@ -144,6 +152,7 @@ describe 'App Authentication', ->
 				res.body.gamer_id.should.eql(dataset.gamer_id)
 				res.body.gamer_secret.should.eql(dataset.gamer_token)
 				done(err)
+			null
 
 
 		it 'should reject wrong anonymous gamer creds', (done)->
@@ -159,6 +168,7 @@ describe 'App Authentication', ->
 				res.body.name.should.eql("LoginError")
 				res.body.message.should.eql('Invalid user credentials')
 				done(err)
+			null
 
 		it 'should convert anonymous account to e-mail', (done)->
 			# Create anonymous account
@@ -195,6 +205,7 @@ describe 'App Authentication', ->
 					.expect 200
 					.end (err, res)->
 						done err
+			null
 
 	# Testing Facebook Login (will work only with valid token)
 	describe 'Facebook login', ->
@@ -213,6 +224,7 @@ describe 'App Authentication', ->
 				if err? then return done(err)
 				res.body.name.should.eql('InvalidLoginTokenError')
 				done(err)
+			null
 
 		it.skip 'should accept valid facebook token regardless of id, and unlink from facebook', (done)->
 
@@ -231,6 +243,7 @@ describe 'App Authentication', ->
 					res.body.network.should.be.eql("facebook")
 					res.body.networkid.should.not.be.undefined
 					done(err)
+			null
 
 		it.skip 'user should link to facebook, then unlink', (done)->
 
@@ -252,6 +265,7 @@ describe 'App Authentication', ->
 				.expect 200
 				.end (err, res)->
 					done(err)
+			null
 
 		it.skip 'should convert anonymous account to facebook', (done)->
 			# Create anonymous account
@@ -288,6 +302,7 @@ describe 'App Authentication', ->
 					.expect 200
 					.end (err, res)->
 						done err
+			null
 
 	# Testing Google Login (will work only with valid token)
 	describe 'Google login', ->
@@ -305,6 +320,7 @@ describe 'App Authentication', ->
 
 				res.body.name.should.eql('InvalidLoginTokenError')
 				done(err)
+			null
 
 		it.skip 'should accept valid google token regardless of id', (done)->
 
@@ -324,6 +340,7 @@ describe 'App Authentication', ->
 					res.body.network.should.be.eql("googleplus")
 					res.body.networkid.should.not.be.undefined
 					done(err)
+			null
 
 
 		it.skip 'user should link to google, then unlink', (done)->
@@ -346,6 +363,7 @@ describe 'App Authentication', ->
 				.expect 'content-type', /json/
 				.end (err, res)->
 					done(err)
+			null
 
 		it.skip 'should convert anonymous account to googleplus', (done)->
 			# Create anonymous account
@@ -382,6 +400,7 @@ describe 'App Authentication', ->
 					.expect 200
 					.end (err, res)->
 						done err
+			null
 
 	describe "Game Center login", ()=>
 		it 'should connect with good creds', (done)=>
@@ -406,6 +425,7 @@ describe 'App Authentication', ->
 				res.body.network.should.be.eql("gamecenter")
 				res.body.networkid.should.be.eql(auth.playerId)
 				done(err)
+			null
 
 		it 'should fail for bad bundleId', (done)=>
 			auth = {
@@ -426,6 +446,7 @@ describe 'App Authentication', ->
 				res.body.name.should.eql("GameCenterLoginError")
 				res.body.message.should.eql("Invalid bundleId")
 				done()
+			null
 
 		it 'should fail for bad signature', (done)=>
 			auth = {
@@ -446,6 +467,7 @@ describe 'App Authentication', ->
 				res.body.name.should.eql("GameCenterLoginError")
 				res.body.message.should.eql("Invalid Signature")
 				done()
+			null
 
 	# Testing Custom Network Login
 	describe.skip 'Custom Network login', ->
@@ -463,6 +485,7 @@ describe 'App Authentication', ->
 				res.body.network.should.be.eql("customNetwork")
 				res.body.networkid.should.not.be.undefined
 				done(err)
+			null
 
 		it 'should not connect with bad creds', (done)->
 			request(shuttle)
@@ -474,6 +497,7 @@ describe 'App Authentication', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadUserCredentials')
 				done(err)
+			null
 
 		it 'should not connect with bad custom Name', (done)->
 			request(shuttle)
@@ -485,6 +509,7 @@ describe 'App Authentication', ->
 			.end (err, res)->
 				res.body.name.should.eql('HookError')
 				done(err)
+			null
 
 
 	# Testing Gamer authentication
@@ -500,6 +525,7 @@ describe 'App Authentication', ->
 			.expect 401
 			.end (err, res)->
 				done(err)
+			null
 
 
 		it 'should not allow wrong gamer_secret in basic auth', (done)->
@@ -511,6 +537,7 @@ describe 'App Authentication', ->
 			.expect 'content-type', /json/
 			.expect 401
 			.end done
+			null
 
 		it 'should not allow wrong basic auth', (done)->
 
@@ -521,6 +548,7 @@ describe 'App Authentication', ->
 			.expect 'content-type', /json/
 			.expect 401
 			.end done
+			null
 
 	# Testing Logout
 	describe 'Logout', ->
@@ -537,6 +565,7 @@ describe 'App Authentication', ->
 				if err? then return done(err)
 				res.body.should.eql({})
 				done()
+			null
 
 		it 'should allow check user while logged out', (done)->
 
@@ -549,3 +578,4 @@ describe 'App Authentication', ->
 				if err? then return done(err)
 				print res.body
 				done()
+			null

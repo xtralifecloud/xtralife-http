@@ -12,6 +12,8 @@ dataset = require './dataset.coffee'
 email_id = null
 email_token = null
 
+xlenv.mailer = sendMail: (mail, cb)=> cb(null, {})
+
 describe 'Short Login code', ->
 
 	before 'should wait for initialisation', ->
@@ -34,6 +36,7 @@ describe 'Short Login code', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it 'should register email gamer', (done)->
 
@@ -49,6 +52,7 @@ describe 'Short Login code', ->
 			email_id = res.body.gamer_id
 			email_token = res.body.gamer_secret
 			done(err)
+		null
 
 	it 'should change the password and re-login', (done)->
 		request(shuttle)
@@ -70,6 +74,7 @@ describe 'Short Login code', ->
 				res.body.should.have.property 'gamer_id'
 				res.body.should.have.property 'gamer_secret'
 				done(err)
+		null
 
 
 	it 'should restore the password', (done)->
@@ -82,35 +87,36 @@ describe 'Short Login code', ->
 		.end (err, res)->
 			res.body.should.have.property 'done'
 			done(err)
+		null
 
 	it 'should send an email', (done)->
 		this.timeout(15000);
 
 		request(shuttle)
-		.get "/v1/login/devteam@clanofthecloud.com"
+		.post "/v1/login/devteam01@clanofthecloud.com"
 		.set dataset.validAppCredentials
 		.send { from: "noreply@clanofthecloud.com", title : "Here are your credentials", body : "You temporary code is [[SHORTCODE]] \nEnjoy." }
 		.expect 'content-type', /json/
 		.expect 200
 		.end (err, res)->
-			#console.log res.body
 			if err? then return done(err)
 			res.body.should.have.property "done"
 			done(err)
+		null
 
 	it 'should send an email with html', (done)->
 		this.timeout(15000);
 		request(shuttle)
-		.get "/v1/login/devteam@clanofthecloud.com"
+		.post "/v1/login/devteam01@clanofthecloud.com"
 		.set dataset.validAppCredentials
 		.send { from: "noreply@clanofthecloud.com", title : "Here are your credentials", body : "You temporary code is [[SHORTCODE]] \nEnjoy.", html: "<h1>Hi!</h1> <p>You temporary code is <b>[[SHORTCODE]]<b> </p> <br /><p>Enjoy.</p>" }
 		.expect 'content-type', /json/
 		.expect 200
 		.end (err, res)->
-			#console.log res.body
 			should(err).be.null
 			res.body.should.have.property "done"
 			done(err)
+		null
 
 	it 'should return 400 in case of unknown email', (done)->
 		request(shuttle)
@@ -121,6 +127,7 @@ describe 'Short Login code', ->
 		.expect 400
 		.end (err, res)->
 			done(err)
+		null
 
 	it 'should return 400 in case of missing SHORTCODE email', (done)->
 		request(shuttle)
@@ -131,6 +138,7 @@ describe 'Short Login code', ->
 		.expect 400
 		.end (err, res)->
 			done(err)
+		null
 
 
 	it 'should create a login code', (done)->
@@ -146,6 +154,7 @@ describe 'Short Login code', ->
 			res.body.should.have.property "shortcode"
 			shortcode = res.body.shortcode
 			done(err)
+		null
 
 	it 'should login with code', (done)->
 		#console.log {shortcode}
@@ -161,6 +170,7 @@ describe 'Short Login code', ->
 			res.body.should.have.property 'gamer_secret'
 			res.body.should.have.property 'passwordChanged'
 			done(err)
+		null
 
 	it 'login with same code should fail', (done)->
 		request(shuttle)
@@ -172,6 +182,7 @@ describe 'Short Login code', ->
 		.end (err, res)->			
 			res.body.name.should.eql "BadToken"
 			done(err)
+		null
 
 	it 'should fail to get code on bad domain', (done)->
 
@@ -184,6 +195,7 @@ describe 'Short Login code', ->
 		.end (err, res)->
 			res.body.name.should.eql "InvalidDomain"
 			done(err)
+		null
 
 	it 'should success to get code on owned domain with an expiry in 5"', (done)->
 
@@ -210,6 +222,6 @@ describe 'Short Login code', ->
 					res.body.name.should.eql "BadToken"
 					done(err)
 			, 7*1000
-
+		null
 
 

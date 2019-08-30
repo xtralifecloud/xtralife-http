@@ -28,6 +28,7 @@ describe 'Gamers', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	before "should create a friend", (done)->
 		request(shuttle)
@@ -42,6 +43,7 @@ describe 'Gamers', ->
 			dataset.friend_id = res.body.gamer_id
 			dataset.friend_token = res.body.gamer_secret
 			done()
+		null
 
 	describe 'Profile', ->
 
@@ -59,6 +61,7 @@ describe 'Gamers', ->
 				res.body.should.have.property 'profile'
 				res.body.profile.should.containDeep {"addr1" : "rue condorcet, Paris"}
 				done()
+			null
 
 		it 'get profile should sucess', (done)->
 
@@ -72,6 +75,7 @@ describe 'Gamers', ->
 				if err? then return done(err)
 				res.body.should.containDeep {"addr1" : "rue condorcet, Paris"}
 				done()
+			null
 
 	describe 'Search', ->
 
@@ -88,6 +92,7 @@ describe 'Gamers', ->
 			.end (err, res)->
 				res.body.name.should.eql('InvalidOption')
 				done()
+			null
 
 		it 'get existing gamer_id should sucess', (done)->
 
@@ -105,6 +110,7 @@ describe 'Gamers', ->
 				if err? then return done(err)
 				res.body.should.have.property "_id"
 				done()
+			null
 
 		it 'get non existing gamer_id should fail', (done)->
 
@@ -117,6 +123,7 @@ describe 'Gamers', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadGamerID')
 				done()
+			null
 
 		it 'get existing network_id should sucess', (done)->
 
@@ -132,6 +139,7 @@ describe 'Gamers', ->
 				if err? then return done(err)
 				res.body.should.have.property "_id"
 				done()
+			null
 
 		it 'get non existing network_id should fail', (done)->
 
@@ -145,6 +153,7 @@ describe 'Gamers', ->
 				if err? then return done(err)
 				res.body.name.should.eql('BadGamerID')
 				done()
+			null
 
 		it 'get displayName containing "Guest" should sucess', (done)->
 
@@ -158,6 +167,7 @@ describe 'Gamers', ->
 				if err? then return done(err)
 				res.body.should.have.property "count"
 				done()
+			null
 
 	describe 'GDPR user nuking', ->
 
@@ -198,5 +208,6 @@ describe 'Gamers', ->
 						res.status.should.eql(401)
 						res.body.name.should.eql('InvalidLoginTokenError')
 						done()
+			null
 
 

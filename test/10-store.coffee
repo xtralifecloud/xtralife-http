@@ -107,6 +107,7 @@ describe 'Store', ->
 				return done err if err?
 				xtralife.api.store.TEST_setProductDefinitions res.body.games[0].appid, definitions, (err)->
 					done err
+		null
 
 	it "should list products", (done)->
 		request(shuttle)
@@ -119,6 +120,7 @@ describe 'Store', ->
 			if err? then return done err
 			res.body.count.should.eql(2)
 			done()
+		null
 
 	it "should validate AppStore receipt for an existing product", (done)->
 		transactionId = 'mocked' + new ObjectID()
@@ -162,6 +164,7 @@ describe 'Store', ->
 						if err? then return done err
 						res.body.history[0].desc.should.eql("My TX")
 						done()
+		null
 
 	it "should not validate the same receipt twice", (done)->
 		inappMock.configureNextAppleRequest(0)
@@ -192,6 +195,7 @@ describe 'Store', ->
 				return done err if err?
 				res.body.money.should.eql(800)
 				done()
+		null
 
 	it "should be able to buy the same item twice", (done)->
 		# Should be ok this time since we have another transaction ID
@@ -223,6 +227,7 @@ describe 'Store', ->
 				return done err if err?
 				res.body.money.should.eql(1600)
 				done()
+		null
 
 	it "should not validate receipt for a non-existing product", (done)->
 		transactionId = 'mocked' + new ObjectID()
@@ -238,6 +243,7 @@ describe 'Store', ->
 		.expect 400
 		.end (err, res)->
 			done err
+		null
 
 	it "should not validate receipt for a non-existing AppStore product", (done)->
 		transactionId = 'mocked' + new ObjectID()
@@ -253,6 +259,7 @@ describe 'Store', ->
 		.expect 400 # purchase not confirmed
 		.end (err, res)->
 			done err
+		null
 
 	it "should not validate receipt from wrong environment", (done)->
 		transactionId = 'mocked' + new ObjectID()
@@ -268,6 +275,7 @@ describe 'Store', ->
 		.expect 400 # purchase not confirmed
 		.end (err, res)->
 			done err
+		null
 
 	it "should return a retryable HTTP code when Apple server is unavailable", (done)->
 		transactionId = 'mocked' + new ObjectID()
@@ -284,6 +292,7 @@ describe 'Store', ->
 		.end (err, res)->
 			res.body.name.should.eql "ExternalServerTempError"
 			done err
+		null
 
 	it "should return a retryable HTTP code for bad responses from Apple", (done)->
 		transactionId = 'mocked' + new ObjectID()
@@ -300,6 +309,7 @@ describe 'Store', ->
 		.end (err, res)->
 			res.body.name.should.eql "ExternalServerTempError"
 			done err
+		null
 
 	it "should return a definitve no for any negative answer from AppStore", (done)->
 		transactionId = 'mocked' + new ObjectID()
@@ -316,6 +326,7 @@ describe 'Store', ->
 		.end (err, res)->
 			res.body.name.should.eql "PurchaseNotConfirmed"
 			done err
+		null
 
 	it "should not validate cryptographically incorrect receipt for Google product", (done)->
 		inappMock.configureNextGoogleRequest(false)
@@ -330,6 +341,7 @@ describe 'Store', ->
 		.expect 400
 		.end (err, res)->
 			done err
+		null
 
 	it "should validate receipt for test Google product", (done)->
 		inappMock.configureNextGoogleRequest(false)
@@ -345,6 +357,7 @@ describe 'Store', ->
 		.end (err, res)->
 			validTransactions += 1
 			done err
+		null
 
 	it "should not validate receipt for really bought Google product but inexisting in store config", (done)->
 		inappMock.configureNextGoogleRequest(true)
@@ -359,6 +372,7 @@ describe 'Store', ->
 		.expect 400
 		.end (err, res)->
 			done err
+		null
 
 	it "should validate Mac AppStore receipt for an existing product", (done)->
 		transactionId = 'mocked' + new ObjectID()
@@ -389,6 +403,7 @@ describe 'Store', ->
 				return done err if err?
 				res.body.money.should.eql(2400)
 				done()
+		null
 
 	it "should validate receipt for Google product", (done)->
 		request(shuttle)
@@ -404,6 +419,7 @@ describe 'Store', ->
 			res.body.validation.repeated.should.eql 0
 			validTransactions += 1
 			done err
+		null
 
 	it "should retrieve the purchase history", (done)->
 		request(shuttle)
@@ -420,6 +436,7 @@ describe 'Store', ->
 			res.body.purchases[1].productId.should.eql 'cotc_product1'
 			res.body.purchases[2].productId.should.eql 'cotc_product2'
 			done()
+		null
 
 	it "should delete the user", (done)->
 		xtralife.api.onDeleteUser ObjectID(gamer_id), done, 'com.clanofthecloud.cloudbuilder'

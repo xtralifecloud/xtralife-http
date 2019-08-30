@@ -29,6 +29,12 @@ describe 'UnitTest', ->
 		.catch done
 		.done()
 
+	after 'should close', (done)=>
+		setTimeout ()=> 
+			process.exit(0) 
+		, 1000
+		done()
+		null
 
 	describe 'ping', ->
 		it "should succes ping call", (done)->
@@ -42,6 +48,7 @@ describe 'UnitTest', ->
 				res.body.should.have.property 'tag'
 				res.body.tag.should.eql('custom test tag')
 				done err
+			null
 
 	describe.skip 'create-delete users', ->
 

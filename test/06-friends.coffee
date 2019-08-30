@@ -27,6 +27,7 @@ describe 'Friends', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	before "should create a friend", (done)->
 		request(shuttle)
@@ -41,6 +42,7 @@ describe 'Friends', ->
 			dataset.friend_id = res.body.gamer_id
 			dataset.friend_token = res.body.gamer_secret
 			done()
+		null
 
 	describe 'Failures', ->
 
@@ -55,6 +57,7 @@ describe 'Friends', ->
 			.end (err, res)->
 				res.body.name.should.eql('StatusNotSupported')
 				done(err)
+			null
 
 		it 'gamer should reject an bad gamer_id', (done)->
 
@@ -67,6 +70,7 @@ describe 'Friends', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadGamerID')
 				done(err)
+			null
 
 		it 'gamer should reject an unknown gamer_id', (done)->
 
@@ -79,6 +83,7 @@ describe 'Friends', ->
 			.end (err, res)->
 				res.body.name.should.eql('GamerIdNotFound')
 				done(err)
+			null
 
 		it 'gamer should reject a missing status', (done)->
 
@@ -91,6 +96,7 @@ describe 'Friends', ->
 			.end (err, res)->
 				res.body.name.should.eql('StatusNotFound')
 				done(err)
+			null
 
 
 	describe 'Success', ->
@@ -108,6 +114,7 @@ describe 'Friends', ->
 				if err? then return done(err)
 				res.body.should.eql { done : 1}
 				done(err)
+			null
 
 		it 'should list gamer friends and gamer friend friends', (done)->
 
@@ -134,7 +141,8 @@ describe 'Friends', ->
 							res.body.friends.should.be.an.Array
 							res.body.friends.should.containDeep([{gamer_id:dataset.gamer_id }])
 							done(err)
-						
+			null
+			
 		it 'gamer should blacklist a gamer', (done)->
 
 			request(shuttle)
@@ -147,6 +155,7 @@ describe 'Friends', ->
 				if err? then return done(err)
 				res.body.should.eql { done : 1}
 				done(err)
+			null
 
 		it 'should list blacklisted users', (done)->
 
@@ -162,6 +171,7 @@ describe 'Friends', ->
 				res.body.blacklisted.should.be.an.Array
 				res.body.blacklisted.should.containDeep([{gamer_id:dataset.friend_id }])
 				done(err)
+			null
 
 		it 'list friends should not contains friend', (done)->
 
@@ -177,6 +187,7 @@ describe 'Friends', ->
 				res.body.friends.should.be.an.Array
 				res.body.friends.should.not.containDeep([{gamer_id:dataset.friend_id }])
 				done(err)
+			null
 
 		it 'should not accept to add a blacklisted friend', (done)->
 
@@ -190,6 +201,7 @@ describe 'Friends', ->
 				if err? then return done(err)
 				res.body.should.eql { done : 0}
 				done(err)
+			null
 
 
 		it 'gamer should forget a relation', (done)->
@@ -204,6 +216,7 @@ describe 'Friends', ->
 				if err? then return done(err)
 				res.body.should.eql { done : 1}
 				done(err)
+			null
 
 		it 'list friends shouldnt contains friend' , (done)->
 
@@ -219,6 +232,7 @@ describe 'Friends', ->
 				res.body.friends.should.be.an.Array
 				res.body.friends.should.not.containDeep([{gamer_id:dataset.friend_id }])
 				done(err)
+			null
 
 		it 'blacklisted shouldnt contains friend', (done)->
 
@@ -234,3 +248,4 @@ describe 'Friends', ->
 				res.body.blacklisted.should.be.an.Array
 				res.body.blacklisted.should.not.containDeep([{gamer_id:dataset.friend_id }])
 				done(err)
+			null

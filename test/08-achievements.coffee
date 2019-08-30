@@ -33,6 +33,7 @@ describe 'Achievements', ->
 			gamer_id = res.body.gamer_id
 			gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it "should reset key/value for a user with -auto", (done)->
 
@@ -53,6 +54,7 @@ describe 'Achievements', ->
 			res.body.balance.score.should.eql(0)
 			res.body.achievements.should.eql({})
 			done()
+		null
 
 	it "should increment key/value for a user", (done)->
 
@@ -72,6 +74,7 @@ describe 'Achievements', ->
 			res.body.balance.score.should.eql(100)
 			res.body.achievements.should.eql({})
 			done()
+		null
 
 	# This time do not check for achievements (old call)
 	it "should decrement key/value for a user", (done)->
@@ -92,6 +95,7 @@ describe 'Achievements', ->
 			res.body.score.should.eql(60)
 			should(res.body.achievements).be.undefined
 			done()
+		null
 
 	it "should add an achievement", (done)->
 		xtralife = require 'xtralife-api'
@@ -141,6 +145,7 @@ describe 'Achievements', ->
 		.then (result)-> done()
 		.catch done
 		.done()
+		null
 
 	it "should list achievements for the user even before having set gamer data", (done)->
 
@@ -154,6 +159,7 @@ describe 'Achievements', ->
 			if err? then return done err
 			res.body.achievements.testOnce.progress.should.eql(0.06)
 			done()
+		null
 
 	it "should add gamer data to achievement", (done)->
 		request(shuttle)
@@ -169,6 +175,7 @@ describe 'Achievements', ->
 			if err? then return done err
 			res.body.achievement.gamerData.test.should.eql('data')
 			done()
+		null
 
 	it "should modify gamer data of achievement", (done)->
 		request(shuttle)
@@ -187,6 +194,7 @@ describe 'Achievements', ->
 			res.body.achievement.gamerData.aKey.should.eql('aData')
 			res.body.achievement.gamerData.otherKey.should.eql('newData')
 			done()
+		null
 
 	it "should show gamer data in achievements", (done)->
 
@@ -200,6 +208,7 @@ describe 'Achievements', ->
 			if err? then return done err
 			res.body.achievements.testOnce.gamerData.aKey.should.eql('aData')
 			done()
+		null
 
 	it "should retrieve gamer data", (done)->
 
@@ -213,6 +222,7 @@ describe 'Achievements', ->
 			if err? then return done err
 			res.body.gamerData.otherKey.should.eql('newData')
 			done()
+		null
 
 	it "should list empty achievements for the user", (done)->
 
@@ -226,6 +236,7 @@ describe 'Achievements', ->
 			if err? then return done err
 			res.body.achievements.testOnce.progress.should.eql(0.06)
 			done()
+		null
 
 	it "should complete achievement for a user", (done)->
 
@@ -247,6 +258,7 @@ describe 'Achievements', ->
 			# Verify that it is enriched as well ;)
 			res.body.achievements.testOnce.progress.should.eql(1)
 			done()
+		null
 
 	it "should not complete achievement twice", (done)->
 
@@ -279,6 +291,7 @@ describe 'Achievements', ->
 				res.body.balance.score.should.eql(1050)
 				res.body.achievements.should.eql({})
 				done()
+		null
 
 	it "should be able to complete achievement twice for a user", (done)->
 
@@ -329,6 +342,7 @@ describe 'Achievements', ->
 					if err? then return done err
 					should.exist(res.body.achievements.testMultiple)
 					done()
+		null
 
 	it "should not be able to complete achievement more times than allowed", (done)->
 
@@ -364,6 +378,7 @@ describe 'Achievements', ->
 				if err? then return done err
 				res.body.achievements.should.eql({})
 				done()
+		null
 
 	it "should run an associated transaction", (done)->
 
@@ -386,6 +401,7 @@ describe 'Achievements', ->
 			# And it should have affected the actual gold, which should go from the directed 100 to 60
 			res.body.balance.gold.should.eql(60)
 			done()
+		null
 
 	it "should prevent recursion in reward transactions", (done)->
 
@@ -410,6 +426,7 @@ describe 'Achievements', ->
 			res.body.balance.a.should.eql(0)
 			res.body.balance.b.should.eql(10)
 			done()
+		null
 
 	it "should refuse an invalid API version", (done)->
 
@@ -427,6 +444,7 @@ describe 'Achievements', ->
 		.expect 400
 		.end (err, res)->
 			done(err)
+		null
 
 	it "should mark an old API as obsolete", (done)->
 
@@ -446,6 +464,7 @@ describe 'Achievements', ->
 			if err? then return done err
 			res.get('X-Obsolete').should.eql('true')
 			done()
+		null
 
 	it.skip "should reset achievements (works in DEV mode only)", (done)->
 		# Reset it from previous test
@@ -457,6 +476,7 @@ describe 'Achievements', ->
 		.expect 200
 		.end (err, res)->
 			done(err)
+		null
 
 	it "should delete the temporary user", (done)->
 		xtralife = require 'xtralife-api'

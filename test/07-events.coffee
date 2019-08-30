@@ -31,6 +31,7 @@ describe 'Events', ->
 			gamer_id = res.body.gamer_id
 			gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it "should fail if domain not enable for event ", (done)->
 
@@ -43,6 +44,7 @@ describe 'Events', ->
 		.end (err, res)->
 			res.body.name.should.eql('NoListenerOnDomain')
 			done(err)
+		null
 
 	it "should fail if domain not declared ", (done)->
 
@@ -56,6 +58,7 @@ describe 'Events', ->
 		.end (err, res)->
 			res.body.name.should.eql('InvalidDomain')
 			done(err)
+		null
 
 	it "should receive (autoack) then send", (done)->
 
@@ -86,6 +89,7 @@ describe 'Events', ->
 				messageId = res.body.id
 				if err? then return done(err)
 		, 100
+		null
 
 	it "volatile should receive (no ACK needed) then send", (done)->
 
@@ -118,6 +122,7 @@ describe 'Events', ->
 				messageId = res.body.id
 				if err? then return done(err)
 		, 100
+		null
 
 
 	it "should receive twice if not acked", (done)->
@@ -160,6 +165,7 @@ describe 'Events', ->
 					res.status.should.eql 200
 					if err? then return done(err)
 					done()
+		null
 
 	it "should receive long sent message", (done)->
 
@@ -191,6 +197,7 @@ describe 'Events', ->
 				if err? then return done(err)
 				done()
 		, 500
+		null
 
 	it "should wait for a message", (done)->
 
@@ -229,6 +236,7 @@ describe 'Events', ->
 				messageId = res.body.id
 				if err? then return done(err)
 		, 600
+		null
 
 	it 'should allow acking message', (done)->
 		messageId = null
@@ -267,6 +275,7 @@ describe 'Events', ->
 				.end (err, res)->
 					if err? then return done(err)
 					done()
+		null
 
 	it 'should work even when sending / receiving / acking 2 messages (double receive bug)', (done)->
 		messageId = null
@@ -348,6 +357,7 @@ describe 'Events', ->
 								should(res.body).be.eql {}
 								#console.log 'should have timedout after 500ms with a 204 status code'
 								done()
+		null
 
 	it "should not receive on private messages sent to another domain", (done)->
 
@@ -387,6 +397,7 @@ describe 'Events', ->
 			if err then return done err
 			#console.log res.body
 			ok()
+		null
 
 	it "should allow sending message in batch, receive in REST api", (done)->
 		request(shuttle)
@@ -410,4 +421,5 @@ describe 'Events', ->
 		.end (err, res)->
 			#console.log res.body
 			if err? then return done err
+		null
 

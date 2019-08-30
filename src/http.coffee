@@ -67,6 +67,7 @@ xtralife.configure (err)->
 	server = http.createServer(app).listen xlenv.http.port, 16383, (err)->
 		if err? then return def.reject err
 		logger.info 'HTTP REST API server listening on port '+ xlenv.http.port
+		app.set('server', server)
 		def.resolve(app)
 
 	server.timeout = xlenv.http.timeout or 600000

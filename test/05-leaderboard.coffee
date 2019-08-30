@@ -25,55 +25,54 @@ print = (obj)->
 
 describe 'Leaderboards', ->
 
-	before 'should wait for initialisation', (done)->
+	before 'should wait for initialisation', ()->
 		shuttlePromise.then (_shuttle)->
 			shuttle = _shuttle
 
+	before 'should setup users', (done)->
+		request(shuttle)
+		.post '/v1/login/anonymous'
+		.set dataset.validAppCredentials
+		.type 'json'
+		.send {}
+		.expect 'content-type', /json/
+		.expect 200
+		.end (err, res)->
+			if err? then return done err
+			gamer_id = res.body.gamer_id
+			gamer_token = res.body.gamer_secret
+
 			request(shuttle)
-			.post '/v1/login/anonymous'
+			.put '/v1/gamer/vfs/com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3/key1'
 			.set dataset.validAppCredentials
-			.type 'json'
-			.send {}
+			.auth(gamer_id, gamer_token)
+			.send { value : "value of gamer key1" }
 			.expect 'content-type', /json/
 			.expect 200
 			.end (err, res)->
 				if err? then return done err
-				gamer_id = res.body.gamer_id
-				gamer_token = res.body.gamer_secret
 
 				request(shuttle)
-				.put '/v1/gamer/vfs/com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3/key1'
+				.post '/v1/login/anonymous'
 				.set dataset.validAppCredentials
-				.auth(gamer_id, gamer_token)
-				.send { value : "value of gamer key1" }
+				.type 'json'
+				.send {}
 				.expect 'content-type', /json/
 				.expect 200
 				.end (err, res)->
 					if err? then return done err
+					friend_id = res.body.gamer_id
+					friend_token = res.body.gamer_secret
 
 					request(shuttle)
-					.post '/v1/login/anonymous'
+					.put '/v1/gamer/vfs/com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3/key1'
 					.set dataset.validAppCredentials
-					.type 'json'
-					.send {}
+					.auth(friend_id, friend_token)
+					.send { value : "value of friend key1"}
 					.expect 'content-type', /json/
 					.expect 200
 					.end (err, res)->
-						if err? then return done err
-						friend_id = res.body.gamer_id
-						friend_token = res.body.gamer_secret
-
-						request(shuttle)
-						.put '/v1/gamer/vfs/com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3/key1'
-						.set dataset.validAppCredentials
-						.auth(friend_id, friend_token)
-						.send { value : "value of friend key1"}
-						.expect 'content-type', /json/
-						.expect 200
-						.end (err, res)->
-							done err
-
-		.catch done
+						done err
 		return null
 
 	describe 'Success', ->
@@ -94,6 +93,7 @@ describe 'Leaderboards', ->
 				if res.body.done == 1
 					res.body.should.have.property "rank"
 				done(err)
+			null
 
 		it 'should allow bestscores in batch', (done)->
 			request(shuttle)
@@ -109,6 +109,7 @@ describe 'Leaderboards', ->
 				res.body.should.have.property 'easyboard'
 				res.body.easyboard.score.should.eql 500
 				done()
+			null
 
 		it 'should allow highscore in batch', (done)->
 			request(shuttle)
@@ -123,6 +124,7 @@ describe 'Leaderboards', ->
 				if err? then return done err
 				res.body.should.have.property 'easyboard'
 				done()
+			null
 
 		it 'should allow centered score in batch', (done)->
 			request(shuttle)
@@ -137,6 +139,7 @@ describe 'Leaderboards', ->
 				if err? then return done err
 				res.body.should.have.property 'easyboard'
 				done()
+			null
 
 
 		it 'gamer should not be able to score a lower score in <easy>', (done)->
@@ -152,6 +155,7 @@ describe 'Leaderboards', ->
 				res.body.should.have.property "done"
 				res.body.done.should.eql 0
 				done(err)
+			null
 
 		it 'gamer should be able to score in <medium>', (done)->
 
@@ -168,6 +172,7 @@ describe 'Leaderboards', ->
 				if res.body.done == 1
 					res.body.should.have.property "rank"
 				done(err)
+			null
 
 		it 'gamer should retreive his bestscores', (done)->
 
@@ -184,6 +189,7 @@ describe 'Leaderboards', ->
 				res.body.should.have.property "mediumboard"
 				res.body.mediumboard.should.have.property "score"
 				done(err)
+			null
 
 		it 'friend should be able to score', (done)->
 
@@ -201,6 +207,7 @@ describe 'Leaderboards', ->
 				if res.body.done == 1
 					res.body.should.have.property "rank"
 				done(err)
+			null
 
 
 		it 'gamer should retreive a Leaderboard hightolow', (done)->
@@ -226,6 +233,7 @@ describe 'Leaderboards', ->
 				res.body.easyboard.scores[0].score.should.have.property "score"
 				res.body.easyboard.scores[0].score.score.should.not.be.below res.body.easyboard.scores[1].score.score
 				done(err)
+			null
 
 		it.skip 'gamer should retreive a Leaderboard', (done)->
 
@@ -246,6 +254,7 @@ describe 'Leaderboards', ->
 				res.body.easyboard.scores[0].should.have.property "score"
 				res.body.easyboard.scores[0].score.should.have.property "score"
 				done(err)
+			null
 
 	describe 'Failures', ->
 
@@ -261,6 +270,7 @@ describe 'Leaderboards', ->
 			.end (err, res)->
 				res.body.name.should.eql('ScoreNotFound')
 				done(err)
+			null
 
 		it 'should reject score if order is not in hightolow, lowtohigh', (done)->
 
@@ -274,6 +284,7 @@ describe 'Leaderboards', ->
 			.end (err, res)->
 				res.body.name.should.eql('InvalidScoreOrder')
 				done(err)
+			null
 
 		it 'should reject hisghscores if type is not in hisghscore, friendscore', (done)->
 
@@ -287,6 +298,7 @@ describe 'Leaderboards', ->
 			.end (err, res)->
 				res.body.name.should.eql('InvalidScoreType')
 				done(err)
+			null
 
 		it 'should reject hisghscores if page is not an integer', (done)->
 
@@ -300,6 +312,7 @@ describe 'Leaderboards', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadPageScore')
 				done(err)
+			null
 
 		it 'should reject hisghscores if page<= 0', (done)->
 
@@ -313,6 +326,7 @@ describe 'Leaderboards', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadPageScore')
 				done(err)
+			null
 
 		it 'should reject hisghscores if count is not an integer', (done)->
 
@@ -326,6 +340,7 @@ describe 'Leaderboards', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadCountScore')
 				done(err)
+			null
 
 		it 'should reject hisghscores if count<= 0', (done)->
 
@@ -339,6 +354,7 @@ describe 'Leaderboards', ->
 			.end (err, res)->
 				res.body.name.should.eql('BadCountScore')
 				done(err)
+			null
 
 		it 'should reject centered score if gamer never score', (done)->
 
@@ -353,6 +369,7 @@ describe 'Leaderboards', ->
 				#console.log res.body
 				res.body.name.should.eql('MissingScore')
 				done(err)
+			null
 
 
 
@@ -444,6 +461,7 @@ describe 'Leaderboards', ->
 				res.body[board].scores[4].gamer_id.should.equal gamers_id[5]
 				res.body[board].scores[4].score.score.should.equal 50
 				done(err)
+			null
 
 		it 'should retreive easy page 2', (done)->
 
@@ -470,6 +488,7 @@ describe 'Leaderboards', ->
 				res.body[board].scores[4].gamer_id.should.equal gamers_id[10]
 				res.body[board].scores[4].score.score.should.equal 100
 				done(err)
+			null
 
 		it 'should retreive centered score', (done)->
 
@@ -484,6 +503,7 @@ describe 'Leaderboards', ->
 				res.body[board].should.have.property "scores"
 				res.body[board].scores.should.containDeep([{gamer_id:gamers_id[7]}])
 				done(err)
+			null
 
 		it 'should retreive equivalent score', (done)->
 
@@ -512,6 +532,7 @@ describe 'Leaderboards', ->
 				res.body[board].scores[4].gamer_id.should.equal gamers_id[15]
 				res.body[board].scores[4].score.score.should.equal 110
 				done(err)
+			null
 
 		it 'should retreive last score', (done)->
 
@@ -534,6 +555,7 @@ describe 'Leaderboards', ->
 				res.body[board].scores[1].gamer_id.should.equal gamers_id[20]
 				res.body[board].scores[1].score.score.should.equal 200
 				done(err)
+			null
 
 		it 'should retreive best scores', (done)->
 
@@ -550,6 +572,7 @@ describe 'Leaderboards', ->
 				res.body[board].rank.should.equal 4
 				print res.body
 				done(err)
+			null
 
 		it 'should retreive friends scores', (done)->
 
@@ -567,6 +590,7 @@ describe 'Leaderboards', ->
 				res.body[board][0].gamer_id.should.equal gamers_id[2]
 				res.body[board][0].score.score.should.equal 20
 				done(err)
+			null
 
 
 		it "should delete temporary users", (done)->

@@ -29,6 +29,7 @@ describe 'Batches', ->
 			gamer_id = res.body.gamer_id
 			gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it 'should run a synchronous unauthenticated batch', (done)->
 		request(shuttle)
@@ -43,6 +44,7 @@ describe 'Batches', ->
 			res.body.input.should.eql 'hello'
 			res.body.domain.should.eql 'com.clanofthecloud.cloudbuilder.azerty'
 			done()
+		null
 
 	it 'should run a synchronous authenticated batch', (done)->
 		request(shuttle)
@@ -57,6 +59,7 @@ describe 'Batches', ->
 			if err? then return done err
 			res.body.userFound.should.eql gamer_id
 			done()
+		null
 
 	it 'unauthenticated batch reports no user', (done)->
 		request(shuttle)
@@ -71,6 +74,7 @@ describe 'Batches', ->
 			if err? then return done err
 			res.body.should.eql {}
 			done()
+		null
 
 	it 'should allow running an asynchronous gamer batch', (done)->
 		request(shuttle)
@@ -85,6 +89,7 @@ describe 'Batches', ->
 			if err? then return done err
 			res.body.should.eql { fs: {}, balance: {} }
 			done()
+		null
 
 	it 'should not crash if batch doesnt compile', (done)->
 		request(shuttle)
@@ -99,6 +104,7 @@ describe 'Batches', ->
 			if err? then return done err
 			res.body.should.eql { name: 'HookError', message: 'Hook com.clanofthecloud.cloudbuilder.azerty/__doesntcompile does not exist' }
 			done()
+		null
 
 	it 'should have access to common', (done)->
 		request(shuttle)
@@ -113,6 +119,7 @@ describe 'Batches', ->
 			if err? then return done err
 			res.body.should.eql "itworks"
 			done()
+		null
 
 	it 'should have access to mod in common', (done)->
 		request(shuttle)
@@ -127,6 +134,7 @@ describe 'Batches', ->
 			if err? then return done err
 			res.body.should.eql "itworks"
 			done()
+		null
 
 	it 'should add isSafe==false when calling a batch', (done)->
 		request(shuttle)
@@ -141,6 +149,7 @@ describe 'Batches', ->
 			if err? then return done err
 			res.body.isSafe.should.eql false
 			done()
+		null
 
 	it 'should receive true when calling hasIsSafe indirectly', (done)->
 		request(shuttle)
@@ -155,6 +164,7 @@ describe 'Batches', ->
 			if err? then return done err
 			res.body.isSafe.should.eql true
 			done()
+		null
 
 	it 'should return explicit error if batch does not exist', (done)->
 		request(shuttle)
@@ -171,3 +181,4 @@ describe 'Batches', ->
 				name: 'HookError'
 				message: 'Hook com.clanofthecloud.cloudbuilder.azerty/__doesnotexist does not exist'
 			done()
+		null

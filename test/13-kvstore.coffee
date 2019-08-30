@@ -36,6 +36,7 @@ describe 'KV Store', ->
 			dataset.gamer_id = res.body.gamer_id
 			dataset.gamer_token = res.body.gamer_secret
 			done()
+		null
 
 	it "should read the key", (done)->
 		request(shuttle)
@@ -49,6 +50,7 @@ describe 'KV Store', ->
 			res.body.key.should.eql 'testKey'
 			res.body.value.should.eql 'hi'
 			done()
+		null
 
 	it "should write the key", (done)->
 		request(shuttle)
@@ -64,6 +66,7 @@ describe 'KV Store', ->
 			res.body.ok.should.eql 1
 			res.body.nModified.should.eql 1
 			done()
+		null
 
 	it "should read the modified key", (done)->
 		request(shuttle)
@@ -77,6 +80,7 @@ describe 'KV Store', ->
 			res.body.key.should.eql 'testKey'
 			res.body.value.should.eql "hello world!"
 			done()
+		null
 
 	after "delete key", (done)->
 		request(shuttle)
@@ -89,3 +93,4 @@ describe 'KV Store', ->
 			if err? then return done err
 			res.body.should.eql ok:1, n:1
 			done()
+		null

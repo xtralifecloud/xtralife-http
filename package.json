@@ -42,14 +42,14 @@
   },
   "devDependencies": {
     "async": "*",
-    "coffeescript": "*",
     "coffee-script-mapped": "*",
-    "elasticsearch": "*",
-    "mocha": "3",
+    "coffeescript": "*",
+    "elasticsearch": "^12.1.3",
+    "mocha": "^6.2.0",
     "mongodb": "*",
     "redis": "*",
     "should": "*",
-    "supertest": "<1.1",
+    "supertest": "^4.0.2",
     "winston": "*",
     "xtralife-env": "*"
   }

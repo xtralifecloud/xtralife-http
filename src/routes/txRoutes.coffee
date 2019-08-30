@@ -3,8 +3,6 @@ errors = require '../errors.coffee'
 
 _domainHandler = require './domainHandler.coffee'
 
-JaySchema = require('../middleware.coffee').JaySchema
-checkSchema = require('../middleware.coffee').checkSchema
 checkRequest = require('../middleware.coffee').check
 router = require('express').Router caseSensitive: true
 
