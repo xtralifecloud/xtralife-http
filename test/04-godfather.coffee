@@ -12,6 +12,7 @@ dataset = require './dataset.coffee'
 gamer_id = null
 gamer_token = null
 
+xtralife = require 'xtralife-api'
 
 describe 'Godfather', ->
 
@@ -67,6 +68,13 @@ describe 'Godfather', ->
 
 			done(err)
 		null
+
+	it 'should find godfather by code', ()=>
+		game = xtralife.api.game.dynGames["com.clanofthecloud.cloudbuilder"]
+		domain = xtralife.api.game.getPrivateDomain game.appid
+		xtralife.api.social.findGodfatherFromCode null, domain, godfatherCode
+		.then (godfather)=>
+			godfather.toString().should.eql(dataset.gamer_id)
 
 	it 'set godfather code should sucess', (done)->
 
