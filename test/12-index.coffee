@@ -70,6 +70,48 @@ describe 'Index', ->
 			done(err)
 		null
 
+	it "should index a document with / in the id", (done)->
+
+		request(shuttle)
+		.post '/v1/index/private/test'
+		.set dataset.validAppCredentials
+		.send
+			id: "#{gamer_id}/with_a_slash"
+			properties: {}
+			payload: {string: "this is from our unit tests"}
+		.expect 'content-type', /json/
+		.expect 200
+		.end (err, res)->
+			if err? then return done(err)
+			res.body.created.should.eql true
+			done(err)
+		null
+
+	it 'should get and delete the indexed document with / in the id', (done)->
+		request(shuttle)
+		.get "/v1/index/private/test/#{gamer_id}/with_a_slash"
+		.set dataset.validAppCredentials
+		.expect 'content-type', /json/
+		.expect 200
+		.end (err, res)->
+			if err? then return done(err)
+			res.body.found.should.eql true
+			res.body._id.should.eql "#{gamer_id}/with_a_slash"
+			request(shuttle)
+			.delete "/v1/index/private/test/#{gamer_id}/with_a_slash"
+			.set dataset.validAppCredentials
+			.send
+				id: gamer_id
+			.expect 'content-type', /json/
+			.expect 200
+			.end (err, res)->
+				res.body.found.should.eql true
+				#console.log res.body
+				done()
+
+		null
+
+
 	it 'should report missing document', (done)->
 		request(shuttle)
 		.get "/v1/index/private/test/missing_document_id"

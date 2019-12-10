@@ -35,7 +35,7 @@ router
 	.catch next
 
 router
-.route '/:domain/:indexName/:id'
+.route '/:domain/:indexName/:id(*)'
 .all _domainHandler
 .get (req, res, next)->
 	{id, domain, indexName} = req.params

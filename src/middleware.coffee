@@ -77,8 +77,8 @@ module.exports =
 		else
 			err.status or 500
 
-		unless err instanceof errors.APIError or err instanceof xtralife.errors.XLAPIError
-			logger.error err.message, {stack: err.stack}
+		unless err instanceof errors.APIError or err instanceof xtralife.errors.XLAPIError or err instanceof errors.NotFound
+			logger.error err.message, {stack: err.stack?}
 		else
 			logger.debug err.message,
 				game: req.game
