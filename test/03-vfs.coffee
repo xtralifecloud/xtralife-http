@@ -13,7 +13,7 @@ xtralife = require 'xtralife-api'
 
 ObjectID = require('mongodb').ObjectID
 
-describe 'gamerVFS', ->
+describe.only 'gamerVFS', ->
 
 	before 'should wait for initialisation', ->
 		this.timeout 5000
@@ -107,6 +107,18 @@ describe 'gamerVFS', ->
 			done(err)
 		null
 
+	it 'should read the test key with newest API', (done)->
+		request(shuttle)
+		.get '/v3/gamer/vfs/private/test'
+		.set dataset.validAppCredentials
+		.auth(dataset.gamer_id, dataset.gamer_token)
+		.expect 'content-type', /json/
+		.expect 200
+		.end (err, res)->
+			res.body.should.eql result: test: {hi: "all"}
+			done(err)
+		null
+
 	it 'should read all private keys', (done)->
 		request(shuttle)
 		.get '/v1/gamer/vfs/private'
@@ -117,6 +129,20 @@ describe 'gamerVFS', ->
 		.end (err, res)->
 			res.status.should.eql 200
 			res.body.should.eql {test: {hi: "all"}, test2: {hello: 'world'}}
+			if err? then return done(err)
+			done(err)
+		null
+
+	it 'should read all private keys with newest API', (done)->
+		request(shuttle)
+		.get '/v3/gamer/vfs/private'
+		.set dataset.validAppCredentials
+		.auth(dataset.gamer_id, dataset.gamer_token)
+		.expect 'content-type', /json/
+		.expect 200
+		.end (err, res)->
+			res.status.should.eql 200
+			res.body.should.eql result: {test: {hi: "all"}, test2: {hello: 'world'}}
 			if err? then return done(err)
 			done(err)
 		null

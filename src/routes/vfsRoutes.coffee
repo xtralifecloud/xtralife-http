@@ -12,8 +12,10 @@ router.route '/:domain/:key'
 	.then (value)->
 		unless value[req.params.key]? then return next new errors.KeyNotFound req
 
+		result = if req.version == "v1" then value[req.params.key] else { result : value }
+
 		res
-		.json value[req.params.key]
+		.json result
 		.end()
 	.catch next
 	.done()
@@ -69,8 +71,9 @@ router.route "/:domain"
 .get (req, res, next)->
 	xtralife.api.virtualfs.read req.context, req.params.domain, req.gamer._id, null
 	.then (value)->
+		result = if req.version == 'v1' then value else { result : value } 
 		res
-		.json value
+		.json result
 		.end()
 	.catch next
 	.done()
