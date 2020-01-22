@@ -13,7 +13,7 @@ xtralife = require 'xtralife-api'
 
 ObjectID = require('mongodb').ObjectID
 
-describe.only 'gamerVFS', ->
+describe 'gamerVFS', ->
 
 	before 'should wait for initialisation', ->
 		this.timeout 5000
