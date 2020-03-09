@@ -5,6 +5,9 @@ _domainHandler = require './domainHandler.coffee'
 
 router = require('express').Router caseSensitive: true
 
+forceGamerVFS_V1 = ()=>
+	return xlenv?.options?.feature?.forceGamerVFS_V1
+
 router.route '/:domain/:key'
 .all _domainHandler
 .get (req, res, next)->
@@ -12,7 +15,7 @@ router.route '/:domain/:key'
 	.then (value)->
 		unless value[req.params.key]? then return next new errors.KeyNotFound req
 
-		result = if req.version == "v1" then value[req.params.key] else { result : value }
+		result = if forceGamerVFS_V1() or req.version == "v1" then value[req.params.key] else { result : value }
 
 		res
 		.json result
@@ -71,7 +74,7 @@ router.route "/:domain"
 .get (req, res, next)->
 	xtralife.api.virtualfs.read req.context, req.params.domain, req.gamer._id, null
 	.then (value)->
-		result = if req.version == 'v1' then value else { result : value } 
+		result = if forceGamerVFS_V1() or req.version == 'v1' then value else { result : value } 
 		res
 		.json result
 		.end()

@@ -73,6 +73,9 @@ xlenv.override null,
 		#GameCenterTokenMaxage: 86400
 		tag: 'custom test tag'
 
+		feature:
+			forceGamerVFS_V1: false
+
 	mailer: null # not used for xtralife-http tests
 
 	http:

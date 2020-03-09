@@ -119,6 +119,21 @@ describe 'gamerVFS', ->
 			done(err)
 		null
 
+	it 'should allow forcing v1 api even when called with v3', (done)->
+		xlenv.options.feature.forceGamerVFS_V1 = true
+
+		request(shuttle)
+		.get '/v3/gamer/vfs/private/test'
+		.set dataset.validAppCredentials
+		.auth(dataset.gamer_id, dataset.gamer_token)
+		.expect 'content-type', /json/
+		.expect 200
+		.end (err, res)->
+			res.body.should.eql {hi: "all"}
+			xlenv.options.feature.forceGamerVFS_V1 = false
+			done(err)
+		null
+
 	it 'should read all private keys', (done)->
 		request(shuttle)
 		.get '/v1/gamer/vfs/private'
