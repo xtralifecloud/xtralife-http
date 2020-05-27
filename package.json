@@ -2,9 +2,9 @@
   "name": "xtralife-http",
   "version": "3.3.8",
   "description": "RESTful express server for xtralife",
-  "main": "src/http.coffee",
+  "main": "src/http.js",
   "scripts": {
-    "test": "mocha ./test/*.coffee"
+    "test": "mocha ./test/*.js"
   },
   "repository": {
     "type": "git",
