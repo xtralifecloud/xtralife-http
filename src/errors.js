@@ -7,7 +7,6 @@
  */
 class APIError extends Error {
 	static initClass() {
-
 		this.prototype.fields = ['name', 'message', 'status', 'details'];
 	}
 
@@ -19,7 +18,7 @@ APIError.initClass();
 class HttpRequestError extends APIError {
 	constructor(request) {
 		super();
-		this.request = request; 
+		this.request = request;
 	}
 }
 

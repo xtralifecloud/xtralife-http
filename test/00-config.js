@@ -3,13 +3,13 @@
  * DS102: Remove unnecessary code created because of implicit returns
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const Q = require('bluebird');
-Q.promisifyAll(require('redis'));
+const Promise = require('bluebird');
+Promise.promisifyAll(require('redis'));
 const os = require('os');
 global.xlenv = require("xtralife-env");
 
 const winston = require('winston');
-global.logger = winston.createLogger({ 
+global.logger = winston.createLogger({
 	transports: [new winston.transports.Console()],
 	level: 'error',
 	format: winston.format.simple()
@@ -25,19 +25,19 @@ xlenv.override(null, {
 		port: 6378
 	},
 
-	redisClient(cb){
+	redisClient(cb) {
 		const client = require('redis').createClient(xlenv.redis.port, xlenv.redis.host);
 		return client.info(err => cb(err, client));
 	},
 
-	redisChannel(cb){
+	redisChannel(cb) {
 		const client = require('redis').createClient(xlenv.redis.port, xlenv.redis.host);
 		return client.info(err => cb(err, client));
 	},
 
-	redisStats(cb){
+	redisStats(cb) {
 		const client = require('redis').createClient(xlenv.redis.port, xlenv.redis.host);
-		return client.info(function(err){
+		return client.info(function (err) {
 			client.select(10);
 			return cb(err, client);
 		});
@@ -56,12 +56,12 @@ xlenv.override(null, {
 			useUnifiedTopology: true
 		}
 	},
-			
-	mongoCx(cb){
+
+	mongoCx(cb) {
 		return require("mongodb").MongoClient.connect(xlenv.mongodb.url, xlenv.mongodb.options, (err, mongodb) => cb(err, mongodb));
 	},
 
-	elastic(cb){
+	elastic(cb) {
 		const elastic = require("elasticsearch");
 		const client = new elastic.Client();
 		return cb(null, client);
@@ -96,18 +96,18 @@ xlenv.override(null, {
 
 	http: {
 		waterline: 600, // warn if we serve more than 10 req/sec
-		port : 1999
+		port: 1999
 	}, // allows running tests when a full server is running
 
 	xtralife: {
 		games: {
-			"com.clanofthecloud.testgame": { 
-				apikey:"testgame-key",
-				apisecret:"testgame-secret",
+			"com.clanofthecloud.testgame": {
+				apikey: "testgame-key",
+				apisecret: "testgame-secret",
 				config: {
-					enable:true,
-					domains:[],
-					eventedDomains:[],
+					enable: true,
+					domains: [],
+					eventedDomains: [],
 					certs: {
 						android: {
 							enable: false,
@@ -126,18 +126,18 @@ xlenv.override(null, {
 						}
 					},
 					socialSettings: {
-						facebookAppToken : ''
+						facebookAppToken: ''
 					}
 				}
 			},
 
-			"com.clanofthecloud.cloudbuilder": { 
-				apikey:"cloudbuilder-key",
-				apisecret:"azerty",
+			"com.clanofthecloud.cloudbuilder": {
+				apikey: "cloudbuilder-key",
+				apisecret: "azerty",
 				config: {
-					enable:true,
-					domains:["com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3","com.clanofthecloud.cloudbuilder.test"],
-					eventedDomains:["com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3"],
+					enable: true,
+					domains: ["com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3", "com.clanofthecloud.cloudbuilder.test"],
+					eventedDomains: ["com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3"],
 					certs: {
 						android: {
 							enable: false,
@@ -156,7 +156,7 @@ xlenv.override(null, {
 						}
 					},
 					socialSettings: {
-						facebookAppToken : '',
+						facebookAppToken: '',
 						gameCenterBundleIdRE: /^cloud.xtralife.gamecenterauth$/
 					}
 				}

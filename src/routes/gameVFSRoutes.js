@@ -9,46 +9,46 @@ const errors = require('../errors.js');
 
 const _domainHandler = require('./domainHandler.js');
 
-const router = require('express').Router({caseSensitive: true});
+const router = require('express').Router({ caseSensitive: true });
 
-const forbiddenRoute = function(req, res, next){
-	res.status(403); // forbidden
-	res.header('X-Obsolete', 'true');
-	res.json({error: "This route is no longer available"});
-	return res.end();
+const forbiddenRoute = function (req, res, next) {
+    res.status(403); // forbidden
+    res.header('X-Obsolete', 'true');
+    res.json({ error: "This route is no longer available" });
+    return res.end();
 };
 
 router.route('/:domain/:key')
-.all(_domainHandler)
-.get((req, res, next) => xtralife.api.gamevfs.read(req.params.domain, req.params.key, function(err, value){
-    if (err != null) { return next(err); }
+    .all(_domainHandler)
+    .get((req, res, next) => xtralife.api.gamevfs.read(req.params.domain, req.params.key, function (err, value) {
+        if (err != null) { return next(err); }
 
-    if (value[req.params.key] == null) { return next(new errors.KeyNotFound(req)); }
-    const result = req.version === "v1" ? value[req.params.key] : { result : value };
+        if (value[req.params.key] == null) { return next(new errors.KeyNotFound(req)); }
+        const result = req.version === "v1" ? value[req.params.key] : { result: value };
 
-    return res
-    .status(200)
-    .json(result)
-    .end();
-})).put(forbiddenRoute)
-.delete(forbiddenRoute)
+        return res
+            .status(200)
+            .json(result)
+            .end();
+    })).put(forbiddenRoute)
+    .delete(forbiddenRoute)
 
-.all((req, res, next) => next(new errors.InvalidMethodError()));
+    .all((req, res, next) => next(new errors.InvalidMethodError()));
 
 // list all keys in domain, with values
 router.route("/:domain")
-.all(_domainHandler)
-.get((req, res, next) => xtralife.api.gamevfs.read(req.params.domain, null, function(err, value){
-    if (err != null) { return next(err); }
-    
-    const result = req.version === 'v1' ? value : { result : value }; 
-    return res
-    .status(200)
-    .json(result)
-    .end();
-})).put(forbiddenRoute)
-.delete(forbiddenRoute)
+    .all(_domainHandler)
+    .get((req, res, next) => xtralife.api.gamevfs.read(req.params.domain, null, function (err, value) {
+        if (err != null) { return next(err); }
 
-.all((req, res, next) => next(new errors.InvalidMethodError()));
+        const result = req.version === 'v1' ? value : { result: value };
+        return res
+            .status(200)
+            .json(result)
+            .end();
+    })).put(forbiddenRoute)
+    .delete(forbiddenRoute)
+
+    .all((req, res, next) => next(new errors.InvalidMethodError()));
 
 module.exports = router;

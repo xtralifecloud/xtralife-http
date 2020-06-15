@@ -1,3 +1,2 @@
---require coffeescript/register
 -t 3000
 -s 0

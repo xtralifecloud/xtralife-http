@@ -8,9 +8,9 @@ const xtralife = require('xtralife-api');
 const middleware = require('./middleware.js');
 const errors = require('./errors.js');
 
-module.exports = function(app){
+module.exports = function (app) {
 
-	app.param("version", function(req, res, next, version){
+	app.param("version", function (req, res, next, version) {
 		req.version = version;
 		return next();
 	});
@@ -34,7 +34,7 @@ module.exports = function(app){
 	require('./routes/propertiesRoutes.js')(app);
 	require('./routes/godfatherRoutes.js')(app);
 	require('./routes/scoresRoutes.js')(app);
-	
+
 	app.use('/:version/gamer/vfs', require('./routes/vfsRoutes.js'));
 	app.use('/:version/gamer/tx', require('./routes/txRoutes.js'));
 	app.use('/:version/gamer/matches', require('./routes/matchRoutes.js'));

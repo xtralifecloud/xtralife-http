@@ -37,7 +37,7 @@ module.exports = {
 		},
 		'after-achievement-triggered': function (params, customData, mod) {
 			//console.log('[Hook] After achievement triggered');
-			this.achievement.modifyUserAchievementData(params.domain, params.user_id, 'testOnce', {'fromHook': 'value'});
+			this.achievement.modifyUserAchievementData(params.domain, params.user_id, 'testOnce', { 'fromHook': 'value' });
 		},
 		'after-achievement-userdata-modified': function (params, customData, mod) {
 			//console.log('[Hook] After achievement userdata triggered');
@@ -102,40 +102,40 @@ module.exports = {
 			//console.log('received at ' + new Date());
 		},
 		'__test1': function (params, customData, mod) {
-			return {input: params.request.input, domain: this.game.getPrivateDomain()};
+			return { input: params.request.input, domain: this.game.getPrivateDomain() };
 		},
 		'__test2': function (params, customData, mod) {
-			return {userFound: params.user_id};
+			return { userFound: params.user_id };
 		},
 		'__test3': function (params, customData, mod) {
 			var domain = this.game.getPrivateDomain();
 			return mod.Q.all(
 				[this.virtualfs.read(domain, params.user_id, null),
-					this.tx.balance(domain, params.user_id)]
+				this.tx.balance(domain, params.user_id)]
 			).spread(function (fs, balance) {
-				return {fs: fs, balance: balance};
+				return { fs: fs, balance: balance };
 			});
 		},
 		'__test4': function (params, customData, mod) {
 			return mod.Q.all([ // TODO why Q.all here ?
-				this.user.account.convert(params.user_id, "email", "test" + Math.random() + "@localhost.localdomain", "pass*123", {updatedGamer: true})
+				this.user.account.convert(params.user_id, "email", "test" + Math.random() + "@localhost.localdomain", "pass*123", { updatedGamer: true })
 					.then(function (result) {
-						return {got: result};
+						return { got: result };
 					})
 			]);
 		},
 		'__test5': function (params, customData, mod) {
 			return mod.Q.all([ // TODO why Q.all here ?
-				this.user.account.convert(params.user_id, "facebook", "CAAOubWEN7ZBIBALPkqZAj4XoZBS90OErzJ7TGr8mp3ffrpRS81TZBFrkoiAZAC8GuXaW3lVozoTyT7ZAineSS80DAbblGEybRFwKJGlBo4H5ux5hQcBMvSy2h9rIcJkAEslUXDZApVjeLdNZB7Xct1N7PyqWmS4jAypvLfe0U8brS9X0L3DfuZBamSlNlnIZAGaUedIwYTTRT95gZDZD", null, {updatedGamer: true})
+				this.user.account.convert(params.user_id, "facebook", "CAAOubWEN7ZBIBALPkqZAj4XoZBS90OErzJ7TGr8mp3ffrpRS81TZBFrkoiAZAC8GuXaW3lVozoTyT7ZAineSS80DAbblGEybRFwKJGlBo4H5ux5hQcBMvSy2h9rIcJkAEslUXDZApVjeLdNZB7Xct1N7PyqWmS4jAypvLfe0U8brS9X0L3DfuZBamSlNlnIZAGaUedIwYTTRT95gZDZD", null, { updatedGamer: true })
 					.then(function (result) {
-						return {got: result};
+						return { got: result };
 					}).catch(function (err) {
-					return {error: err};
-				})
+						return { error: err };
+					})
 			]);
 		},
 		'__hasIsSafe': function (params, customData, mod) {
-			return {isSafe: mod.isSafe()};
+			return { isSafe: mod.isSafe() };
 		},
 		'__callsHasIsSafe': function (params, customData, mod) {
 			return this.game.runBatch('com.clanofthecloud.cloudbuilder.azerty', 'hasIsSafe', {})
@@ -164,7 +164,7 @@ module.exports = {
 			return this.leaderboard.bestscores(this.game.getPrivateDomain(), params.user_id);
 		},
 		'__sendEventTest': function (params, customData, mod) {
-			return this.game.sendEvent(this.game.getPrivateDomain(), params.user_id, {hello: 'world'});
+			return this.game.sendEvent(this.game.getPrivateDomain(), params.user_id, { hello: 'world' });
 		},
 		'__highscoreInBatch': function (params, customData, mod) {
 			return this.leaderboard.highscore(this.game.getPrivateDomain(), null, 'easyboard', 10);
@@ -173,8 +173,8 @@ module.exports = {
 			return this.leaderboard.highscore(this.game.getPrivateDomain(), params.user_id, 'easyboard', 10);
 		},
 		'__auth_customNetwork_comclanofthecloudcloudbuilder': function (params, customData, mod) {
-			var {user_id, user_token} = params;
-			return {verified : user_token == user_id}
+			var { user_id, user_token } = params;
+			return { verified: user_token == user_id }
 		},
 	}
 };
