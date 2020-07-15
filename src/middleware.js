@@ -13,7 +13,6 @@ const errors = require("./errors.js");
 
 const basicAuth = require('basic-auth');
 
-
 const env = (process.env.NODE_ENV != null) ? process.env.NODE_ENV : "dev";
 
 const JaySchema = new (require('jayschema'));
@@ -149,6 +148,10 @@ module.exports = {
 	// check gamer token in Authorization header
 	// gamer must be valid in common users, not necessarily the current game's users
 	authenticateGamer(req, res, next) {
+		function adjustDAUMAU(appid, userid) {
+			xlenv.redis.client.pfadd(`hll.dau:${appid}`, userid, (err) => (null /* don't care if it fails */))
+		}
+		
 		try {
 			const credentials = basicAuth(req); // contains .name and .pass
 
@@ -172,6 +175,7 @@ module.exports = {
 				if (xtralife.api.user.sha_passwd(gamer._id.toString()) === credentials.pass) {
 
 					req.gamer = gamer;
+					adjustDAUMAU(req.game.appid, gamer._id.toString())
 					return next();
 				} else {
 					return next(new errors.InvalidLoginTokenError(req));
@@ -216,3 +220,4 @@ module.exports = {
 		}
 	}
 };
+

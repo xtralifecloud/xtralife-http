@@ -78,6 +78,9 @@ xtralife.configure(function (err) {
 		if (err != null) { return def.reject(err); }
 		logger.info('HTTP REST API server listening on port ' + xlenv.http.port);
 		app.set('server', server);
+
+		require('./metrics-server')
+
 		return def.resolve(app);
 	});
 
