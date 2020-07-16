@@ -5,9 +5,12 @@ const Promise = require('bluebird')
 
 const app = express()
 
+const metrics = xtralife.api.game.getMetrics()
+const collectDefaultMetrics = metrics.collectDefaultMetrics;
+const prefix = 'xl_backend_';
+collectDefaultMetrics({ prefix });
 
 app.get('/metrics', async (req, res) => {
-	const metrics = xtralife.api.game.getMetrics()
 	res.set("Content-type", metrics.register.contentType)
 	const content = await metrics.register.metrics()
 	res.send(content)
