@@ -10,7 +10,7 @@ let async = require('async');
 const util = require("util");
 const rs = require("randomstring");
 const {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 
 let shuttle = null;
@@ -668,7 +668,7 @@ describe('Leaderboards', function () {
 			async = require('async');
 			this.timeout(4000);
 			return async.forEachSeries(gamers_id,
-				(userid, cb) => xtralife.api.onDeleteUser(ObjectID(userid), cb, 'com.clanofthecloud.cloudbuilder')
+				(userid, cb) => xtralife.api.onDeleteUser(ObjectId(userid), cb, 'com.clanofthecloud.cloudbuilder')
 				, err => {
 					return done(err);
 				});

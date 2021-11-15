@@ -8,7 +8,7 @@
 const xtralife = require('xtralife-api');
 const errors = require('../errors.js');
 const {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 const {
 	checkSchema

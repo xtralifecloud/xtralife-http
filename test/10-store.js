@@ -12,7 +12,7 @@ const shuttlePromise = require('../src/http.js');
 
 const dataset = require('./dataset.js');
 const {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 
 const Q = require('bluebird');
@@ -49,7 +49,7 @@ class InAppVerifierMock {
 		if (platform === 'google') {
 			if (this.googleMockConfig.validateSuccessfully) {
 				response =
-					{ transactionId: new ObjectID() };
+					{ transactionId: new ObjectId() };
 				return callback(null, response);
 			} else {
 				response = {
@@ -153,7 +153,7 @@ describe('Store', function () {
 	});
 
 	it("should validate AppStore receipt for an existing product", function (done) {
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(0);
 
 		request(shuttle)
@@ -236,7 +236,7 @@ describe('Store', function () {
 
 	it("should be able to buy the same item twice", function (done) {
 		// Should be ok this time since we have another transaction ID
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(0);
 
 		request(shuttle)
@@ -270,7 +270,7 @@ describe('Store', function () {
 	});
 
 	it("should not validate receipt for a non-existing product", function (done) {
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(0);
 
 		request(shuttle)
@@ -286,7 +286,7 @@ describe('Store', function () {
 	});
 
 	it("should not validate receipt for a non-existing AppStore product", function (done) {
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(0);
 
 		request(shuttle)
@@ -302,7 +302,7 @@ describe('Store', function () {
 	});
 
 	it("should not validate receipt from wrong environment", function (done) {
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(21007);
 
 		request(shuttle)
@@ -318,7 +318,7 @@ describe('Store', function () {
 	});
 
 	it("should return a retryable HTTP code when Apple server is unavailable", function (done) {
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(21005);
 
 		request(shuttle)
@@ -337,7 +337,7 @@ describe('Store', function () {
 	});
 
 	it("should return a retryable HTTP code for bad responses from Apple", function (done) {
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(0, true);
 
 		request(shuttle)
@@ -356,7 +356,7 @@ describe('Store', function () {
 	});
 
 	it("should return a definitve no for any negative answer from AppStore", function (done) {
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(21002);
 
 		request(shuttle)
@@ -423,7 +423,7 @@ describe('Store', function () {
 	});
 
 	it("should validate Mac AppStore receipt for an existing product", function (done) {
-		transactionId = 'mocked' + new ObjectID();
+		transactionId = 'mocked' + new ObjectId();
 		inappMock.configureNextAppleRequest(0);
 
 		request(shuttle)
@@ -494,7 +494,7 @@ describe('Store', function () {
 	});
 
 	return it("should delete the user", function (done) {
-		xtralife.api.onDeleteUser(ObjectID(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
+		xtralife.api.onDeleteUser(ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
 		return null;
 	});
 });

@@ -15,7 +15,7 @@ const dataset = require('./dataset.js');
 const Q = require('bluebird');
 const xtralife = require('xtralife-api');
 const {
-    ObjectID
+    ObjectId
 } = require('mongodb');
 
 let gamer_id = null;
@@ -97,7 +97,7 @@ describe.skip('Facebook', function () {
 
     it("should delete facebook user", function (done) {
         this.timeout(4000);
-        return xtralife.api.onDeleteUser(ObjectID(gplus_gamer_id), done, 'com.clanofthecloud.cloudbuilder');
+        return xtralife.api.onDeleteUser(ObjectId(gplus_gamer_id), done, 'com.clanofthecloud.cloudbuilder');
     });
 
 
@@ -165,7 +165,7 @@ describe.skip('Facebook', function () {
 
     return it("should delete anonymous user", function (done) {
         this.timeout(4000);
-        return xtralife.api.onDeleteUser(ObjectID(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
+        return xtralife.api.onDeleteUser(ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
     });
 });
 

@@ -14,7 +14,7 @@ const shuttlePromise = require('../src/http.js');
 
 const dataset = require('./dataset.js');
 const {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 
 const Q = require('bluebird');
@@ -1136,8 +1136,8 @@ describe('Matches', function () { // there's an interraction somewhere in our te
 	return it("should delete the user", function (done) {
 		const xtralife = require('xtralife-api');
 		const async = require('async');
-		async.parallel([cb => xtralife.api.onDeleteUser(ObjectID(gamer_id_p1), cb, 'com.clanofthecloud.cloudbuilder'),
-		cb => xtralife.api.onDeleteUser(ObjectID(gamer_id_p2), cb, 'com.clanofthecloud.cloudbuilder')
+		async.parallel([cb => xtralife.api.onDeleteUser(ObjectId(gamer_id_p1), cb, 'com.clanofthecloud.cloudbuilder'),
+		cb => xtralife.api.onDeleteUser(ObjectId(gamer_id_p2), cb, 'com.clanofthecloud.cloudbuilder')
 		], err => {
 			return done(err);
 		});

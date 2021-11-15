@@ -8,7 +8,7 @@
 const xtralife = require('xtralife-api');
 const errors = require('../errors.js');
 const {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 const {
 	checkSchema
@@ -64,7 +64,7 @@ const _convertMatchToBasicReturnObject = match => ({
 //####################### Routes ########################
 route.param('match_id', function (req, res, next, matchId) {
 	try {
-		req.match_id = ObjectID(matchId);
+		req.match_id = ObjectId(matchId);
 		return next();
 	} catch (error) {
 		return next(new errors.InvalidMatch);
@@ -73,7 +73,7 @@ route.param('match_id', function (req, res, next, matchId) {
 
 route.param('friend_id', function (req, res, next, friendId) {
 	try {
-		req.friend_id = ObjectID(friendId);
+		req.friend_id = ObjectId(friendId);
 		return next();
 	} catch (error) {
 		return next(new errors.GamerIdNotFound);
@@ -83,7 +83,7 @@ route.param('friend_id', function (req, res, next, friendId) {
 const _requires_lastEventId = function (req, _, next) {
 	try {
 		if (req.query.lastEventId == null) { return next(new errors.MissingParameter('lastEventId')); }
-		req.lastEventId = ObjectID(req.query.lastEventId);
+		req.lastEventId = ObjectId(req.query.lastEventId);
 		return next();
 	} catch (error) {
 		return next(new errors.MissingParameter('lastEventId'));

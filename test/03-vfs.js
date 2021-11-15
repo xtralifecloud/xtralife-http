@@ -14,13 +14,13 @@ const dataset = require('./dataset.js');
 let xtralife = require('xtralife-api');
 
 let {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 
 xtralife = require('xtralife-api');
 
 ({
-	ObjectID
+	ObjectId
 } = require('mongodb'));
 
 describe('gamerVFS', function () {
@@ -69,7 +69,7 @@ describe('gamerVFS', function () {
 		const game = xtralife.api.game.dynGames["com.clanofthecloud.cloudbuilder"];
 		const domain = xtralife.api.game.getPrivateDomain(game.appid);
 
-		return xtralife.api.virtualfs.write({ game }, domain, new ObjectID(dataset.gamer_id), { test: "test", test2: "test2" });
+		return xtralife.api.virtualfs.write({ game }, domain, new ObjectId(dataset.gamer_id), { test: "test", test2: "test2" });
 	});
 
 
@@ -77,7 +77,7 @@ describe('gamerVFS', function () {
 		const game = xtralife.api.game.dynGames["com.clanofthecloud.cloudbuilder"];
 		const domain = xtralife.api.game.getPrivateDomain(game.appid);
 
-		return xtralife.api.virtualfs.read({ game }, domain, new ObjectID(dataset.gamer_id), ["test", "test2"])
+		return xtralife.api.virtualfs.read({ game }, domain, new ObjectId(dataset.gamer_id), ["test", "test2"])
 			.then(function (result) {
 				//console.log result
 				result.test.should.eql("test");

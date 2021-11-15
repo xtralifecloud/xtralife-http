@@ -12,7 +12,7 @@ let shuttle = null;
 require('./00-config.js');
 const dataset = require('./dataset.js');
 const {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 
 const print = function (obj) {
@@ -210,7 +210,7 @@ describe('App Authentication', function () {
 					const secret = res.body.gamer_secret;
 
 					// Convert to e-mail
-					const creds = { network: "email", id: "dummy" + new ObjectID() + "@localhost.localdomain", secret: "passwd" };
+					const creds = { network: "email", id: "dummy" + new ObjectId() + "@localhost.localdomain", secret: "passwd" };
 					return request(shuttle)
 						.post('/v1/gamer/convert')
 						.set(dataset.validAppCredentials)
@@ -316,7 +316,7 @@ describe('App Authentication', function () {
 					const secret = res.body.gamer_secret;
 
 					// Convert to e-mail
-					const creds = { network: "facebook", id: "dummy" + new ObjectID(), secret: dataset.facebookToken };
+					const creds = { network: "facebook", id: "dummy" + new ObjectId(), secret: dataset.facebookToken };
 					return request(shuttle)
 						.post('/v1/gamer/convert')
 						.set(dataset.validAppCredentials)
@@ -423,7 +423,7 @@ describe('App Authentication', function () {
 					const secret = res.body.gamer_secret;
 
 					// Convert to e-mail
-					const creds = { network: "googleplus", id: "dummy" + new ObjectID(), secret: dataset.googleToken };
+					const creds = { network: "googleplus", id: "dummy" + new ObjectId(), secret: dataset.googleToken };
 					return request(shuttle)
 						.post('/v1/gamer/convert')
 						.set(dataset.validAppCredentials)

@@ -9,7 +9,7 @@ const should = require('should');
 let async = require('async');
 const util = require('util');
 const {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 //agent = require 'superagent'
 
@@ -163,7 +163,7 @@ describe('UnitTest', function () {
 			const xtralife = require('xtralife-api');
 			async = require('async');
 			this.timeout(4000);
-			return xtralife.api.onDeleteUser(ObjectID(anonym_id), done, 'com.clanofthecloud.cloudbuilder');
+			return xtralife.api.onDeleteUser(ObjectId(anonym_id), done, 'com.clanofthecloud.cloudbuilder');
 		});
 	});
 

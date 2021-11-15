@@ -12,7 +12,7 @@ const shuttlePromise = require('../src/http.js');
 
 const dataset = require('./dataset.js');
 const {
-	ObjectID
+	ObjectId
 } = require('mongodb');
 
 const Q = require('bluebird');
@@ -555,7 +555,7 @@ describe('Achievements', function () {
 
 	return it("should delete the temporary user", function (done) {
 		const xtralife = require('xtralife-api');
-		xtralife.api.onDeleteUser(ObjectID(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
+		xtralife.api.onDeleteUser(ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
 		return null;
 	});
 });
