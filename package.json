@@ -32,7 +32,7 @@
     "jayschema": "^0.3.2",
     "randomstring": "^1.2.1",
     "underscore": "^1.13.1",
-    "xtralife-api": "^4.0.0-beta3"
+    "xtralife-api": "4.0.0"
   },
   "devDependencies": {
     "async": "^3.2.1",
@@ -43,6 +43,6 @@
     "should": "^13.2.3",
     "supertest": "^6.1.6",
     "winston": "^3.3.3",
-    "xtralife-env": "4.0.0-alpha"
+    "xtralife-env": "4.0.0"
   }
 }
