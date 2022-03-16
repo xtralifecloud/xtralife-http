@@ -29,7 +29,7 @@ router.route('/:domain/:key')
                 .end();
         }).catch(next)
         .done()).put(function (req, res, next) {
-            const _write = (value, result, domain, key) => xtralife.api.virtualfs.write(req.context, domain, req.gamer._id, key, value)
+            const _write = (value, result) => xtralife.api.virtualfs.write(req.context, req.params.domain, req.gamer._id, req.params.key, value)
                 .then(count => {
                     result.done = count;
                     if (req.context.customData != null) { result.customData = req.context.customData; }
@@ -40,21 +40,19 @@ router.route('/:domain/:key')
 
             return ((req.query.binary != null) ?
                 xtralife.api.virtualfs.createSignedURL(req.params.domain, req.gamer._id, req.params.key, req.query.contentType)
-                    .then(([signedURL, getURL, domain, key])=> {
-                        _write(getURL, {
+                    .then(([signedURL, getURL]) => _write(getURL, {
                         putURL: signedURL,
                         getURL
-                        },
-                        domain,
-                        key
-                    )})
+                    }
+                    ).catch(next).done())
                 :
-                _write(req.body, {})
-            )
-                .catch(next)
+                _write(req.body, {}).catch(next).done()
+            )   
         }).delete(function (req, res, next) {
             if (req.query.binary != null) {
                 xtralife.api.virtualfs.deleteURL(req.params.domain, req.gamer._id, req.params.key)
+                    .catch(err => logger.error(err.message, { stack: err.stack }))
+                    .done();
             }
 
             return xtralife.api.virtualfs.delete(req.context, req.params.domain, req.gamer._id, req.params.key)
