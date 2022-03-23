@@ -46,18 +46,21 @@ module.exports = function (app) {
 	return app.route('/v1/gamer')
 		.get(function (req, res, next) {
 			if (req.query.q == null) { return next(new errors.MissingData("q")); }
-			return xtralife.api.user.search(req.game.appid, req.query.q, parseInt(req.query.skip, 10) || 0, parseInt(req.query.limit, 10) || 10, function (err, count, fullresult) {
+			return xtralife.api.user.searchCount(req.game.appid, req.query.q, (err, count) => {
 				if (err != null) { return next(err); }
-				const result = _.map(fullresult, item => ({
-					user_id: item._id,
-					network: item.network,
-					networkid: item.networkid,
-					profile: item.profile
-				}));
-				return res
-					.status(200)
-					.json({ count, result })
-					.end();
+				return xtralife.api.user.search(req.game.appid, req.query.q, parseInt(req.query.skip, 10) || 0, parseInt(req.query.limit, 10) || 10, function (err, fullresult) {
+					if (err != null) { return next(err); }
+					const result = _.map(fullresult, item => ({
+						user_id: item._id,
+						network: item.network,
+						networkid: item.networkid,
+						profile: item.profile
+					}));
+					return res
+						.status(200)
+						.json({ count, result })
+						.end();
+				});
 			});
 		});
 };
