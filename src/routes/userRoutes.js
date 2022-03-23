@@ -20,7 +20,7 @@ const _ = require("underscore");
 
 // when adding new network, remember to change the gamerCatchAllRoute.js file !!
 
-var _login = (game, id, token, options) => ({
+var _login = (game, id, secret, authToken, options) => ({
 	createanonymous(cb) {
 		const profile = {
 			displayName: "Guest",
@@ -30,27 +30,30 @@ var _login = (game, id, token, options) => ({
 	},
 
 	anonymous(cb) {
+		if (id == null || secret == null) { return cb(new errors.LoginError); }
 		return xtralife.api.connect.exist(id, function (err, gamer) {
 			if (err != null) { return cb(err); }
 			if (gamer != null) {
 				const sha = xtralife.api.user.sha_passwd(id);
-				if (sha !== token) { return cb(new errors.LoginError); }
+				if (sha !== secret) { return cb(new errors.LoginError); }
 			}
 			return cb(err, gamer, false);
 		});
 	},
 
 	facebook(cb) {
-		return xtralife.api.connect.loginfb(game, token, options, function (err, gamer, created) {
+		if(authToken == null) { return cb(new errors.LoginError); }
+		return xtralife.api.connect.loginfb(game, authToken, options, function (err, gamer, created) {
 			if ((err != null) && (err.type === 'OAuthException')) {
-				return cb(new errors.InvalidLoginTokenError);
+				return cb(new errors.OAuthException(err.message, err.status, err.source));
 			}
 			return cb(err, gamer, created);
 		});
 	},
 
 	googleplus(cb) {
-		return xtralife.api.connect.logingp(game, token, options, function (err, gamer, created) {
+		if(authToken == null) { return cb(new errors.LoginError); }
+		return xtralife.api.connect.logingp(game, authToken, options, function (err, gamer, created) {
 			if ((err != null) && (err.message === 'Invalid Credentials')) {
 				return cb(new errors.InvalidLoginTokenError);
 			}
@@ -59,24 +62,29 @@ var _login = (game, id, token, options) => ({
 	},
 
 	gamecenter(cb) {
-		return xtralife.api.connect.logingc(game, id, JSON.parse(token), options, cb);
+		if(id == null || authToken == null) { return cb(new errors.LoginError); }
+		return xtralife.api.connect.logingc(game, id, JSON.parse(authToken), options, cb);
 	},
 
 	email(cb) {
-		return xtralife.api.connect.login(game, id, xtralife.api.user.sha_passwd(token), options, cb);
+		if(id == null || secret == null) { return cb(new errors.LoginError); }
+		return xtralife.api.connect.login(game, id, xtralife.api.user.sha_passwd(secret), options, cb);
 	},
 
 	external(cb) {
-		return xtralife.api.connect.loginExternal(game, options.external, id, token, options, cb);
+		if(id == null || authToken == null) { return cb(new errors.LoginError); }
+		return xtralife.api.connect.loginExternal(game, options.external, id, authToken, options, cb);
 	},
 
 	restore(cb) {
-		let shortcode = token;
+		if(secret == null) { return cb(new errors.LoginError); }
+
+		let shortcode = secret;
 		let newpass = null;
-		const idx = token.indexOf(":");
+		const idx = secret.indexOf(":");
 		if ((idx !== -1) && (idx !== 0)) {
-			shortcode = token.substring(0, idx);
-			newpass = token.substr(idx + 1);
+			shortcode = secret.substring(0, idx);
+			newpass = secret.substr(idx + 1);
 		}
 		return xtralife.api.connect.resolveShortLoginCode(game, shortcode, (err, newid) => {
 			if (err != null) { return cb(err); }
@@ -173,6 +181,7 @@ module.exports = function (app) {
 		let network = req.body['network'];
 		const id = req.body['id'];
 		const secret = req.body['secret'];
+		const authToken = req.body["auth_token"];
 		const options = req.body['options'] || {};
 		const thenBatch = req.body.thenBatch || (req.body.options != null ? req.body.options.thenBatch : undefined);
 
@@ -187,10 +196,8 @@ module.exports = function (app) {
 			network = "external";
 		}
 
-		const login = _login(req.game, id, secret, options)[network];
+		const login = _login(req.game, id, secret, authToken, options)[network];
 		if (login == null) { return next(new errors.InvalidLoginNetwork); }
-		if (id == null) { return next(new errors.LoginError(req)); }
-		if (secret == null) { return next(new errors.LoginError(req)); }
 
 		return login(function (err, gamer, created) {
 			if (err != null) { return next(err); }

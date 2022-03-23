@@ -349,6 +349,19 @@ class NoListenerOnDomain extends APIError {
 }
 NoListenerOnDomain.initClass();
 
+class OAuthException extends APIError {
+	static initClass() {
+		this.prototype.name = "OAuthException";
+	}
+	constructor(fbMessage, status, source) {
+		super();
+		this.message = fbMessage;
+		this.status = status;
+		this.details = {source};
+	}
+}
+OAuthException.initClass();
+
 
 module.exports = {
 	APIError, HttpRequestError, InvalidMethodError
@@ -362,7 +375,7 @@ module.exports = {
 	, LeaderboardNotFound, InvalidScoreOrder, InvalidScoreType, ScoreNotFound, BadPageScore, BadCountScore
 	, InvalidMatch
 	, MissingEmailTitle, MissingEmailBody, BadEmailTemplate, MissingSenderEmail
-	, InvalidAPIVersion, NoListenerOnDomain
+	, InvalidAPIVersion, NoListenerOnDomain, OAuthException
 };
 
 

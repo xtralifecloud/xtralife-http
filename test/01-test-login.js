@@ -245,13 +245,13 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'facebook', id: 'wrong', secret: 'wrong' })
+				.send({ network: 'facebook', auth_token: 'wrong' })
 				.expect('content-type', /json/)
-				.expect(401)
+				.expect(400)
 				.end(function (err, res) {
 					//console.log err
 					if (err != null) { return done(err); }
-					res.body.name.should.eql('InvalidLoginTokenError');
+					res.body.name.should.eql('OAuthException');
 					return done(err);
 				});
 			return null;
