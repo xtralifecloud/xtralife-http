@@ -51,11 +51,11 @@ var _login = (game, id, secret, authToken, options) => ({
 		});
 	},
 
-	googleplus(cb) {
+	google(cb) {
 		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.logingp(game, authToken, options, function (err, gamer, created) {
-			if ((err != null) && (err.message === 'Invalid Credentials')) {
-				return cb(new errors.InvalidLoginTokenError);
+		return xtralife.api.connect.loginGoogle(game, authToken, options, function (err, gamer, created) {
+			if ((err != null) && (err.source === 'google')) {
+				return cb(new errors.OAuthException(err.message, 401, err.source));
 			}
 			return cb(err, gamer, created);
 		});

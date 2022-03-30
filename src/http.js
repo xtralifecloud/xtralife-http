@@ -76,7 +76,8 @@ xtralife.configure(function (err) {
 	// listen backlog set to a higher limit of 16384-1
 	var server = http.createServer(app).listen(xlenv.http.port, 16383, function (err) {
 		if (err != null) { return def.reject(err); }
-		logger.info('HTTP REST API server listening on port ' + xlenv.http.port);
+		const { version } = require("../package.json");
+		logger.info(`HTTP REST API server listening on port ${xlenv.http.port} (${version})`  );
 		app.set('server', server);
 
 		require('./metrics-server')
