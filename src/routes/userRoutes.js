@@ -61,6 +61,16 @@ var _login = (game, id, secret, authToken, options) => ({
 		});
 	},
 
+	firebase(cb) {
+		if(authToken == null) { return cb(new errors.LoginError); }
+		return xtralife.api.connect.loginFirebase(game, authToken, options, function (err, gamer, created) {
+			if ((err != null) && (err.source === 'firebase')) {
+				return cb(new errors.OAuthException(err.message, 401, err.source));
+			}
+			return cb(err, gamer, created);
+		});
+	},
+
 	gamecenter(cb) {
 		if(id == null || authToken == null) { return cb(new errors.LoginError); }
 		return xtralife.api.connect.logingc(game, id, JSON.parse(authToken), options, cb);
