@@ -29,7 +29,7 @@ module.exports = function (app) {
 							.end();
 					});
 
-				case "facebook": case "googleplus": case "anonymous": case "email": case "gamecenter":
+				case "facebook": case "googleplus": case "anonymous": case "email": case "gamecenter": case "steam":
 					if (req.params.id == null) { return next(new errors.MissingData("id")); }
 					return xtralife.api.connect.existInNetwork(method, req.params.id, function (err, result) {
 						if (err != null) { return next(err); }
@@ -39,7 +39,7 @@ module.exports = function (app) {
 							.end();
 					});
 				default:
-					return next(new errors.InvalidOption(method, ["gamer_id", "facebook", "googleplus", "anonymous", "email", "gamecenter"]));
+					return next(new errors.InvalidOption(method, ["gamer_id", "facebook", "googleplus", "anonymous", "email", "gamecenter", "steam"]));
 			}
 		});
 
