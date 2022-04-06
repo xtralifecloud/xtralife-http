@@ -70,6 +70,16 @@ var _login = (game, id, secret, authToken, options) => ({
 			return cb(err, gamer, created);
 		});
 	},
+	
+	steam(cb) {	
+		if(authToken == null) { return cb(new errors.LoginError); }
+		return xtralife.api.connect.loginSteam(game, authToken, options, function (err, gamer, created) {
+			if ((err != null) && (err.source === 'steam')) {
+				return cb(new errors.OAuthException(err.message, 401, err.source));
+			}
+			return cb(err, gamer, created);
+		});
+	},
 
 	gamecenter(cb) {
 		if(id == null || authToken == null) { return cb(new errors.LoginError); }
