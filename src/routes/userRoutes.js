@@ -61,9 +61,19 @@ var _login = (game, id, secret, authToken, options) => ({
 		});
 	},
 
+	apple(cb){
+		if(authToken == null) { return cb(new errors.LoginError); }
+		return xtralife.api.connect.loginApple(game, authToken, options, function (err, gamer, created) {
+			if ((err != null) && (err.source === 'apple')) {
+				return cb(new errors.OAuthException(err.message, 401, err.source));
+			}
+			return cb(err, gamer, created);
+		});
+	},
+
 	gamecenter(cb) {
 		if(id == null || authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.logingc(game, id, JSON.parse(authToken), options, cb);
+		return xtralife.api.connect.logingc(game, id, authToken, options, cb);
 	},
 
 	email(cb) {
@@ -75,7 +85,7 @@ var _login = (game, id, secret, authToken, options) => ({
 		if(id == null || authToken == null) { return cb(new errors.LoginError); }
 		return xtralife.api.connect.loginExternal(game, options.external, id, authToken, options, cb);
 	},
-
+	
 	restore(cb) {
 		if(secret == null) { return cb(new errors.LoginError); }
 
