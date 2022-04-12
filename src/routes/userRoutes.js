@@ -43,42 +43,22 @@ var _login = (game, id, secret, authToken, options) => ({
 
 	facebook(cb) {
 		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginfb(game, authToken, options, function (err, gamer, created) {
-			if ((err != null) && (err.type === 'OAuthException')) {
-				return cb(new errors.OAuthException(err.message, err.status, err.source));
-			}
-			return cb(err, gamer, created);
-		});
+		return xtralife.api.connect.loginFacebook(game, authToken, options, cb)
 	},
 
 	google(cb) {
 		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginGoogle(game, authToken, options, function (err, gamer, created) {
-			if ((err != null) && (err.source === 'google')) {
-				return cb(new errors.OAuthException(err.message, 401, err.source));
-			}
-			return cb(err, gamer, created);
-		});
+		return xtralife.api.connect.loginGoogle(game, authToken, options, cb)
 	},
 
 	firebase(cb) {
 		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginFirebase(game, authToken, options, function (err, gamer, created) {
-			if ((err != null) && (err.source === 'firebase')) {
-				return cb(new errors.OAuthException(err.message, 401, err.source));
-			}
-			return cb(err, gamer, created);
-		});
+		return xtralife.api.connect.loginFirebase(game, authToken, options, cb);
 	},
 	
 	steam(cb) {	
 		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginSteam(game, authToken, options, function (err, gamer, created) {
-			if ((err != null) && (err.source === 'steam')) {
-				return cb(new errors.OAuthException(err.message, 401, err.source));
-			}
-			return cb(err, gamer, created);
-		});
+		return xtralife.api.connect.loginSteam(game, authToken, options, cb);
 	},
 
 	gamecenter(cb) {
@@ -284,7 +264,7 @@ module.exports = function (app) {
 							.end();
 					});
 
-				case "facebook": case "googleplus": case "anonymous": case "email": case "gamecenter":
+				case "facebook": case "google": case "anonymous": case "email": case "gamecenter": case "firebase": case "steam": case "apple":
 					if (req.params.id == null) { return next(new errors.MissingData("id")); }
 					return xtralife.api.connect.existInNetwork(method, req.params.id, function (err, result) {
 						if (err != null) { return next(err); }
@@ -296,7 +276,7 @@ module.exports = function (app) {
 							.end();
 					});
 				default:
-					return next(new errors.InvalidOption(method, ["gamer_id", "facebook", "googleplus", "anonymous", "email", "gamecenter"]));
+					return next(new errors.InvalidOption(method, ["gamer_id", "facebook", "google", "anonymous", "email", "gamecenter", "firebase", "steam", "apple"]));
 			}
 		});
 };

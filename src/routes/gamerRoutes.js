@@ -15,27 +15,32 @@ const env = (process.env.NODE_ENV != null) ? process.env.NODE_ENV : "dev";
 const Q = require('bluebird');
 const _domainHandler = require('./domainHandler.js');
 
-const _convert = (gamer_id, body) => ({
+const _convert = (game, gamer_id, body) => ({
 	email() {
 		if (body.id == null) { throw new errors.MissingParameter("id"); }
 		if (body.secret == null) { throw new errors.MissingParameter("secret"); }
-		return xtralife.api.connect.convertAccountToEmail(gamer_id, body.id, xtralife.api.user.sha_passwd(body.secret));
+		return xtralife.api.connect.convertAccountToEmail(gamer_id, body.id, xtralife.api.user.sha_passwd(body.secret), body.options);
 	},
 
 	facebook() {
-		if (body.secret == null) { throw new errors.MissingParameter("secret"); }
-		return xtralife.api.connect.convertAccountToFacebook(gamer_id, body.secret);
+		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
+		return xtralife.api.connect.convertAccountToFacebook(game, gamer_id, body.auth_token, body.options);
 	},
 
-	googleplus() {
-		if (body.secret == null) { throw new errors.MissingParameter("secret"); }
-		return xtralife.api.connect.convertAccountToGooglePlus(gamer_id, body.secret);
+	google() {
+		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
+		return xtralife.api.connect.convertAccountToGoogle(game, gamer_id, body.auth_token, body.options);
 	},
 
-	gamecenter() {
-		if (body.id == null) { throw new errors.MissingParameter("id"); }
-		return xtralife.api.connect.convertAccountToGameCenter(gamer_id, body.id, body.options);
-	}
+	firebase() {
+		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
+		return xtralife.api.connect.convertAccountToFirebase(game, gamer_id, body.auth_token, body.options);
+	},
+
+	steam() {
+		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
+		return xtralife.api.connect.convertAccountToSteam(game, gamer_id, body.auth_token);
+	},
 });
 
 const _link = (user, token) => ({
@@ -172,7 +177,7 @@ module.exports = function (app) {
 
 	app.post("/v1/gamer/convert", function (req, res, next) {
 		const network = req.body['network'];
-		const conversion = _convert(req.gamer._id, req.body);
+		const conversion = _convert(req.game, req.gamer._id, req.body);
 		const allowedKeys = Object.keys(conversion);
 		if (!Array.from(allowedKeys).includes(network)) { return next(new errors.InvalidOption(network, allowedKeys)); }
 
