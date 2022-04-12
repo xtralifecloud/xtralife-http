@@ -15,7 +15,7 @@ const env = (process.env.NODE_ENV != null) ? process.env.NODE_ENV : "dev";
 const Q = require('bluebird');
 const _domainHandler = require('./domainHandler.js');
 
-const _convert = (gamer_id, body) => ({
+const _convert = (game, gamer_id, body) => ({
 	email() {
 		if (body.id == null) { throw new errors.MissingParameter("id"); }
 		if (body.secret == null) { throw new errors.MissingParameter("secret"); }
@@ -30,6 +30,11 @@ const _convert = (gamer_id, body) => ({
 	googleplus() {
 		if (body.secret == null) { throw new errors.MissingParameter("secret"); }
 		return xtralife.api.connect.convertAccountToGooglePlus(gamer_id, body.secret);
+	},
+
+	apple() {
+		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
+		return xtralife.api.connect.convertAccountToApple(game, gamer_id, body.auth_token, body.options);
 	},
 
 	gamecenter() {
@@ -172,7 +177,7 @@ module.exports = function (app) {
 
 	app.post("/v1/gamer/convert", function (req, res, next) {
 		const network = req.body['network'];
-		const conversion = _convert(req.gamer._id, req.body);
+		const conversion = _convert(req.game, req.gamer._id, req.body);
 		const allowedKeys = Object.keys(conversion);
 		if (!Array.from(allowedKeys).includes(network)) { return next(new errors.InvalidOption(network, allowedKeys)); }
 

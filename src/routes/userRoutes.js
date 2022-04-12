@@ -63,12 +63,7 @@ var _login = (game, id, secret, authToken, options) => ({
 
 	apple(cb){
 		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginApple(game, authToken, options, function (err, gamer, created) {
-			if ((err != null) && (err.source === 'apple')) {
-				return cb(new errors.OAuthException(err.message, 401, err.source));
-			}
-			return cb(err, gamer, created);
-		});
+		return xtralife.api.connect.loginApple(game, authToken, options, cb);
 	},
 
 	gamecenter(cb) {
