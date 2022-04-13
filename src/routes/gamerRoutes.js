@@ -15,7 +15,7 @@ const env = (process.env.NODE_ENV != null) ? process.env.NODE_ENV : "dev";
 const Q = require('bluebird');
 const _domainHandler = require('./domainHandler.js');
 
-const _convert = (game, gamer_id, body) => ({
+const _convert = (game, gamer_id, credentials, options) => ({
 	email() {
 		if (body.id == null) { throw new errors.MissingParameter("id"); }
 		if (body.secret == null) { throw new errors.MissingParameter("secret"); }
@@ -33,13 +33,19 @@ const _convert = (game, gamer_id, body) => ({
 	},
 
 	apple() {
-		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
-		return xtralife.api.connect.convertAccountToApple(game, gamer_id, body.auth_token, body.options);
+		if (credentials.auth_token == null) { throw new errors.MissingParameter("credentials.auth_token"); }
+		return xtralife.api.connect.convertAccountToApple(game, gamer_id, credentials.auth_token, options);
 	},
 
 	gamecenter() {
-		if (body.id == null) { throw new errors.MissingParameter("id"); }
-		return xtralife.api.connect.convertAccountToGameCenter(gamer_id, body.id, body.options);
+		if(!credentials.id) throw new errors.MissingParameter("credentials.id");
+		if(!credentials.publicKeyUrl) throw new errors.MissingParameter("credentials.publicKeyUrl");
+		if(!credentials.signature) throw new errors.MissingParameter("credentials.signature");
+		if(!credentials.salt) throw new errors.MissingParameter("credentials.salt");
+		if(!credentials.timestamp) throw new errors.MissingParameter("credentials.timestamp");
+		if(!credentials.bundleId) throw new errors.MissingParameter("credentials.bundleId");
+
+		return xtralife.api.connect.convertAccountToGameCenter(game, gamer_id, credentials);
 	}
 });
 
@@ -177,7 +183,11 @@ module.exports = function (app) {
 
 	app.post("/v1/gamer/convert", function (req, res, next) {
 		const network = req.body['network'];
-		const conversion = _convert(req.game, req.gamer._id, req.body);
+		const credentials = req.body['credentials'];
+		const options = req.body['options'];
+		if(!credentials) return next(new errors.MissingParameter("credentials"));
+
+		const conversion = _convert(req.game, req.gamer._id, credentials, options);
 		const allowedKeys = Object.keys(conversion);
 		if (!Array.from(allowedKeys).includes(network)) { return next(new errors.InvalidOption(network, allowedKeys)); }
 

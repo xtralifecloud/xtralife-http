@@ -20,7 +20,7 @@ const _ = require("underscore");
 
 // when adding new network, remember to change the gamerCatchAllRoute.js file !!
 
-var _login = (game, id, secret, authToken, options) => ({
+var _login = (game, credentials, options) => ({
 	createanonymous(cb) {
 		const profile = {
 			displayName: "Guest",
@@ -62,13 +62,18 @@ var _login = (game, id, secret, authToken, options) => ({
 	},
 
 	apple(cb){
-		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginApple(game, authToken, options, cb);
+		if(!credentials.authToken) { return cb(new errors.MissingParameter("credentials.auth_token")); }
+		return xtralife.api.connect.loginApple(game, credentials.authToken, options, cb);
 	},
 
 	gamecenter(cb) {
-		if(id == null || authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.logingc(game, id, authToken, options, cb);
+		if(!credentials.id) return cb(new errors.MissingParameter("credentials.id"));
+		if(!credentials.publicKeyUrl) return cb(new errors.MissingParameter("credentials.publicKeyUrl"));
+		if(!credentials.signature) return cb(new errors.MissingParameter("credentials.signature"));
+		if(!credentials.salt) return cb(new errors.MissingParameter("credentials.salt"));
+		if(!credentials.timestamp) return cb(new errors.MissingParameter("credentials.timestamp"));
+		if(!credentials.bundleId) return cb(new errors.MissingParameter("credentials.bundleId"));
+		return xtralife.api.connect.loginGameCenter(game, credentials, options, cb);
 	},
 
 	email(cb) {
@@ -184,11 +189,11 @@ module.exports = function (app) {
 
 	app.post("/v1/login", function (req, res, next) {
 		let network = req.body['network'];
-		const id = req.body['id'];
-		const secret = req.body['secret'];
-		const authToken = req.body["auth_token"];
+		const credentials = req.body['credentials'];
 		const options = req.body['options'] || {};
 		const thenBatch = req.body.thenBatch || (req.body.options != null ? req.body.options.thenBatch : undefined);
+
+		if(!credentials) return next(new errors.MissingParameter("credentials")); 
 
 		if (thenBatch != null) {
 			if (thenBatch.name == null) { return next(new errors.MissingParameter("thenBatch.name")); }
@@ -201,7 +206,7 @@ module.exports = function (app) {
 			network = "external";
 		}
 
-		const login = _login(req.game, id, secret, authToken, options)[network];
+		const login = _login(req.game, credentials, options)[network];
 		if (login == null) { return next(new errors.InvalidLoginNetwork); }
 
 		return login(function (err, gamer, created) {
