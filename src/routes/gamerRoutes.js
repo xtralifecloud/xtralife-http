@@ -17,33 +17,33 @@ const _domainHandler = require('./domainHandler.js');
 
 const _convert = (game, gamer_id, credentials, options) => ({
 	email() {
-		if (body.id == null) { throw new errors.MissingParameter("id"); }
-		if (body.secret == null) { throw new errors.MissingParameter("secret"); }
-		return xtralife.api.connect.convertAccountToEmail(gamer_id, body.id, xtralife.api.user.sha_passwd(body.secret), body.options);
+		if (!credentials.id) { throw new errors.MissingParameter("credentials.id"); }
+		if (!credentials.secret) { throw new errors.MissingParameter("credentials.secret"); }
+		return xtralife.api.connect.convertAccountToEmail(gamer_id, credentials.id, xtralife.api.user.sha_passwd(credentials.secret), options);
 	},
 
 	facebook() {
-		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
-		return xtralife.api.connect.convertAccountToFacebook(game, gamer_id, body.auth_token, body.options);
+		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }
+		return xtralife.api.connect.convertAccountToFacebook(game, gamer_id, credentials.auth_token, options);
 	},
 
 	google() {
-		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
-		return xtralife.api.connect.convertAccountToGoogle(game, gamer_id, body.auth_token, body.options);
+		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }
+		return xtralife.api.connect.convertAccountToGoogle(game, gamer_id, credentials.auth_token, options);
 	},
 
 	firebase() {
-		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
-		return xtralife.api.connect.convertAccountToFirebase(game, gamer_id, body.auth_token, body.options);
+		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }
+		return xtralife.api.connect.convertAccountToFirebase(game, gamer_id, credentials.auth_token, options);
 	},
 
 	steam() {
-		if (body.auth_token == null) { throw new errors.MissingParameter("auth_token"); }
-		return xtralife.api.connect.convertAccountToSteam(game, gamer_id, body.auth_token);
+		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }
+		return xtralife.api.connect.convertAccountToSteam(game, gamer_id, credentials.auth_token);
 	},
 	
 	apple() {
-		if (credentials.auth_token == null) { throw new errors.MissingParameter("credentials.auth_token"); }
+		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }
 		return xtralife.api.connect.convertAccountToApple(game, gamer_id, credentials.auth_token, options);
 	},
 

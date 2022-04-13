@@ -30,40 +30,41 @@ var _login = (game, credentials, options) => ({
 	},
 
 	anonymous(cb) {
-		if (id == null || secret == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.exist(id, function (err, gamer) {
+		if(!credentials.id) return cb(new errors.MissingParameter("credentials.id"));
+		if(!credentials.secret) return cb(new errors.MissingParameter("credentials.secret"));
+		return xtralife.api.connect.exist(credentials.id, function (err, gamer) {
 			if (err != null) { return cb(err); }
 			if (gamer != null) {
-				const sha = xtralife.api.user.sha_passwd(id);
-				if (sha !== secret) { return cb(new errors.LoginError); }
+				const sha = xtralife.api.user.sha_passwd(credentials.id);
+				if (sha !== credentials.secret) { return cb(new errors.LoginError); }
 			}
 			return cb(err, gamer, false);
 		});
 	},
 
 	facebook(cb) {
-		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginFacebook(game, authToken, options, cb)
+		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
+		return xtralife.api.connect.loginFacebook(game, credentials.auth_token, options, cb)
 	},
 
 	google(cb) {
-		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginGoogle(game, authToken, options, cb)
+		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
+		return xtralife.api.connect.loginGoogle(game, credentials.auth_token, options, cb)
 	},
 
 	firebase(cb) {
-		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginFirebase(game, authToken, options, cb);
+		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
+		return xtralife.api.connect.loginFirebase(game, credentials.auth_token, options, cb);
 	},
 	
 	steam(cb) {	
-		if(authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginSteam(game, authToken, options, cb);
+		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
+		return xtralife.api.connect.loginSteam(game, credentials.auth_token, options, cb);
 	},
 
 	apple(cb){
-		if(!credentials.authToken) { return cb(new errors.MissingParameter("credentials.auth_token")); }
-		return xtralife.api.connect.loginApple(game, credentials.authToken, options, cb);
+		if(!credentials.auth_token) { return cb(new errors.MissingParameter("credentials.auth_token")); }
+		return xtralife.api.connect.loginApple(game, credentials.auth_token, options, cb);
 	},
 
 	gamecenter(cb) {
@@ -77,24 +78,26 @@ var _login = (game, credentials, options) => ({
 	},
 
 	email(cb) {
-		if(id == null || secret == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.login(game, id, xtralife.api.user.sha_passwd(secret), options, cb);
+		if(!credentials.id) return cb(new errors.MissingParameter("credentials.id"));
+		if(!credentials.secret) return cb(new errors.MissingParameter("credentials.secret"));
+		return xtralife.api.connect.login(game, credentials.id, xtralife.api.user.sha_passwd(credentials.secret), options, cb);
 	},
 
 	external(cb) {
-		if(id == null || authToken == null) { return cb(new errors.LoginError); }
-		return xtralife.api.connect.loginExternal(game, options.external, id, authToken, options, cb);
+		if(!credentials.id) { return cb(new errors.MissingParameter("credentials.id")); }
+		if(!credentials.auth_token) { return cb(new errors.MissingParameter("credentials.auth_token")); }
+		return xtralife.api.connect.loginExternal(game, options.external, credentials.id, credentials.auth_token, options, cb);
 	},
 	
 	restore(cb) {
-		if(secret == null) { return cb(new errors.LoginError); }
+		if(!credentials.secret) return cb(new errors.MissingParameter("credentials.secret"));
 
-		let shortcode = secret;
+		let shortcode = credentials.secret;
 		let newpass = null;
-		const idx = secret.indexOf(":");
+		const idx = credentials.secret.indexOf(":");
 		if ((idx !== -1) && (idx !== 0)) {
-			shortcode = secret.substring(0, idx);
-			newpass = secret.substr(idx + 1);
+			shortcode = credentials.secret.substring(0, idx);
+			newpass = credentials.secret.substr(idx + 1);
 		}
 		return xtralife.api.connect.resolveShortLoginCode(game, shortcode, (err, newid) => {
 			if (err != null) { return cb(err); }
