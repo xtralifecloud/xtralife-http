@@ -51,7 +51,7 @@ describe('Short Login code', function () {
 		request(shuttle)
 			.post('/v1/login')
 			.set(dataset.validAppCredentials)
-			.send({ network: 'email', id: 'devteam01@clanofthecloud.com', secret: 'password' })
+			.send({ network: 'email', credentials: {id: 'devteam01@clanofthecloud.com', secret: 'password' }})
 			.expect('content-type', /json/)
 			.end(function (err, res) {
 				//console.log res.body
@@ -77,7 +77,7 @@ describe('Short Login code', function () {
 				return request(shuttle)
 					.post('/v1/login')
 					.set(dataset.validAppCredentials)
-					.send({ network: 'email', id: 'devteam01@clanofthecloud.com', secret: 'newpassword' })
+					.send({ network: 'email', credentials: {id: 'devteam01@clanofthecloud.com', secret: 'newpassword'}})
 					.expect('content-type', /json/)
 					.end(function (err, res) {
 						//console.log res.body
@@ -180,13 +180,12 @@ describe('Short Login code', function () {
 	});
 
 	it('should login with code', function (done) {
-		//console.log {shortcode}
+		//console.log(shortcode)
 		request(shuttle)
 			.post('/v1/login')
 			.set(dataset.validAppCredentials)
-			.send({ network: 'restore', id: '', secret: `${shortcode}:password` })
+			.send({ network: 'restore', credentials: {secret: `${shortcode}:password`}})
 			.expect('content-type', /json/)
-			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
 				res.body.should.have.property('gamer_id');
@@ -201,7 +200,7 @@ describe('Short Login code', function () {
 		request(shuttle)
 			.post('/v1/login')
 			.set(dataset.validAppCredentials)
-			.send({ network: 'restore', id: '', secret: shortcode })
+			.send({ network: 'restore', credentials : {secret: shortcode }})
 			.expect('content-type', /json/)
 			.expect(400)
 			.end(function (err, res) {
@@ -245,10 +244,11 @@ describe('Short Login code', function () {
 				return setTimeout(() => request(shuttle)
 					.post('/v1/login')
 					.set(dataset.validAppCredentials)
-					.send({ network: 'restore', id: '', secret: shortcode })
+					.send({ network: 'restore', credentials: {secret: shortcode }})
 					.expect('content-type', /json/)
 					.expect(400)
 					.end(function (err, res) {
+						console.log('err:', err)
 						res.body.name.should.eql("BadToken");
 						return done(err);
 					})

@@ -328,7 +328,7 @@ describe('gamerVFS', function () {
 			.post('/v1/login')
 			.set(dataset.validAppCredentials)
 			.type('json')
-			.send({ network: 'anonymous', id: dataset.gamer_id, secret: dataset.gamer_token })
+			.send({ network: 'anonymous', credentials: {id: dataset.gamer_id, secret: dataset.gamer_token }})
 			.expect('content-type', /json/)
 			.expect(200)
 			.end(function (err, res) {

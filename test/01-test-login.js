@@ -96,12 +96,12 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'facebook' })
+				.send({ network: 'anonymous', credentials: {} })
 				.expect('content-type', /json/)
-				.expect(401)
+				.expect(400)
 				.end(function (err, res) {
-					res.body.name.should.eql('LoginError');
-					res.body.message.should.eql('Invalid user credentials');
+					res.body.name.should.eql('MissingParameter');
+					res.body.message.should.eql('The parameter is invalid or absent: credentials.id');
 					return done(err);
 				});
 			return null;
@@ -112,12 +112,12 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'facebook', id: 'any' })
+				.send({ network: 'anonymous',  credentials: {id: 'any'} })
 				.expect('content-type', /json/)
-				.expect(401)
+				.expect(400)
 				.end(function (err, res) {
-					res.body.name.should.eql('LoginError');
-					res.body.message.should.eql('Invalid user credentials');
+					res.body.name.should.eql('MissingParameter');
+					res.body.message.should.eql('The parameter is invalid or absent: credentials.secret');
 					return done(err);
 				});
 			return null;
@@ -145,7 +145,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'anonymous', id: dataset.gamer_id, secret: dataset.gamer_token })
+				.send({ network: 'anonymous', credentials: {id: dataset.gamer_id, secret: dataset.gamer_token }})
 				.expect('content-type', /json/)
 				.expect(200)
 				.end(function (err, res) {
@@ -164,7 +164,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'anonymous', id: dataset.gamer_id, secret: dataset.gamer_token, thenBatch: { name: "login", domain: "com.clanofthecloud.cloudbuilder.azerty", params: { contest: "Silver" } } })
+				.send({ network: 'anonymous', credentials: {id: dataset.gamer_id, secret: dataset.gamer_token}, thenBatch: { name: "login", domain: "com.clanofthecloud.cloudbuilder.azerty", params: { contest: "Silver" } } })
 				.expect('content-type', /json/)
 				.expect(200)
 				.end(function (err, res) {
@@ -184,7 +184,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'anonymous', id: dataset.gamer_id, secret: 'this is wrong' })
+				.send({ network: 'anonymous', credentials: {id: dataset.gamer_id, secret: 'this is wrong' }})
 				.expect('content-type', /json/)
 				.expect(401)
 				.end(function (err, res) {
@@ -210,7 +210,7 @@ describe('App Authentication', function () {
 					const secret = res.body.gamer_secret;
 
 					// Convert to e-mail
-					const creds = { network: "email", id: "dummy" + new ObjectId() + "@localhost.localdomain", secret: "passwd" };
+					const creds = { network: "email", credentials: { id: "dummy" + new ObjectId() + "@localhost.localdomain", secret: "passwd" }};
 					return request(shuttle)
 						.post('/v1/gamer/convert')
 						.set(dataset.validAppCredentials)
@@ -245,13 +245,13 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'facebook', auth_token: 'wrong' })
+				.send({ network: 'facebook', credentials: {auth_token: 'wrong'}})
 				.expect('content-type', /json/)
 				.expect(400)
 				.end(function (err, res) {
 					//console.log err
 					if (err != null) { return done(err); }
-					res.body.name.should.eql('OAuthException');
+					res.body.name.should.eql('FacebookError');
 					return done(err);
 				});
 			return null;
@@ -262,7 +262,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'facebook', id: 'any will do', secret: dataset.facebookToken })
+				.send({ network: 'facebook', credentials: {auth_token: dataset.facebookToken }})
 				.expect('content-type', /json/)
 				.end(function (err, res) {
 					if (res.status === 401) {
@@ -285,7 +285,7 @@ describe('App Authentication', function () {
 				.post('/v1/gamer/link')
 				.set(dataset.validAppCredentials)
 				.auth(dataset.gamer_id, dataset.gamer_token)
-				.send({ network: 'facebook', id: 'any will do', secret: dataset.facebookToken })
+				.send({ network: 'facebook', credentials: {auth_token: dataset.facebookToken }})
 				.expect('content-type', /json/)
 				.expect(200)
 				.end(function (err, res) {
@@ -316,7 +316,7 @@ describe('App Authentication', function () {
 					const secret = res.body.gamer_secret;
 
 					// Convert to e-mail
-					const creds = { network: "facebook", id: "dummy" + new ObjectId(), secret: dataset.facebookToken };
+					const creds = { network: "facebook", credentials: {id: "dummy" + new ObjectId(), auth_token: dataset.facebookToken }};
 					return request(shuttle)
 						.post('/v1/gamer/convert')
 						.set(dataset.validAppCredentials)
@@ -350,7 +350,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'googleplus', id: 'wrong', secret: 'wrong' })
+				.send({ network: 'google', credentials: {auth_token: 'wrong' }})
 				.expect('content-type', /json/)
 				.expect(401)
 				.end(function (err, res) {
@@ -367,7 +367,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'googleplus', id: 'any will do', secret: dataset.googleToken })
+				.send({ network: 'google', credentials : {auth_token: dataset.googleToken} })
 				.expect('content-type', /json/)
 				.end(function (err, res) {
 					if (res.status === 401) {
@@ -392,7 +392,7 @@ describe('App Authentication', function () {
 				.post('/v1/gamer/link')
 				.set(dataset.validAppCredentials)
 				.auth(dataset.gamer_id, dataset.gamer_token)
-				.send({ network: 'googleplus', id: 'any will do', secret: dataset.googleToken })
+				.send({ network: 'google', credentials : {auth_token: dataset.googleToken}  })
 				.expect('content-type', /json/)
 				.expect(200)
 				.end(function (err, res) {
@@ -423,7 +423,7 @@ describe('App Authentication', function () {
 					const secret = res.body.gamer_secret;
 
 					// Convert to e-mail
-					const creds = { network: "googleplus", id: "dummy" + new ObjectId(), secret: dataset.googleToken };
+					const creds = { network: "googleplus", credentials: {id: "dummy" + new ObjectId(), auth_token: dataset.googleToken }};
 					return request(shuttle)
 						.post('/v1/gamer/convert')
 						.set(dataset.validAppCredentials)
@@ -449,11 +449,11 @@ describe('App Authentication', function () {
 		});
 	});
 
-	describe("Game Center login", () => {
+	describe.skip("Game Center login", () => {
 		it('should connect with good creds', done => {
 			const auth = {
 				bundleId: "cloud.xtralife.gamecenterauth",
-				playerId: "G:1965586982",
+				id: "G:1965586982",
 				publicKeyUrl: "https://static.gc.apple.com/public-key/gc-prod-4.cer",
 				salt: "NRRF0g==",
 				signature: "cf6d+TOnCFABj1+CT5dS4H7zU+xgCgos9gI3TsqcHyl7Q73UZHkdeAEM+Lq4zXtMOz14ieK5AhxorjkrxCnotH7JLMQhdGwyM11PIsA4Yugu+Vm9RqvY6HuAsNKpdIn1XvyIKwff7vXpCWwfbk6r8Idy8kHnAAOgCUxwE9vLXYGVov6KTDjrjM1LggvYjCY7cvPB8AjhPsA28GkIMZD04JSZEpZAAwTJCiDCwPoyZxBUciIe5NUOSboWZP8CjmNUB5WFl4Fwean4Vi0a8+tr1/UZdfUsB4eTqXoQOv6zgmvFjIU+XQ7gGGEUDbtJrc+LInXouN4nLNAY0cD4ItgA3g==",
@@ -463,7 +463,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'gamecenter', id: auth.playerId, secret: JSON.stringify(auth) })
+				.send({ network: 'gamecenter', credentials: auth })
 				.expect('content-type', /json/)
 				.end(function (err, res) {
 					if (err != null) { return done(err); }
@@ -479,7 +479,7 @@ describe('App Authentication', function () {
 		it('should fail for bad bundleId', done => {
 			const auth = {
 				bundleId: "cloud.xtralife.badBundleId",
-				playerId: "G:1965586982",
+				id: "G:1965586982",
 				publicKeyUrl: "https://static.gc.apple.com/public-key/gc-prod-4.cer",
 				salt: "NRRF0g==",
 				signature: "cf6d+TOnCFABj1+CT5dS4H7zU+xgCgos9gI3TsqcHyl7Q73UZHkdeAEM+Lq4zXtMOz14ieK5AhxorjkrxCnotH7JLMQhdGwyM11PIsA4Yugu+Vm9RqvY6HuAsNKpdIn1XvyIKwff7vXpCWwfbk6r8Idy8kHnAAOgCUxwE9vLXYGVov6KTDjrjM1LggvYjCY7cvPB8AjhPsA28GkIMZD04JSZEpZAAwTJCiDCwPoyZxBUciIe5NUOSboWZP8CjmNUB5WFl4Fwean4Vi0a8+tr1/UZdfUsB4eTqXoQOv6zgmvFjIU+XQ7gGGEUDbtJrc+LInXouN4nLNAY0cD4ItgA3g==",
@@ -489,7 +489,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'gamecenter', id: auth.playerId, secret: JSON.stringify(auth) })
+				.send({ network: 'gamecenter', credentials: auth })
 				.expect('content-type', /json/)
 				.end(function (err, res) {
 					res.body.name.should.eql("GameCenterLoginError");
@@ -502,7 +502,7 @@ describe('App Authentication', function () {
 		return it('should fail for bad signature', done => {
 			const auth = {
 				bundleId: "cloud.xtralife.gamecenterauth",
-				playerId: "G:1965586982 modified",
+				id: "G:1965586982 modified",
 				publicKeyUrl: "https://static.gc.apple.com/public-key/gc-prod-4.cer",
 				salt: "NRRF0g==",
 				signature: "cf6d+TOnCFABj1+CT5dS4H7zU+xgCgos9gI3TsqcHyl7Q73UZHkdeAEM+Lq4zXtMOz14ieK5AhxorjkrxCnotH7JLMQhdGwyM11PIsA4Yugu+Vm9RqvY6HuAsNKpdIn1XvyIKwff7vXpCWwfbk6r8Idy8kHnAAOgCUxwE9vLXYGVov6KTDjrjM1LggvYjCY7cvPB8AjhPsA28GkIMZD04JSZEpZAAwTJCiDCwPoyZxBUciIe5NUOSboWZP8CjmNUB5WFl4Fwean4Vi0a8+tr1/UZdfUsB4eTqXoQOv6zgmvFjIU+XQ7gGGEUDbtJrc+LInXouN4nLNAY0cD4ItgA3g==",
@@ -512,7 +512,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'gamecenter', id: auth.playerId, secret: JSON.stringify(auth) })
+				.send({ network: 'gamecenter', credentials: auth })
 				.expect('content-type', /json/)
 				.end(function (err, res) {
 					res.body.name.should.eql("GameCenterLoginError");
@@ -530,7 +530,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'external:customNetwork', id: 'good', secret: 'good' })
+				.send({ network: 'external:customNetwork', credentials: {id: 'good', secret: 'good' }})
 				.expect('content-type', /json/)
 				.end(function (err, res) {
 					if (err != null) { return done(err); }
@@ -547,7 +547,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'external:customNetwork', id: 'good', secret: 'bad' })
+				.send({ network: 'external:customNetwork', credentials: {id: 'good', secret: 'bad'} })
 				.expect('content-type', /json/)
 				.expect(400)
 				.end(function (err, res) {
@@ -561,7 +561,7 @@ describe('App Authentication', function () {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
-				.send({ network: 'external:Unknown', id: 'good', secret: 'good' })
+				.send({ network: 'external:Unknown', credentials: {id: 'good', secret: 'good'} })
 				.expect('content-type', /json/)
 				.expect(400)
 				.end(function (err, res) {

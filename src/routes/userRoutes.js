@@ -30,6 +30,7 @@ var _login = (game, credentials, options) => ({
 	},
 
 	anonymous(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.id) return cb(new errors.MissingParameter("credentials.id"));
 		if(!credentials.secret) return cb(new errors.MissingParameter("credentials.secret"));
 		return xtralife.api.connect.exist(credentials.id, function (err, gamer) {
@@ -43,31 +44,37 @@ var _login = (game, credentials, options) => ({
 	},
 
 	facebook(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
 		return xtralife.api.connect.loginFacebook(game, credentials.auth_token, options, cb)
 	},
 
 	google(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
 		return xtralife.api.connect.loginGoogle(game, credentials.auth_token, options, cb)
 	},
 
 	firebase(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
 		return xtralife.api.connect.loginFirebase(game, credentials.auth_token, options, cb);
 	},
 	
 	steam(cb) {	
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
 		return xtralife.api.connect.loginSteam(game, credentials.auth_token, options, cb);
 	},
 
 	apple(cb){
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.auth_token) { return cb(new errors.MissingParameter("credentials.auth_token")); }
 		return xtralife.api.connect.loginApple(game, credentials.auth_token, options, cb);
 	},
 
 	gamecenter(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.id) return cb(new errors.MissingParameter("credentials.id"));
 		if(!credentials.publicKeyUrl) return cb(new errors.MissingParameter("credentials.publicKeyUrl"));
 		if(!credentials.signature) return cb(new errors.MissingParameter("credentials.signature"));
@@ -78,18 +85,21 @@ var _login = (game, credentials, options) => ({
 	},
 
 	email(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.id) return cb(new errors.MissingParameter("credentials.id"));
 		if(!credentials.secret) return cb(new errors.MissingParameter("credentials.secret"));
 		return xtralife.api.connect.login(game, credentials.id, xtralife.api.user.sha_passwd(credentials.secret), options, cb);
 	},
 
 	external(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.id) { return cb(new errors.MissingParameter("credentials.id")); }
 		if(!credentials.auth_token) { return cb(new errors.MissingParameter("credentials.auth_token")); }
 		return xtralife.api.connect.loginExternal(game, options.external, credentials.id, credentials.auth_token, options, cb);
 	},
 	
 	restore(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.secret) return cb(new errors.MissingParameter("credentials.secret"));
 
 		let shortcode = credentials.secret;
@@ -102,7 +112,8 @@ var _login = (game, credentials, options) => ({
 		return xtralife.api.connect.resolveShortLoginCode(game, shortcode, (err, newid) => {
 			if (err != null) { return cb(err); }
 			if (newid == null) { return cb(new errors.LoginError); }
-			const login = _login(game, newid, xtralife.api.user.sha_passwd(newid))["anonymous"];
+			const credentials = { id: newid, secret: xtralife.api.user.sha_passwd(newid)};
+			const login = _login(game, credentials)["anonymous"];
 			return login(function (err, gamer, created) {
 				if (err != null) { return cb(err); }
 				if (newpass != null) {
@@ -195,8 +206,6 @@ module.exports = function (app) {
 		const credentials = req.body['credentials'];
 		const options = req.body['options'] || {};
 		const thenBatch = req.body.thenBatch || (req.body.options != null ? req.body.options.thenBatch : undefined);
-
-		if(!credentials) return next(new errors.MissingParameter("credentials")); 
 
 		if (thenBatch != null) {
 			if (thenBatch.name == null) { return next(new errors.MissingParameter("thenBatch.name")); }
