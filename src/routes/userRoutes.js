@@ -93,9 +93,7 @@ var _login = (game, credentials, options) => ({
 
 	external(cb) {
 		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
-		if(!credentials.id) { return cb(new errors.MissingParameter("credentials.id")); }
-		if(!credentials.auth_token) { return cb(new errors.MissingParameter("credentials.auth_token")); }
-		return xtralife.api.connect.loginExternal(game, options.external, credentials.id, credentials.auth_token, options, cb);
+		return xtralife.api.connect.loginExternal(game, options.external, credentials, options, cb);
 	},
 	
 	restore(cb) {
