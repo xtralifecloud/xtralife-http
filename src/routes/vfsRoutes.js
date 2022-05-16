@@ -52,7 +52,6 @@ router.route('/:domain/:key')
             if (req.query.binary != null) {
                 xtralife.api.virtualfs.deleteURL(req.params.domain, req.gamer._id, req.params.key)
                     .catch(err => logger.error(err.message, { stack: err.stack }))
-                    .done();
             }
 
             return xtralife.api.virtualfs.delete(req.context, req.params.domain, req.gamer._id, req.params.key)
