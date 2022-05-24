@@ -20,7 +20,7 @@ module.exports = {
 	},
 
 	cleanGamerForReturning(gamer) {
-		const result = gamer;
+		const result = Object.assign({}, gamer);
 		result.gamer_id = gamer._id;
 		result.gamer_secret = xtralife.api.user.sha_passwd(gamer._id);
 		result.servertime = new Date();
