@@ -127,7 +127,7 @@ var _login = (game, credentials, options) => ({
 	}
 });
 
-const _finalize = function (req, res, next, gamer, created) {
+const _finalize = async function (req, res, next, gamer, created) {
 	const thenBatch = req.body.thenBatch || (req.body.options != null ? req.body.options.thenBatch : undefined);
 	const device = req.body['device'];
 
@@ -163,18 +163,57 @@ const _finalize = function (req, res, next, gamer, created) {
 				.end();
 			return;
 		}
+		const osn = req.body['osn'];
 
-		return xtralife.api.outline.get(req.game, gamer.gamer_id, req.game.config.domains, (err, outline) => {
+		if(osn){
+			if(!osn.os) return next(new errors.MissingParameter("osn.os"));
+			if(!osn.token) return next(new errors.MissingParameter("osn.token"));
+			const domain = `${req.game.appid}.${req.game.apisecret}`;
+			await new Promise(resolve =>
+				xtralife.api.connect.registerToken(gamer, osn.os, osn.token, domain, (err, done) => {
+					if(err) next(err);
+					if(done === 1) logger.info(`Registered token ${osn.token} for user ${gamer._id}`)
+					resolve(done);
+				})
+			);
+		}
+
+		return xtralife.api.outline.get(req.game, gamer._id, req.game.config.domains, async (err, outline) => {
 			if (err != null) { return next(err); }
 
 			result = outline;
-			result.gamer_id = gamer.gamer_id;
-			result.gamer_secret = xtralife.api.user.sha_passwd(gamer.gamer_id);
+			result.gamer_id = gamer._id;
+			result.gamer_secret = xtralife.api.user.sha_passwd(gamer._id);
 			if (gamer.passwordChanged != null) { result.passwordChanged = gamer.passwordChanged; }
-			return res
-				.status(created ? 201 : 200)
-				.json(result)
-				.end();
+
+			if(gamer.tokens && gamer.tokens.length > 0) {
+				const day = 1000 * 60 * 60 * 24
+
+				await Promise.all(gamer.tokens.map(token => {
+					return new Promise((resolve) => {
+						if(token.creationTime?.getTime() < (new Date()).getTime() - (30 * day)){
+							return xtralife.api.connect.unregisterToken(gamer, token.os, token.token, token.domain, (err, done) => {
+								if(err) next(err);
+								if(done === 1) {
+									result.tokens.splice(result.tokens.indexOf(token), 1)
+									logger.info(`Unregistered token ${token.token} for user ${gamer._id}`)
+								}
+								resolve(done);
+							});
+						}
+						resolve(0)
+					})
+				}));
+				return res
+					.status(created ? 201 : 200)
+					.json(result)
+					.end();
+			}else{
+				return res
+					.status(created ? 201 : 200)
+					.json(result)
+					.end();
+			}
 		});
 	}
 };
