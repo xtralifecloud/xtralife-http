@@ -40,6 +40,11 @@ router
 		}
 
 		const message = req.body;
+		message.type = 'user';
+		message.from = req.gamer._id
+		message.to = req.params.user;
+		message.name = req.gamer.profile.displayName;
+
 		return xlenv.broker.send(req.params.domain, req.params.user, message)
 			.then(() => res.status(200)
 				.json(message) // with .id field added
