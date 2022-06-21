@@ -5,7 +5,6 @@
  */
 const Promise = require('bluebird');
 Promise.promisifyAll(require('redis'));
-const os = require('os');
 global.xlenv = require("xtralife-env");
 
 const winston = require('winston');
@@ -106,26 +105,20 @@ xlenv.override(null, {
 					enable: true,
 					domains: [],
 					eventedDomains: [],
-					certs: {
-						android: {
-							enable: false,
-							senderID: '',
-							apikey: ''
-						},
-						ios: {
-							enable: false,
-							cert: '',
-							key: ''
-						},
-						macos: {
-							enable: false,
-							cert: '',
-							key: ''
+
+					google: { // see google cloud platform
+						clientID: '', // login
+						inApp: { // in-app purchase android
+							packageID: '',
+							serviceAccount: {
+								private_key_id: '',
+								client_email: '',
+								client_id: '',
+								type: 'service_account'
+							}
 						}
 					},
-					socialSettings: {
-						facebookAppToken: ''
-					}
+
 				}
 			},
 
@@ -136,39 +129,31 @@ xlenv.override(null, {
 					enable: true,
 					domains: ["com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3", "com.clanofthecloud.cloudbuilder.test"],
 					eventedDomains: ["com.clanofthecloud.cloudbuilder.m3Nsd85GNQd3"],
-					certs: {
-						android: {
-							enable: false,
-							senderID: '',
-							apikey: ''
-						},
-						ios: {
-							enable: false,
-							cert: '',
-							key: ''
-						},
-						macos: {
-							enable: false,
-							cert: '',
-							key: ''
+
+					google: { // see google cloud platform
+						clientID: '', // login
+						inApp: { // in-app purchase android
+							packageID: 'any',
+							serviceAccount: {
+								private_key_id: '',
+								client_email: '',
+								client_id: '',
+								type: 'service_account'
+							}
 						}
 					},
-					socialSettings: {
-						facebookAppToken: '',
-						gameCenterBundleIdRE: /^cloud.xtralife.gamecenterauth$/
-					}
 				}
 			}
 		}
 	},
 
-	AWS: { // to run the xtralife-http tests, you MUST configure access to an S3 bucket
+	AWS: {
 		S3: {
-			bucket: 'CONFIGURE',
+			bucket: "",
+			region: "",
 			credentials: {
-				region: 'CONFIGURE',
-				accessKeyId: 'CONFIGURE',
-				secretAccessKey: 'CONFIGURE'
+				accessKeyId: "",
+				secretAccessKey: ""
 			}
 		}
 	},

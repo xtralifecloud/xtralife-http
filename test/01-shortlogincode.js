@@ -248,7 +248,6 @@ describe('Short Login code', function () {
 					.expect('content-type', /json/)
 					.expect(400)
 					.end(function (err, res) {
-						console.log('err:', err)
 						res.body.name.should.eql("BadToken");
 						return done(err);
 					})
