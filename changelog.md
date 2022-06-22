@@ -1,10 +1,12 @@
 # xtralife http changelog
 
 ## 4.1.3-beta
-xtralife-api: 4.2.6-beta </br>
+xtralife-api: 4.2.6 </br>
 
 - remove user device token older than 1 month on login
 - add token param for device token registration on login
+- add message details on event route
+- fix tests (due to config)
 
 ## 4.1.2
 xtralife-api: 4.2.5 </br>
