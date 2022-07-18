@@ -84,6 +84,12 @@ var _login = (game, credentials, options) => ({
 		return xtralife.api.connect.loginGameCenter(game, credentials, options, cb);
 	},
 
+	nintendo(cb) {
+		if(!credentials) return cb(new errors.MissingParameter("credentials"));
+		if(!credentials.auth_token) { return cb(new errors.MissingParameter("credentials.auth_token")); }
+		return xtralife.api.connect.loginNintendo(game, credentials, options, cb);
+	},
+
 	email(cb) {
 		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.id) return cb(new errors.MissingParameter("credentials.id"));
