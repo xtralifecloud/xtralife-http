@@ -149,7 +149,7 @@ module.exports = {
 	// gamer must be valid in common users, not necessarily the current game's users
 	authenticateGamer(req, res, next) {
 		function adjustDAUMAU(appid, userid) {
-			xlenv.redis.client.pfadd(`hll.dau:${appid}`, userid, (err) => (null /* don't care if it fails */))
+			xlenv.redis.client.PFADD(`hll.dau:${appid}`, userid, (err) => (null /* don't care if it fails */))
 		}
 		
 		try {
