@@ -163,16 +163,16 @@ const _finalize = async function (req, res, next, gamer, created) {
 				.end();
 			return;
 		}
-		const osn = req.body['osn'];
+		const deviceToken = req.body.deviceToken || (req.body.options != null ? req.body.options.deviceToken : undefined);
 
-		if(osn){
-			if(!osn.os) return next(new errors.MissingParameter("osn.os"));
-			if(!osn.token) return next(new errors.MissingParameter("osn.token"));
+		if(deviceToken){
+			if(!deviceToken.os) return next(new errors.MissingParameter("deviceToken.os"));
+			if(!deviceToken.token) return next(new errors.MissingParameter("deviceToken.token"));
 			const domain = `${req.game.appid}.${req.game.apisecret}`;
 			await new Promise(resolve =>
-				xtralife.api.connect.registerToken(gamer, osn.os, osn.token, domain, (err, done) => {
+				xtralife.api.connect.registerToken(gamer, deviceToken.os, deviceToken.token, domain, (err, done) => {
 					if(err) next(err);
-					if(done === 1) logger.info(`Registered token ${osn.token} for user ${gamer._id}`)
+					if(done === 1) logger.info(`Registered token ${deviceToken.token} for user ${gamer._id}`)
 					resolve(done);
 				})
 			);
