@@ -267,7 +267,7 @@ describe('Leaderboards', function () {
 			return null;
 		});
 
-		return it.skip('gamer should retreive a Leaderboard', function (done) {
+		return it('gamer should retreive a Leaderboard', function (done) {
 
 			request(shuttle)
 				.get('/v1/gamer/scores/easyboard')

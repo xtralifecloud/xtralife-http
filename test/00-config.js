@@ -3,8 +3,6 @@
  * DS102: Remove unnecessary code created because of implicit returns
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
  */
-const Promise = require('bluebird');
-Promise.promisifyAll(require('redis'));
 global.xlenv = require("xtralife-env");
 
 const winston = require('winston');
@@ -14,32 +12,39 @@ global.logger = winston.createLogger({
 	format: winston.format.simple()
 });
 
+const Redis = require('ioredis');
+
 xlenv.override(null, {
 	nbworkers: 1,
 
 	privateKey: "CONFIGURE : This is a private key and you should customize it",
 
 	redis: {
-		host: "localhost",
-		port: 6378
+		config: { // refer to https://github.com/luin/ioredis/blob/v4/API.md#new-redisport-host-options
+			host: "localhost",
+			port: 6378
+		}
 	},
 
-	redisClient(cb) {
-		const client = require('redis').createClient(xlenv.redis.port, xlenv.redis.host);
-		return client.info(err => cb(err, client));
+	redisClient(cb){
+		const redis = new Redis(xlenv.redis.config);
+		redis.info((err) => {
+			return cb(err, redis);
+		})
 	},
 
-	redisChannel(cb) {
-		const client = require('redis').createClient(xlenv.redis.port, xlenv.redis.host);
-		return client.info(err => cb(err, client));
+	redisChannel(cb){
+		const redis = new Redis(xlenv.redis.config);
+		redis.info((err) => {
+			return cb(err, redis);
+		})
 	},
 
 	redisStats(cb) {
-		const client = require('redis').createClient(xlenv.redis.port, xlenv.redis.host);
-		return client.info(function (err) {
-			client.select(10);
-			return cb(err, client);
-		});
+		const redis = new Redis(xlenv.redis.config);
+		redis.info((err) => {
+			return cb(err, redis);
+		})
 	},
 
 	mongodb: {
