@@ -106,10 +106,16 @@ router
 		if ((req.query.ack != null) && (req.query.ack !== 'auto')) {
 			return xlenv.broker.ack(req.params.domain, req.gamer._id.toString(), req.query.ack)
 				.then(_receive)
-				.catch(err => logger.error(err)).done();
+				.catch(err => {
+					logger.error(err)
+					return next(err);
+				});
 		} else {
 			return _receive()
-				.catch(err => logger.error(err)).done();
+				.catch(err => {
+					logger.error(err)
+					return next(err);
+				});
 		}
 	});
 
