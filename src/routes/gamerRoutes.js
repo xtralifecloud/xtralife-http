@@ -41,6 +41,11 @@ const _convert = (game, gamer_id, credentials, options) => ({
 		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }
 		return xtralife.api.connect.convertAccountToSteam(game, gamer_id, credentials.auth_token);
 	},
+
+	epic() {
+		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }
+		return xtralife.api.connect.convertAccountToEpic(game, gamer_id, credentials.auth_token);
+	},
 	
 	apple() {
 		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }

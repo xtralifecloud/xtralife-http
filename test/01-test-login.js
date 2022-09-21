@@ -342,6 +342,85 @@ describe('App Authentication', function () {
 		});
 	});
 
+	// Testing Epic Online Services Login (will work only with valid token)
+	describe('Epic Games login', function () {
+
+		it('should reject wrong Epic gamer token', function (done) {
+			this.timeout(5000);
+			request(shuttle)
+				.post('/v1/login')
+				.set(dataset.validAppCredentials)
+				.send({ network: 'epic', credentials: {auth_token: 'wrong' }})
+				.expect('content-type', /json/)
+				.end(function (err, res) {
+					if (err != null) { return done(err); }
+					res.body.name.should.eql('EpicError');
+					return done(err);
+				});
+			return null;
+		});
+
+		it('should accept valid Epic token', function (done) {
+			request(shuttle)
+				.post('/v1/login')
+				.set(dataset.validAppCredentials)
+				.send({ network: 'epic', credentials : {auth_token: dataset.epicToken} })
+				.expect('content-type', /json/)
+				.end(function (err, res) {
+					if (res.status === 401) {
+						return done(new Error(("Check your Epic token!")));
+					} else {
+						if (err != null) { return done(err); }
+						res.body.gamer_id.should.not.be.undefined;
+						res.body.gamer_secret.should.not.be.undefined;
+						res.body.network.should.be.eql("epic");
+						res.body.networkid.should.not.be.undefined;
+						return done(err);
+					}
+				});
+			return null;
+		});
+
+		return it.skip('should convert anonymous account to Epic', function (done) {
+			// Create anonymous account
+			request(shuttle)
+				.post('/v1/login/anonymous')
+				.set(dataset.validAppCredentials)
+				.send({})
+				.expect('content-type', /json/)
+				.expect(200)
+				.end(function (err, res) {
+					if (err != null) { return done(err); }
+					const id = res.body.gamer_id;
+					const secret = res.body.gamer_secret;
+
+					// Convert to epic
+					const creds = { network: "epic", credentials: {auth_token: dataset.epicToken }};
+					return request(shuttle)
+						.post('/v1/gamer/convert')
+						.set(dataset.validAppCredentials)
+						.auth(id, secret)
+						.send(creds)
+						.expect('content-type', /json/)
+						.expect(200)
+						.end(function (err, res) {
+							if (err != null) { return done(err); }
+							res.body.done.should.eql(1);
+
+							// Then we should be able to log by epic
+							return request(shuttle)
+								.post('/v1/login')
+								.set(dataset.validAppCredentials)
+								.send(creds)
+								.expect('content-type', /json/)
+								.expect(200)
+								.end((err, res) => done(err));
+						});
+				});
+			return null;
+		});
+	});
+
 	// Testing Google Login (will work only with valid token)
 	describe('Google login', function () {
 

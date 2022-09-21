@@ -67,6 +67,12 @@ var _login = (game, credentials, options) => ({
 		return xtralife.api.connect.loginSteam(game, credentials.auth_token, options, cb);
 	},
 
+	epic(cb) {	
+		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
+		if(!credentials.auth_token) return cb(new errors.MissingParameter("credentials.auth_token"));
+		return xtralife.api.connect.loginEpic(game, credentials.auth_token, options, cb);
+	},
+
 	apple(cb){
 		if(!credentials) return cb(new errors.MissingParameter("credentials")); 
 		if(!credentials.auth_token) { return cb(new errors.MissingParameter("credentials.auth_token")); }
@@ -323,7 +329,7 @@ module.exports = function (app) {
 							.end();
 					});
 
-				case "facebook": case "google": case "anonymous": case "email": case "gamecenter": case "firebase": case "steam": case "apple":
+				case "facebook": case "google": case "anonymous": case "email": case "gamecenter": case "firebase": case "steam": case "apple": case "epic":
 					if (req.params.id == null) { return next(new errors.MissingData("id")); }
 					return xtralife.api.connect.existInNetwork(method, req.params.id, function (err, result) {
 						if (err != null) { return next(err); }
@@ -335,7 +341,7 @@ module.exports = function (app) {
 							.end();
 					});
 				default:
-					return next(new errors.InvalidOption(method, ["gamer_id", "facebook", "google", "anonymous", "email", "gamecenter", "firebase", "steam", "apple"]));
+					return next(new errors.InvalidOption(method, ["gamer_id", "facebook", "google", "anonymous", "email", "gamecenter", "firebase", "steam", "apple", "epic"]));
 			}
 		});
 };
