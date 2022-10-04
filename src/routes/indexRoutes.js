@@ -60,7 +60,7 @@ router
 					return next(new errors.NotFound());
 				}
 			}).catch(function (err) {
-				if (err.message === "Not Found") {
+				if (err.statusCode === 404) {
 					return next(new errors.NotFound());
 				} else { return next(err); }
 			});
@@ -71,7 +71,11 @@ router
 		return xtralife.api.index.delete(req.context, domain.toLowerCase(), indexName, id)
 			.then(result => res.status(200)
 				.json(result)
-				.end()).catch(next);
+				.end()).catch(err => {
+					if (err.statusCode === 404) {
+						return next(new errors.NotFound());
+					} else { return next(err); }
+			});
 	});
 
 router
