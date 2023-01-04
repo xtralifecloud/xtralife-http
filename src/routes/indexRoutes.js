@@ -39,7 +39,7 @@ router
 				: xtralife.api.index.query(req.context, domain.toLowerCase(), indexName, req.body, from, max);
 
 		return promise.then(result => res.status(200)
-			.json(result.hits)
+			.json(result.body.hits)
 			.end()).catch(next);
 	});
 
@@ -52,9 +52,9 @@ router
 		return xtralife.api.index.get(req.context, domain.toLowerCase(), indexName, id)
 			.then(function (result) {
 				//console.log result
-				if (result.found) {
+				if (result.body.found) {
 					return res.status(200)
-						.json(result)
+						.json(result.body)
 						.end();
 				} else {
 					return next(new errors.NotFound());
