@@ -64,8 +64,10 @@ xlenv.override(null, {
 	},
 
 	elastic(cb) {
-		const elastic = require("elasticsearch");
-		const client = new elastic.Client();
+		const { Client } = require('@elastic/elasticsearch');
+		const client = new Client({
+			node: 'http://localhost:9200'
+		});
 		return cb(null, client);
 	},
 

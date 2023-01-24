@@ -114,7 +114,6 @@ describe('GameVFS', function () {
 				if (err != null) { return done(err); }
 				res.status.should.eql(200);
 				res.body.should.eql({ test: { hi: "all" }, test2: { hello: 'world' }});
-				if (err != null) { return done(err); }
 				return done(err);
 			});
 		return null;

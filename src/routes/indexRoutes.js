@@ -48,10 +48,8 @@ router
 	.all(_domainHandler)
 	.get(function (req, res, next) {
 		const { id, domain, indexName } = req.params;
-		//console.log "#{domain} / #{indexName} / #{id}"
 		return xtralife.api.index.get(req.context, domain.toLowerCase(), indexName, id)
 			.then(function (result) {
-				//console.log result
 				if (result.body.found) {
 					return res.status(200)
 						.json(result.body)
@@ -60,7 +58,7 @@ router
 					return next(new errors.NotFound());
 				}
 			}).catch(function (err) {
-				if (err.message === "Not Found") {
+				if (err.meta.body.found === false) {
 					return next(new errors.NotFound());
 				} else { return next(err); }
 			});

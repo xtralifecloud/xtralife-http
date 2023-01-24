@@ -60,7 +60,7 @@ describe('Index', function () {
 			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
-				res.body.created.should.eql(true);
+				res.body.body.result.should.eql("created");
 				return done(err);
 			});
 		return null;
@@ -78,7 +78,6 @@ describe('Index', function () {
 				res.body._id.should.eql(gamer_id);
 				res.body._source.a.should.eql(1);
 				res.body._source.b.should.eql(2);
-				//console.log res.body
 				return done(err);
 			});
 		return null;
@@ -98,7 +97,7 @@ describe('Index', function () {
 			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
-				res.body.created.should.eql(true);
+				res.body.body.result.should.eql("created");
 				return done(err);
 			});
 		return null;
@@ -123,8 +122,7 @@ describe('Index', function () {
 					.expect('content-type', /json/)
 					.expect(200)
 					.end(function (err, res) {
-						res.body.found.should.eql(true);
-						//console.log res.body
+						res.body.body.result.should.eql("deleted");
 						return done();
 					});
 			});
@@ -152,7 +150,6 @@ describe('Index', function () {
 			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
-
 				should((res.body.hits.length > 0) && (res.body.hits.length <= 5));
 				return done(err);
 			});
@@ -239,7 +236,7 @@ describe('Index', function () {
 			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
-				res.body.created.should.eql(false);
+				res.body.body.result.should.eql("updated");
 
 				return request(shuttle)
 					.post(`/v1/index/private/test/search?max=50&q=token:${gamer_token}`)
@@ -270,8 +267,8 @@ describe('Index', function () {
 			.expect('content-type', /json/)
 			.expect(200)
 			.end(function (err, res) {
-				res.body.found.should.eql(true);
-				//console.log res.body
+				if (err != null) { return done(err); }
+				res.body.body.result.should.eql("deleted");
 				return done();
 			});
 		return null;
