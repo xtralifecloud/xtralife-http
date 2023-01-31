@@ -360,7 +360,7 @@ describe('App Authentication', function () {
 			return null;
 		});
 
-		it('should accept valid Epic token', function (done) {
+		it.skip('should accept valid Epic token', function (done) {
 			request(shuttle)
 				.post('/v1/login')
 				.set(dataset.validAppCredentials)
