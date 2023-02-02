@@ -4,7 +4,7 @@
   "description": "RESTful express server for xtralife",
   "main": "src/http.js",
   "scripts": {
-    "test": "mocha ./test/*.js"
+    "test": "mocha ./test/*.js --exit"
   },
   "repository": {
     "type": "git",
