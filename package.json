@@ -20,7 +20,7 @@
   "author": "devteam <devteam@xtralife.cloud>",
   "license": "(C) Xtralife.cloud, 2015",
   "engines": {
-    "node": ">=8.14"
+    "node": "^18.13.0"
   },
   "dependencies": {
     "basic-auth": "^2.0.1",
