@@ -177,9 +177,7 @@ describe('Achievements', function () {
 
 		xtralife.api.achievement.saveAchievementsDefinitions('com.clanofthecloud.cloudbuilder.azerty', definitions)
 			.then(result => done())
-			.catch(done)
-			.done();
-		return null;
+			.catch(err => done(err));
 	});
 
 	it("should list achievements for the user even before having set gamer data", function (done) {
@@ -555,7 +553,7 @@ describe('Achievements', function () {
 
 	return it("should delete the temporary user", function (done) {
 		const xtralife = require('xtralife-api');
-		xtralife.api.onDeleteUser(ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
+		xtralife.api.onDeleteUser(new ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
 		return null;
 	});
 });

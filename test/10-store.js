@@ -494,7 +494,7 @@ describe('Store', function () {
 	});
 
 	return it("should delete the user", function (done) {
-		xtralife.api.onDeleteUser(ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
+		xtralife.api.onDeleteUser(new ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
 		return null;
 	});
 });

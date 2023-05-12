@@ -163,7 +163,7 @@ describe('UnitTest', function () {
 			const xtralife = require('xtralife-api');
 			async = require('async');
 			this.timeout(4000);
-			return xtralife.api.onDeleteUser(ObjectId(anonym_id), done, 'com.clanofthecloud.cloudbuilder');
+			return xtralife.api.onDeleteUser(new ObjectId(anonym_id), done, 'com.clanofthecloud.cloudbuilder');
 		});
 	});
 

@@ -84,7 +84,7 @@ describe.skip('GooglePlus', function () {
 
     it("should delete google user", function (done) {
         this.timeout(4000);
-        return xtralife.api.onDeleteUser(ObjectId(gplus_gamer_id), done, 'com.clanofthecloud.cloudbuilder');
+        return xtralife.api.onDeleteUser(new ObjectId(gplus_gamer_id), done, 'com.clanofthecloud.cloudbuilder');
     });
 
 
@@ -152,7 +152,7 @@ describe.skip('GooglePlus', function () {
 
     return it("should delete anonymous user", function (done) {
         this.timeout(4000);
-        return xtralife.api.onDeleteUser(ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
+        return xtralife.api.onDeleteUser(new ObjectId(gamer_id), done, 'com.clanofthecloud.cloudbuilder');
     });
 });
 

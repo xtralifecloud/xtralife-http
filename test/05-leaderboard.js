@@ -668,7 +668,7 @@ describe('Leaderboards', function () {
 			async = require('async');
 			this.timeout(4000);
 			return async.forEachSeries(gamers_id,
-				(userid, cb) => xtralife.api.onDeleteUser(ObjectId(userid), cb, 'com.clanofthecloud.cloudbuilder')
+				(userid, cb) => xtralife.api.onDeleteUser(new ObjectId(userid), cb, 'com.clanofthecloud.cloudbuilder')
 				, err => {
 					return done(err);
 				});

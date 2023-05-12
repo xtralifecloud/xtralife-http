@@ -112,7 +112,8 @@ module.exports = {
 			return mod.Q.all(
 				[this.virtualfs.read(domain, params.user_id, null),
 				this.tx.balance(domain, params.user_id)]
-			).spread(function (fs, balance) {
+			).then((result) => {
+				const [fs, balance] = result;
 				return { fs: fs, balance: balance };
 			});
 		},
