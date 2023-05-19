@@ -159,8 +159,7 @@ const _finalize = async function (req, res, next, gamer, created) {
 					.status(created ? 201 : 200)
 					.json(result)
 					.end();
-			}).catch(next)
-			.done();
+			}).catch(next);
 	} else {
 		if (xlenv.options.cleanLogin) {
 			result.domains = [];

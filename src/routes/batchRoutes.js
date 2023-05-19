@@ -18,7 +18,6 @@ const _runbatch = paramsfn => (function (req, res, next) {
             .status(200)
             .json(customData)
             .end()).catch(next)
-        .done();
 });
 
 unauthenticatedBatch.route('/:domain/:name')

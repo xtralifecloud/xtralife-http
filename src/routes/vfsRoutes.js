@@ -28,7 +28,7 @@ router.route('/:domain/:key')
                 .json(result)
                 .end();
         }).catch(next)
-        .done()).put(function (req, res, next) {
+        ).put(function (req, res, next) {
             const _write = (value, result) => xtralife.api.virtualfs.write(req.context, req.params.domain, req.gamer._id, req.params.key, value)
                 .then(count => {
                     result.done = count;
@@ -44,9 +44,9 @@ router.route('/:domain/:key')
                         putURL: signedURL,
                         getURL
                     }
-                    ).catch(next).done())
+                    ).catch(next))
                 :
-                _write(req.body, {}).catch(next).done()
+                _write(req.body, {}).catch(next)
             )   
         }).delete(function (req, res, next) {
             if (req.query.binary != null) {
@@ -77,7 +77,7 @@ router.route("/:domain")
                 .json(result)
                 .end();
         }).catch(next)
-        .done()).put((req, res, next) => xtralife.api.virtualfs.write(req.context, req.params.domain, req.gamer._id, null, req.body)
+        ).put((req, res, next) => xtralife.api.virtualfs.write(req.context, req.params.domain, req.gamer._id, null, req.body)
             .then(function (count) {
                 const result = { done: count };
                 if (req.context.customData != null) { result.customData = req.context.customData; }
@@ -85,7 +85,7 @@ router.route("/:domain")
                     .json(result)
                     .end();
             }).catch(next)
-            .done()).delete((req, res, next) => xtralife.api.virtualfs.delete(req.context, req.params.domain, req.gamer._id, null)
+            ).delete((req, res, next) => xtralife.api.virtualfs.delete(req.context, req.params.domain, req.gamer._id, null)
                 .then(function (count) {
                     const result = { done: count };
                     if (req.context.customData != null) { result.customData = req.context.customData; }
@@ -93,7 +93,7 @@ router.route("/:domain")
                         .json(result)
                         .end();
                 }).catch(next)
-                .done()).all((req, res, next) => next(new errors.InvalidMethodError()));
+                ).all((req, res, next) => next(new errors.InvalidMethodError()));
 
 module.exports = router;
 function __guard__(value, transform) {

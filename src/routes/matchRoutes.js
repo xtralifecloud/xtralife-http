@@ -233,7 +233,6 @@ route.route('/')
 		.then(createdMatch => res
 			.status(200)
 			.json(_convertMatchToReturnObject(req.game, createdMatch))
-			.end()).catch(next)
-		.done());
+			.end()).catch(next));
 
 module.exports = route;
