@@ -36,7 +36,7 @@
     "xtralife-api": "^4.3.6"
   },
   "devDependencies": {
-    "@elastic/elasticsearch": "7.10.0",
+    "@elastic/elasticsearch": "8.7.0",
     "async": "^3.2.1",
     "mocha": "^10.0.0",
     "mongodb": "^4.1.2",
