@@ -15,6 +15,7 @@ const dataset = require('./dataset.js');
 const Q = require('bluebird');
 const xtralife = require('xtralife-api');
 
+const isElasticDriverBelow8 = parseInt(xlenv.elastic.driver.version.split('.')[0]) < 8;
 let gamer_id = null;
 let gamer_token = null;
 
@@ -60,7 +61,7 @@ describe('Index', function () {
 			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
-				res.body.result.should.eql("created");
+				(isElasticDriverBelow8 ? res.body.body : res.body).result.should.eql("created");
 				return done(err);
 			});
 		return null;
@@ -97,7 +98,7 @@ describe('Index', function () {
 			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
-				res.body.result.should.eql("created");
+				(isElasticDriverBelow8 ? res.body.body : res.body).result.should.eql("created");
 				return done(err);
 			});
 		return null;
@@ -122,7 +123,7 @@ describe('Index', function () {
 					.expect('content-type', /json/)
 					.expect(200)
 					.end(function (err, res) {
-						res.body.result.should.eql("deleted");
+						(isElasticDriverBelow8 ? res.body.body : res.body).result.should.eql("deleted");
 						return done();
 					});
 			});
@@ -236,7 +237,7 @@ describe('Index', function () {
 			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
-				res.body.result.should.eql("updated");
+				(isElasticDriverBelow8 ? res.body.body : res.body).result.should.eql("updated");
 
 				return request(shuttle)
 					.post(`/v1/index/private/test/search?max=50&q=token:${gamer_token}`)
@@ -268,7 +269,7 @@ describe('Index', function () {
 			.expect(200)
 			.end(function (err, res) {
 				if (err != null) { return done(err); }
-				res.body.result.should.eql("deleted");
+				(isElasticDriverBelow8 ? res.body.body : res.body).result.should.eql("deleted");
 				return done();
 			});
 		return null;
