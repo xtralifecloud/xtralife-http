@@ -27,11 +27,11 @@ module.exports = function (app) {
                     .json(result)
                     .end();
             }).catch(next)
-            .done()).get(getProperty = (req, res, next) => xtralife.api.user.read(req.context, req.params.domain, req.gamer._id, req.params.key)
+            ).get(getProperty = (req, res, next) => xtralife.api.user.read(req.context, req.params.domain, req.gamer._id, req.params.key)
                 .then(properties => res
                     .json({ properties })
                     .end()).catch(next)
-                .done()).delete(deleteProperty = (req, res, next) => xtralife.api.user.delete(req.context, req.params.domain, req.gamer._id, req.params.key)
+                ).delete(deleteProperty = (req, res, next) => xtralife.api.user.delete(req.context, req.params.domain, req.gamer._id, req.params.key)
                     .then(function (count) {
                         const result = { done: count };
                         if (req.context.customData != null) { result.customData = req.context.customData; }
@@ -39,7 +39,7 @@ module.exports = function (app) {
                             .json(result)
                             .end();
                     }).catch(next)
-                    .done()).all((req, res, next) => next(new errors.InvalidMethodError()));
+                    ).all((req, res, next) => next(new errors.InvalidMethodError()));
 
     app.route('/v1/gamer/property/:key')
         .all(_privateDomain)
@@ -59,11 +59,11 @@ module.exports = function (app) {
                     .json(result)
                     .end();
             }).catch(next)
-            .done()).get(getProperties = (req, res, next) => xtralife.api.user.read(req.context, req.params.domain, req.gamer._id)
+            ).get(getProperties = (req, res, next) => xtralife.api.user.read(req.context, req.params.domain, req.gamer._id)
                 .then(properties => res
                     .json({ properties })
                     .end()).catch(next)
-                .done()).delete(deleteProperties = (req, res, next) => xtralife.api.user.delete(req.context, req.params.domain, req.gamer._id)
+                ).delete(deleteProperties = (req, res, next) => xtralife.api.user.delete(req.context, req.params.domain, req.gamer._id)
                     .then(function (count) {
                         const result = { done: count };
                         if (req.context.customData != null) { result.customData = req.context.customData; }
@@ -71,7 +71,7 @@ module.exports = function (app) {
                             .json(result)
                             .end();
                     }).catch(next)
-                    .done()).all((req, res, next) => next(new errors.InvalidMethodError()));
+                    ).all((req, res, next) => next(new errors.InvalidMethodError()));
 
 
     app.route('/v1/gamer/property')

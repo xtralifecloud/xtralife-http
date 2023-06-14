@@ -233,8 +233,7 @@ module.exports = function (app) {
 
 	app.get('/v1/gamer/achievements/:domain', _domainHandler, (req, res, next) => xtralife.api.achievement.getUserAchievements(req.gamer._id, req.params.domain)
 		.then(achievements => res.status(200).json({ achievements })
-			.end()).catch(next)
-		.done());
+			.end()).catch(next));
 
 	app.get('/v1/gamer/achievements/:domain/:name/gamerdata', _domainHandler, (req, res, next) => xtralife.api.achievement.getUserAchievements(req.gamer._id, req.params.domain)
 		.then(function (achievements) {
@@ -243,13 +242,11 @@ module.exports = function (app) {
 
 			return res.status(200).json({ gamerData: data })
 				.end();
-		}).catch(next)
-		.done());
+		}).catch(next));
 
 	app.post('/v1/gamer/achievements/:domain/:name/gamerdata', _domainHandler, (req, res, next) => xtralife.api.achievement.modifyUserAchievementData(req.context, req.gamer._id, req.params.domain, req.params.name, req.body)
 		.then(achievement => res.status(200).json({ achievement })
-			.end()).catch(next)
-		.done());
+			.end()).catch(next));
 
 	app.post('/v1/gamer/nuke/me', (req, res, next) => {
 		return xtralife.api.onDeleteUser(req.gamer._id, err => {

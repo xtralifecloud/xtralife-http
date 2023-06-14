@@ -64,7 +64,7 @@ const _convertMatchToBasicReturnObject = match => ({
 //####################### Routes ########################
 route.param('match_id', function (req, res, next, matchId) {
 	try {
-		req.match_id = ObjectId(matchId);
+		req.match_id = new ObjectId(matchId);
 		return next();
 	} catch (error) {
 		return next(new errors.InvalidMatch);
@@ -73,7 +73,7 @@ route.param('match_id', function (req, res, next, matchId) {
 
 route.param('friend_id', function (req, res, next, friendId) {
 	try {
-		req.friend_id = ObjectId(friendId);
+		req.friend_id = new ObjectId(friendId);
 		return next();
 	} catch (error) {
 		return next(new errors.GamerIdNotFound);
@@ -83,7 +83,7 @@ route.param('friend_id', function (req, res, next, friendId) {
 const _requires_lastEventId = function (req, _, next) {
 	try {
 		if (req.query.lastEventId == null) { return next(new errors.MissingParameter('lastEventId')); }
-		req.lastEventId = ObjectId(req.query.lastEventId);
+		req.lastEventId = new ObjectId(req.query.lastEventId);
 		return next();
 	} catch (error) {
 		return next(new errors.MissingParameter('lastEventId'));
@@ -95,13 +95,11 @@ route.route('/:match_id')
 		.then(foundMatch => res
 			.status(200)
 			.json(_convertMatchToReturnObject(req.game, foundMatch))
-			.end()).catch(next)
-		.done()).delete((req, res, next) => xtralife.api.match.deleteMatch(req.context, req.match_id, req.gamer._id)
-			.then(count => res
-				.status(200)
-				.json({ done: count })
-				.end()).catch(next)
-			.done());
+			.end()).catch(next)).delete((req, res, next) => xtralife.api.match.deleteMatch(req.context, req.match_id, req.gamer._id)
+				.then(count => res
+					.status(200)
+					.json({ done: count })
+					.end()).catch(next));
 
 route.route('/:match_id/finish')
 	.post(_requires_lastEventId, (req, res, next) => xtralife.api.match.finishMatch(req.context, req.match_id, req.gamer._id, req.body.osn, req.lastEventId)
@@ -111,24 +109,21 @@ route.route('/:match_id/finish')
 				.status(200)
 				.json(_convertMatchToBasicReturnObject(finishedMatch))
 				.end();
-		}).catch(next)
-		.done());
+		}).catch(next));
 
 route.route('/:match_id/join')
 	.post((req, res, next) => xtralife.api.match.joinMatch(req.context, req.match_id, req.gamer._id, req.body.osn)
 		.then(joinedMatch => res
 			.status(200)
 			.json(_convertMatchToReturnObject(req.game, joinedMatch))
-			.end()).catch(next)
-		.done());
+			.end()).catch(next));
 
 route.route('/:match_id/leave')
 	.post((req, res, next) => xtralife.api.match.leaveMatch(req.context, req.match_id, req.gamer._id, req.body.osn)
 		.then(leftMatch => res
 			.status(200)
 			.json(_convertMatchToBasicReturnObject(leftMatch))
-			.end()).catch(next)
-		.done());
+			.end()).catch(next));
 
 route.route('/:match_id/invite/:friend_id')
 	.post((req, res, next) => xtralife.api.match.inviteToMatch(req.context, req.match_id, req.gamer._id, req.friend_id, req.body.osn)
@@ -138,8 +133,7 @@ route.route('/:match_id/invite/:friend_id')
 				.status(200)
 				.json(_convertMatchToBasicReturnObject(updatedMatch))
 				.end();
-		}).catch(next)
-		.done());
+		}).catch(next));
 
 route.route('/:match_id/invitation')
 	.delete((req, res, next) => xtralife.api.match.dismissInvitation(req.context, req.match_id, req.gamer._id)
@@ -149,8 +143,7 @@ route.route('/:match_id/invitation')
 				.status(200)
 				.json(_convertMatchToBasicReturnObject(finishedMatch))
 				.end();
-		}).catch(next)
-		.done());
+		}).catch(next));
 
 
 route.route('/:match_id/move')
@@ -173,8 +166,7 @@ route.route('/:match_id/move')
 				.status(200)
 				.json(_convertMatchToBasicReturnObject(updatedMatch))
 				.end();
-		}).catch(next)
-		.done());
+		}).catch(next));
 
 route.route('/:match_id/shoe/draw')
 	.post(_requires_lastEventId, function (req, res, next) {
@@ -182,15 +174,14 @@ route.route('/:match_id/shoe/draw')
 		if (!count) { return next(new errors.MissingParameter('count')); }
 
 		return xtralife.api.match.drawFromShoe(req.context, req.match_id, req.gamer._id, req.body.osn, req.lastEventId, count)
-			.spread(function (match, drawnItems) {
+			.then(function ([match, drawnItems]) {
 				const response = _convertMatchToBasicReturnObject(match);
 				response.drawnItems = drawnItems;
 				return res
 					.status(200)
 					.json(response)
 					.end();
-			}).catch(next)
-			.done();
+			}).catch(next);
 	});
 
 route.route('/')
@@ -198,22 +189,20 @@ route.route('/')
 		const props =
 			(req.query.properties != null) ? JSON.parse(req.query.properties) : {};
 		// Limit to 30 matches by default
-		const limit = parseInt(req.query.limit, 10) || 30;
+		const limit = parseInt(req.query.limit, 10) || 0;
 		const skip = parseInt(req.query.skip, 10) || 0;
 		const includeFinished = (req.query.finished != null);
 		const includeFull = (req.query.full != null);
 		const onlyParticipating = (req.query.participating != null);
 		const onlyInvited = (req.query.invited != null);
 		return xtralife.api.match.findMatches(req.params.domain, req.gamer._id, props, skip, limit, includeFinished, includeFull, onlyParticipating, onlyInvited)
-			.spread(function (count, matches) {
+			.then(([count, matches]) => {
 				const result = _convertMatchesToReturnObject(matches);
 				result.count = count;
 				return res
 					.status(200)
 					.json(result)
-					.end();
 			}).catch(next)
-			.done();
 	}).post(checkSchema({
 		type: 'object',
 		properties: {
@@ -244,7 +233,6 @@ route.route('/')
 		.then(createdMatch => res
 			.status(200)
 			.json(_convertMatchToReturnObject(req.game, createdMatch))
-			.end()).catch(next)
-		.done());
+			.end()).catch(next));
 
 module.exports = route;

@@ -15,13 +15,13 @@ const router = require('express').Router({ caseSensitive: true });
 router.get("/:domain/balance", _domainHandler, (req, res, next) => xtralife.api.transaction.balance(req.context, req.params.domain, req.gamer._id)
     .then(balance => res.json(balance)
         .end()).catch(next)
-    .done());
+    );
 
 router.route("/:domain")
     .all(_domainHandler)
     .post((req, res, next) => // TODO ?checkAchievements ?
         xtralife.api.transaction.transaction(req.context, req.params.domain, req.gamer._id, req.body.transaction, req.body.description)
-            .spread(function (balance, achievements) {
+            .then(function ([balance, achievements]) {
                 let result;
                 switch (req.version) {
                     case 'v1':
@@ -35,7 +35,7 @@ router.route("/:domain")
                 return res.json(result)
                     .end();
             }).catch(next)
-            .done()).get((req, res, next) => // optional ?unit= param
+            ).get((req, res, next) => // optional ?unit= param
                 xtralife.api.transaction.txHistory(
                     req.params.domain,
                     req.gamer._id,
