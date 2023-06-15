@@ -33,7 +33,7 @@
     "jayschema": "^0.3.2",
     "randomstring": "^1.2.1",
     "underscore": "^1.13.1",
-    "xtralife-api": "^4.3.6"
+    "xtralife-api": "^4.4.1"
   },
   "devDependencies": {
     "@elastic/elasticsearch": "8.7.0",
@@ -42,7 +42,7 @@
     "mongodb": "^5.5.0",
     "should": "^13.2.3",
     "supertest": "^6.1.6",
-    "winston": "^3.3.3",
-    "xtralife-env": "^4.0.0"
+    "winston": "^3.9.0",
+    "xtralife-env": "^4.4.0"
   }
 }
