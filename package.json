@@ -33,7 +33,7 @@
     "jayschema": "^0.3.2",
     "randomstring": "^1.2.1",
     "underscore": "^1.13.1",
-    "xtralife-api": "^4.4.2"
+    "xtralife-api": "^4.4.3"
   },
   "devDependencies": {
     "@elastic/elasticsearch": "8.7.0",
