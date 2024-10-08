@@ -1,6 +1,6 @@
 {
   "name": "xtralife-http",
-  "version": "4.4.3",
+  "version": "4.4.4",
   "description": "RESTful express server for xtralife",
   "main": "src/http.js",
   "scripts": {
