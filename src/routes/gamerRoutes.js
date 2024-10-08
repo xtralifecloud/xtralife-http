@@ -39,7 +39,7 @@ const _convert = (game, gamer_id, credentials, options) => ({
 
 	steam() {
 		if (!credentials.auth_token) { throw new errors.MissingParameter("credentials.auth_token"); }
-		return xtralife.api.connect.convertAccountToSteam(game, gamer_id, credentials.auth_token);
+		return xtralife.api.connect.convertAccountToSteam(game, gamer_id, credentials.auth_token, options);
 	},
 
 	epic() {
