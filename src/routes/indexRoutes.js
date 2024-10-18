@@ -14,11 +14,10 @@ const _domainHandler = require('./domainHandler.js');
 const Q = require('bluebird');
 const router = require('express').Router({ caseSensitive: true });
 
-const isElasticDriverBelow8 = parseInt(xlenv.elastic.driver.version.split('.')[0]) < 8;
-
 router
 	.route('/:domain/:indexName/search')
 	.post(_domainHandler, function (req, res, next) {
+		const isElasticDriverBelow8 = parseInt(xlenv.elasticConfig.driver.version.split('.')[0]) < 8;
 		let { q, sort, max, from } = req.query;
 		sort =
 			(sort != null) ?
@@ -49,6 +48,7 @@ router
 	.route('/:domain/:indexName/:id(*)')
 	.all(_domainHandler)
 	.get(function (req, res, next) {
+		const isElasticDriverBelow8 = parseInt(xlenv.elasticConfig.driver.version.split('.')[0]) < 8;
 		const { id, domain, indexName } = req.params;
 		return xtralife.api.index.get(req.context, domain.toLowerCase(), indexName, id)
 			.then(function (result) {

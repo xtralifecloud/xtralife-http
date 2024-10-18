@@ -15,11 +15,15 @@ const dataset = require('./dataset.js');
 const Q = require('bluebird');
 const xtralife = require('xtralife-api');
 
-const isElasticDriverBelow8 = parseInt(xlenv.elastic.driver.version.split('.')[0]) < 8;
 let gamer_id = null;
 let gamer_token = null;
 
 describe('Index', function () {
+
+	if (xlenv.options.disableIndexModule === true)
+		return it.skip("SKIPPED (xlenv.options.disableIndexModule === true)");
+
+	const isElasticDriverBelow8 = parseInt(xlenv.elasticConfig.driver.version.split('.')[0]) < 8;
 
 	before('should wait for initialisation', () => shuttlePromise.then(_shuttle => shuttle = _shuttle));
 

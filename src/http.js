@@ -18,7 +18,6 @@ const _ = require("underscore");
 
 const env = (process.env.NODE_ENV != null) ? process.env.NODE_ENV : "dev";
 
-
 const app = express();
 
 app.use(bodyParser.json({ strict: false, limit: (xlenv.http.bodySizeLimit || '500kb') }));
